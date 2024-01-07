@@ -1,0 +1,72 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch on current Chrome",
+			"type": "chrome",
+			"request": "launch",
+			"args": ["--remote-debugging-port=9222"],
+			"runtimeExecutable": "C:/Program Files/Google/Chrome Dev/Application/chrome.exe",
+			"url": "http://localhost:3000/",
+			"urlFilter": "http://localhost:3000/*",
+			"webRoot": "${workspaceFolder}/",
+			"preLaunchTask": "Application",
+			"postDebugTask": "Terminate All Tasks",
+			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js"]
+		},
+		{
+			"name": "Launch on Chrome",
+			"type": "chrome",
+			"request": "launch",
+			// "runtimeArgs": ["--disable-web-security"],
+			"url": "http://localhost:3000/",
+			"urlFilter": "http://localhost:3000/*",
+			"webRoot": "${workspaceFolder}/",
+			"preLaunchTask": "Application",
+			"postDebugTask": "Terminate All Tasks",
+			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js"]
+		},
+
+		{
+			"name": "Launch on Edge",
+			"type": "msedge",
+			"request": "launch",
+			"url": "http://localhost:3000",
+			"urlFilter": "http://localhost:3000/*",
+			"webRoot": "${workspaceFolder}/cat-viewer/Application/src",
+			"preLaunchTask": "Application",
+			"postDebugTask": "Terminate All Tasks",
+			"skipFiles": ["<node_internals>/cat-viewer/Application/**", "${workspaceFolder}/cat-viewer/Application/node_modules/**/*.js"]
+		},
+		{
+			"name": "Attach to Chrome",
+			"type": "chrome",
+			"request": "attach",
+			"url": "http://localhost:3000/",
+			"urlFilter": "http://localhost:3000/*",
+			"webRoot": "${workspaceFolder}/",
+			// "preLaunchTask": "Application",
+			// "postDebugTask": "Terminate All Tasks",
+			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js"]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Launch Program",
+			"runtimeExecutable": "yarn",
+			"runtimeArgs": ["start"],
+			"console": "integratedTerminal",
+			"restart": true,
+			"autoAttachChildProcesses": true,
+			"cwd": "${workspaceFolder}",
+			"env": {
+				"PORT": "4009",
+				"BROWSER": "none"
+			},
+			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js"]
+		}
+	]
+}
