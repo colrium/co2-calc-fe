@@ -1,5 +1,5 @@
-import ThemeRegistry from '@/components/ThemeRegistry';
 
+import ExternalLayout from '@/layouts/External';
 import { Inter } from 'next/font/google';
 import './globals.css';
 
@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
 				<link rel="icon" href="/icon?<generated>" type="image/<generated>" sizes="<generated>" />
 			</head>
 			<body className={inter.className}>
-				<ThemeRegistry options={{ key: 'mui-theme' }}>{children}</ThemeRegistry>
+				<ExternalLayout>{children}</ExternalLayout>
 			</body>
 		</html>
   );

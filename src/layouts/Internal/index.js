@@ -1,5 +1,5 @@
-import ResponsiveAppBar from '@/components/landingpage/ResponsiveAppBar';
 import { Box } from '@mui/material';
+import ResponsiveAppBar from './ResponsiveAppBar';
 
 export default function InternalLayout({children}) {
 	return (

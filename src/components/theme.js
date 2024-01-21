@@ -6,6 +6,9 @@ const theme = createTheme({
 	palette: {
 		primary: {
 			main: '#000000'
+		},
+		inverse: {
+			main: '#FFFFFF'
 		}
 	}
 });

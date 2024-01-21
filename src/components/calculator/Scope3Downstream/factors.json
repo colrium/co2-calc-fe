@@ -1,0 +1,297 @@
+[
+	{ "name": "scope3ds_transport_distribution", "label": "Downstream transportation and distribution", "types": [
+		{
+			"id": "-GqK83GpZ0aGmUze0S2bzw",
+			"name": "Delivery lorries (6 ton)",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "Em32u7u11E_BuiEWGn3dzA",
+			"categoryName": "Road transportation ",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "PGfgJ_jTvk_6Df8cgTTuFw",
+			"name": "Delivery lorries (15 ton)",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "Em32u7u11E_BuiEWGn3dzA",
+			"categoryName": "Road transportation ",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "g7rofEXL_ki9p5P7FwinaA",
+			"name": "Full trailer (60 ton)",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "Em32u7u11E_BuiEWGn3dzA",
+			"categoryName": "Road transportation ",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "yjVBk2tcH0OIgl0m5q6iqg",
+			"name": "Full trailer (75 ton)",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "Em32u7u11E_BuiEWGn3dzA",
+			"categoryName": "Road transportation ",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "qK2ditZFak2Q6nR3-OMKxA",
+			"name": "Bulk carrier (medium)",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "AOg-CSM99UOHb1DWTnc2RQ",
+			"categoryName": "Ship transportation",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "tCkcjhj17U_lvsT7PwSNtQ",
+			"name": "Bulk carrier (large)",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "AOg-CSM99UOHb1DWTnc2RQ",
+			"categoryName": "Ship transportation",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "iNHQ30R6PUmSXFIbhNgXeg",
+			"name": "General cargo (small)",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "AOg-CSM99UOHb1DWTnc2RQ",
+			"categoryName": "Ship transportation",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "rT14a-pLNEumHsU8NWrsLg",
+			"name": "General cargo (multi-purpose carrier)",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "AOg-CSM99UOHb1DWTnc2RQ",
+			"categoryName": "Ship transportation",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "H67zDMJy-UqGy5-gKUDheQ",
+			"name": "Container ship (1 000 TEU)",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "AOg-CSM99UOHb1DWTnc2RQ",
+			"categoryName": "Ship transportation",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "sriiK4bITUCA7fWpHWJhgQ",
+			"name": "Container ship (2 000 TEU) ",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "AOg-CSM99UOHb1DWTnc2RQ",
+			"categoryName": "Ship transportation",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "15MwR8KtT02ZfuqELwotrA",
+			"name": "Semi-trailer (25 ton)",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "Em32u7u11E_BuiEWGn3dzA",
+			"categoryName": "Road transportation ",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "7ewuMrgVNkay3IJst1x_LA",
+			"name": "Train freight",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "XG7Fp6KrV0aRDnuLe1hr8Q",
+			"categoryName": "Rail transportation",
+			"regionId": "ZZGLOBAL",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "xZlxdxNVMEmoGivEI_TOQA",
+			"name": "Aircraft freight",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "sRSJReaXl0Ow0TsHT-cfMw",
+			"categoryName": "Air transportation",
+			"regionId": "ZZGLOBAL",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "jE9OLlvi80GAYOROPR2g-w",
+			"name": "Cargo freight",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "AOg-CSM99UOHb1DWTnc2RQ",
+			"categoryName": "Ship transportation",
+			"regionId": "ZZGLOBAL",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "HRInNF6mXkOxLvxKgf0wPQ",
+			"name": "Road freight",
+			"emissionsType": "fossil",
+			"unit": "tkm",
+			"categoryId": "Em32u7u11E_BuiEWGn3dzA",
+			"categoryName": "Road transportation ",
+			"regionId": "ZZGLOBAL",
+			"yearFrom": null,
+			"yearTo": null
+		}
+	] },
+	{ "name": "scope3ds_processing", "label": "Processing of sold product", "types": [] },
+	{ "name": "scope3ds_use", "label": "Use of sold products", "types": [] },
+	{ "name": "scope3ds_end_of_life", "label": "End-of-life treatment of sold products", "types": [
+		{
+			"id": "oy4FKqrNPkWgC6R17jv-aw",
+			"name": "Bio waste",
+			"emissionsType": "biogenic",
+			"unit": "t",
+			"categoryId": "rPiLK72gEEagmam4haqI5w",
+			"categoryName": "Waste",
+			"regionId": "ZZGLOBAL",
+			"yearFrom": 2020,
+			"yearTo": 2025
+		},
+		{
+			"id": "1il_iM6nUEOMBHK6ws6-jQ",
+			"name": "Paper waste, recycled",
+			"emissionsType": "fossil",
+			"unit": "t",
+			"categoryId": "rPiLK72gEEagmam4haqI5w",
+			"categoryName": "Waste",
+			"regionId": "FI",
+			"yearFrom": 2020,
+			"yearTo": 2025
+		},
+		{
+			"id": "qFr4j_-5tkyZNY-7AtrbZg",
+			"name": "Cardboard waste, recycled",
+			"emissionsType": "fossil",
+			"unit": "t",
+			"categoryId": "rPiLK72gEEagmam4haqI5w",
+			"categoryName": "Waste",
+			"regionId": "FI",
+			"yearFrom": 2020,
+			"yearTo": 2025
+		},
+		{
+			"id": "w63lV5J5G0y2qfGZbiEREQ",
+			"name": "Plastic waste, recycled ",
+			"emissionsType": "fossil",
+			"unit": "t",
+			"categoryId": "rPiLK72gEEagmam4haqI5w",
+			"categoryName": "Waste",
+			"regionId": "FI",
+			"yearFrom": 2020,
+			"yearTo": 2025
+		},
+		{
+			"id": "bGZZ5Ifu4EqInKkyay80GQ",
+			"name": "Electronic waste, recycled",
+			"emissionsType": "fossil",
+			"unit": "t",
+			"categoryId": "rPiLK72gEEagmam4haqI5w",
+			"categoryName": "Waste",
+			"regionId": "FI",
+			"yearFrom": 2020,
+			"yearTo": 2025
+		},
+		{
+			"id": "sc6CXe9qBEO-XCqdizZiXA",
+			"name": "Municipal waste, to combustion",
+			"emissionsType": "fossil",
+			"unit": "t",
+			"categoryId": "rPiLK72gEEagmam4haqI5w",
+			"categoryName": "Waste",
+			"regionId": "FI",
+			"yearFrom": 2020,
+			"yearTo": 2025
+		},
+		{
+			"id": "sGCHHVOCbEu3Sf38_qN1Ng",
+			"name": "Municipal waste, to landifill",
+			"emissionsType": "fossil",
+			"unit": "t",
+			"categoryId": "rPiLK72gEEagmam4haqI5w",
+			"categoryName": "Waste",
+			"regionId": "ZZGLOBAL",
+			"yearFrom": 2020,
+			"yearTo": 2025
+		},
+		{
+			"id": "GM6sp0nZqUanmEhNyW8ZrQ",
+			"name": "Metal, recycled",
+			"emissionsType": "fossil",
+			"unit": "t",
+			"categoryId": "rPiLK72gEEagmam4haqI5w",
+			"categoryName": "Waste",
+			"regionId": "FI",
+			"yearFrom": 2020,
+			"yearTo": 2025
+		},
+		{
+			"id": "0ZQyKC6VL0ujATmUH-qkUw",
+			"name": "Wood waste, recycled",
+			"emissionsType": "fossil",
+			"unit": "t",
+			"categoryId": "rPiLK72gEEagmam4haqI5w",
+			"categoryName": "Waste",
+			"regionId": "FI",
+			"yearFrom": 2020,
+			"yearTo": 2025
+		},
+		{
+			"id": "l4yq8QSyDkK6zzlm_mpUPw",
+			"name": "Hazardous waste",
+			"emissionsType": "fossil",
+			"unit": "t",
+			"categoryId": "rPiLK72gEEagmam4haqI5w",
+			"categoryName": "Waste",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		},
+		{
+			"id": "VAJbsx0mEUiqBxNBq-V1Cg",
+			"name": "Construction waste, recycled",
+			"emissionsType": "fossil",
+			"unit": "t",
+			"categoryId": "rPiLK72gEEagmam4haqI5w",
+			"categoryName": "Waste",
+			"regionId": "FI",
+			"yearFrom": null,
+			"yearTo": null
+		}
+	] },
+	{ "name": "scope3ds_leased", "label": "Leased assets", "types": [] },
+	{ "name": "scope3ds_franchises", "label": "Franchises", "types": [] },
+	{ "name": "Investments", "label": "Investments" }
+]
