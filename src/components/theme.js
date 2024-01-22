@@ -7,6 +7,9 @@ const theme = createTheme({
 		primary: {
 			main: '#000000'
 		},
+		tertiary: {
+			main: '#320557'
+		},
 		inverse: {
 			main: '#FFFFFF'
 		}

@@ -2,8 +2,8 @@
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import ActivityCard from '../ActivityCard';
-import { useCalculatorForm } from '../CalculatorProvider';
+import ActivityCard from '../../ActivityCard';
+import { useCalculatorForm } from '../../CalculatorProvider';
 import factors from './factors.json';
 export default function Scope2() {
 	const { formik } = useCalculatorForm();

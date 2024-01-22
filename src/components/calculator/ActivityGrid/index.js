@@ -73,12 +73,6 @@ export default function ActivityGrid({ rows, name }) {
 			headerName: 'Unit'
 		},
 		{
-			field: 'factor',
-			headerName: 'Description',
-			editable: true,
-			width: 160
-		},
-		{
 			field: 'description',
 			headerName: 'Description',
 			editable: true,

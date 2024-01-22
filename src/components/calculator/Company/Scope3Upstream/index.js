@@ -2,7 +2,7 @@
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import ActivityCard from '../ActivityCard';
+import ActivityCard from '../../ActivityCard';
 import factors from './factors.json';
 export default function Scope3Upstream() {
 	return (

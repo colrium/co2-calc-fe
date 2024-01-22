@@ -1,46 +1,65 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-	assessments: [],
-	product_assessment: [],
+	product: [],
+	company: [],
+	context: {name: 'company', active: -1, step: 0}
 };
 
 export const calculatorSlice = createSlice({
 	name: 'calculator',
 	initialState,
 	reducers: {
-		addAssessment(state, action) {
-			state.assessments = state.assessments.concat([action.payload]);
+		setCalculatorContext(state, action) {
+			state.context = { ...state.context, ...action.payload };
 		},
-		deleteAssessment(state, action) {
+		addCompanyAssessment(state, action) {
+			state.company = state.company.concat([action.payload]);
+		},
+		updateCompanyAssessment(state, action) {
+			if (typeof action.payload.index === 'number' && typeof action.payload.value === 'object') {
+				state.company[action.payload.index] = { ...state.company[action.payload.index], ...action.payload.value };
+			}
+		},
+		deleteCompanyAssessment(state, action) {
 			let indexOfAssessment = typeof action.payload === 'number' ? action.payload : -1;
-			state.assessments = state.assessments;
+			state.company = state.company;
 		},
-		clearAssessments(state, action) {
-			state.assessments = [];
+		clearCompanyAssessments(state, action) {
+			state.company = [];
 		},
 		addProductAssessment(state, action) {
-			state.product_assessment = state.product_assessment.concat([action.payload]);
+			state.product = state.product.concat([action.payload]);
+		},
+		updateProductAssessment(state, action) {
+			if (typeof action.payload.index === 'number' && typeof action.payload.value === 'object') {
+				state.product[action.payload.index] = { ...state.product[action.payload.index], ...action.payload.value };
+			}
 		},
 		deleteProductAssessment(state, action) {
 			let indexOfAssessment = typeof action.payload === 'number' ? action.payload : -1;
-			state.product_assessment = state.product_assessment;
+			state.product = state.product;
 		},
 		clearProductAssessments(state, action) {
-			state.product_assessment = [];
+			state.product = [];
 		}
 	}
 });
 
 export const {
-	addAssessment,
-	deleteAssessment,
-	clearAssessments,
+	setCalculatorContext,
+	setCompanyActiveAssessment,
+	addCompanyAssessment,
+	updateCompanyAssessment,
+	deleteCompanyAssessment,
+	clearCompanyAssessments,
+	setActiveProductAssessment,
 	addProductAssessment,
+	updateProductAssessment,
 	deleteProductAssessment,
 	clearProductAssessments
 } = calculatorSlice.actions;
 
 export const selectCalculator = (state) => ({ ...initialState, ...state.calculator });
 
-export default authSlice.reducer;
+export default calculatorSlice.reducer;

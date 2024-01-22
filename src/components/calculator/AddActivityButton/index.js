@@ -20,10 +20,10 @@ export default function AddActivityButton({name, options=[]}) {
     };
     const handleOnAddActivity = (activity) => () => {
         setAnchorEl(null);
-        let activities = formik.values?.activities || {}
+        const activities = JSON.parse(JSON.stringify(formik.values?.activities || {}));
         const activitiesArr = activities[name] || []
         activities[name] = [...activitiesArr, { ...activity, amount: 0, description: '', id: activity.id || activitiesArr.length+ 1 }];
-        formik.setFieldValue(activities);
+        formik.setFieldValue('activities', activities);
 	};
     return (
 		<Box>

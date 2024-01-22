@@ -3,9 +3,11 @@ import { createWrapper } from 'next-redux-wrapper';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { authSlice } from './authSlice';
+import { calculatorSlice } from './calculatorSlice';
 
 const rootReducer = combineReducers({
-	[authSlice.name]: authSlice.reducer
+	[authSlice.name]: authSlice.reducer,
+	[calculatorSlice.name]: calculatorSlice.reducer
 });
 
 const makeConfiguredStore = () =>
@@ -24,7 +26,7 @@ export const makeStore = () => {
 
 		const persistConfig = {
 			key: 'ghg-calc',
-			whitelist: ['auth'], // make sure it does not clash with server keys
+			whitelist: ['auth', 'calculator'], // make sure it does not clash with server keys
 			storage
 		};
 

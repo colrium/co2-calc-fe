@@ -1,76 +1,170 @@
 /** @format */
 
-import { Grid, Step, StepLabel, Stepper } from '@mui/material';
+import { selectCalculator, setCalculatorContext, updateCompanyAssessment, updateProductAssessment } from '@/store/calculatorSlice';
+import { Box, Grid, Step, StepLabel, Stepper } from '@mui/material';
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { debounce } from 'throttle-debounce';
 import CalculatorProvider from './CalculatorProvider';
-import Overview from './Overview';
-import Results from './Results';
-import Scope1 from './Scope1';
-import Scope2 from './Scope2';
-import Scope3Downstream from './Scope3Downstream';
-import Scope3Upstream from './Scope3Upstream';
-import validationSchema from './validationScema';
-const steps = [
+import CompanyOverview from './Company/Overview';
+import CompanyResults from './Company/Results';
+import CompanyScope1 from './Company/Scope1';
+import CompanyScope2 from './Company/Scope2';
+import CompanyScope3Downstream from './Company/Scope3Downstream';
+import CompanyScope3Upstream from './Company/Scope3Upstream';
+import companyValidationSchema from './Company/validationSchema';
+import FormHeader from './FormHeader';
+import ProductOverview from './Product/Overview';
+import RawMaterials from './Product/RawMaterials';
+import productValidationSchema from './Product/validationSchema';
+import ResultsSidebar from './ResultSidebar';
+const companySteps = [
 	{
 		name: 'overview',
 		label: 'Overview',
-		Component: Overview
+		Component: CompanyOverview
 	},
 	{
 		name: 'scope-1',
 		label: 'Scope 1',
-		Component: Scope1
+		Component: CompanyScope1
 	},
 	{
 		name: 'scope-2',
 		label: 'Scope 2',
-		Component: Scope2
+		Component: CompanyScope2
 	},
 	{
 		name: 'scope-3-upstream',
 		label: 'Scope 3 Upstream',
-		Component: Scope3Upstream
+		Component: CompanyScope3Upstream
 	},
 	{
 		name: 'scope-3-downstream',
 		label: 'Scope 3 Downstream',
-		Component: Scope3Downstream
+		Component: CompanyScope3Downstream
 	},
 	{
 		name: 'results',
 		label: 'Results',
-		Component: Results
+		Component: CompanyResults
 	}
 ];
-const units = ['pkm', 'kg', 'kwh', 'mwh', 'l', 'm3', 't', 'tkm', 'unit', 'kpl'];
-export default function CalculatorForm() {
-	const [activeStep, setActiveStep] = useState(0);
+const productSteps = [
+	{
+		name: 'overview',
+		label: 'Overview',
+		Component: ProductOverview
+	},
+	{
+		name: 'Raw Materials',
+		label: 'Raw Materials',
+		Component: RawMaterials
+	}
+];
+
+const units = {
+	pkm: 'Passenger Kilometers',
+	kg: 'Kilograms',
+	kwh: 'Kilowatt hours',
+	mwh: 'Megawatt hours',
+	l: 'Litres',
+	m3: 'Cubic meters',
+	t: 'Tonnes',
+	tkm: 'Tonne Kilometers',
+	unit: 'Unit',
+	kpl: 'Kpl'
+};
+const contextSteps = {
+	company: companySteps,
+	product: productSteps
+};
+const contextValidationSchemas = {
+	company: companyValidationSchema,
+	product: productValidationSchema
+};
+export default function CalculatorForm() {		
+	const calculator = useSelector(selectCalculator);
+	const context = calculator.context;
+	const { name, active, step = 0 } = { name: 'company', active: -1, ...context};
+	const dispatch = useDispatch();
+	const rows = calculator[name];
+	const headerRef = useRef();
 	const [completedSteps, setCompletedStepSteps] = useState([0]);
+	const data = rows[active];
+	const steps = useMemo(() => contextSteps[name], [name]);
+	const validationSchema = useMemo(() => contextValidationSchemas[name], [name]);
 	const formik = useFormik({
-		initialValues: { activities: {} },
+		initialValues: { activities: {}, ...rows[active] },
 		validationSchema: validationSchema
 	});
-	const Component = steps[activeStep]?.Component;
+	const changeContext = (name, active) => {
+		dispatch(setCalculatorContext({name, active}));
+		formik.resetForm();
+	};
 
-    return (
-		<CalculatorProvider
-			value={{ steps, activeStep, setActiveStep, formik, completedSteps, setCompletedStepSteps, units }}
-		>
-			<Grid container>
-				<Grid item md={3}>
-					<Stepper className="w-full" activeStep={activeStep} orientation="vertical">
-						{steps.map(({ label, Component, name }, index) => (
-							<Step key={name} onClick={() => setActiveStep(index)}>
-								<StepLabel>{label}</StepLabel>
-							</Step>
-						))}
-					</Stepper>
-				</Grid>
-				<Grid item md={9}>
-					<Component />
-				</Grid>
-			</Grid>
-		</CalculatorProvider>
+	const setActiveStep = (step) => {
+		dispatch(setCalculatorContext({ step }));
+	};
+
+	const Component = steps[step]?.Component;
+
+	useEffect(() => {
+		if (data) {
+			formik.setValues({ activities: {}, ...rows[active] });
+		}
+	}, [name, active]);
+	const persistValues = useCallback(
+		debounce(50, () => {
+			const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
+			dispatch(action({ index: active, value: formik.values }));
+		}),
+		[active, name, formik.values]
+	);
+	useEffect(() => {
+		return persistValues;
+	}, [step]);
+
+	return (
+		<Grid container>
+			<CalculatorProvider
+				value={{
+					steps,
+					step,
+					setActiveStep,
+					formik,
+					completedSteps,
+					setCompletedStepSteps,
+					units,
+					setContext: changeContext,
+					name,
+					rows
+				}}
+			>
+				<Box>
+					<Grid container>
+						<Grid item xs={12}>
+							<FormHeader ref={headerRef} />
+						</Grid>
+						<Grid item md={3}>
+							<Stepper className="w-full" activeStep={step} orientation="vertical">
+								{steps.map(({ label, Component, name }, index) => (
+									<Step key={name} onClick={() => setActiveStep(index)}>
+										<StepLabel>{label}</StepLabel>
+									</Step>
+								))}
+							</Stepper>
+						</Grid>
+						<Grid item md={6}>
+							<Component />
+						</Grid>
+						<Grid item md={3}>
+							<ResultsSidebar />
+						</Grid>
+					</Grid>
+				</Box>
+			</CalculatorProvider>
+		</Grid>
 	);
 }
