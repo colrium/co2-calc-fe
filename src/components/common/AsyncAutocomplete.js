@@ -1,22 +1,13 @@
 /** @format */
 
+import { useSetState, useUniqueEffect } from '@/hooks';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { CircularProgress, IconButton, InputAdornment, TextField } from '@mui/material';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import * as React from 'react';
 import { debounce } from 'throttle-debounce';
-import strings from '../../Globalization';
-import { useSetState } from '../../hooks';
-import util from '../../util';
 
-export const useDeepEffect = (effect, deps) => {
-	const depsRef = React.useRef(deps);
-	const mutated = !util.deepEqual(deps, depsRef.current);
-	React.useEffect(() => {
-		effect();
-		depsRef.current = deps;
-	}, [mutated]);
-};
+
 
 const filter = createFilterOptions();
 
@@ -171,7 +162,7 @@ const AsyncAutocomplete = ({
 					let freeSoloOption = {
 						id: inputValue,
 						label: inputValue,
-						freeSoloLabel: `${typeof strings.CreateOption === 'string' ? strings.CreateOption : 'Create'} "${inputValue}"`
+						freeSoloLabel: `Create "${inputValue}"`
 					};
 					filtered.unshift(freeSoloOption);
 				}
@@ -402,7 +393,7 @@ const AsyncAutocomplete = ({
 		[filterMode, onInputChange, context, optionsArgs, options]
 	);
 
-	useDeepEffect(() => {
+	useUniqueEffect(() => {
 		const opts = { deriverArgs: optionsArgs, deriver: options };
 		opts.append = pagination > 0 && state.page;
 		deriveOptions(opts);

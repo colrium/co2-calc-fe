@@ -31,10 +31,10 @@ export default function ResultsSidebar() {
 	const scope3DownPercentage = footprint > 0 ? ((scope3DownFootprint / footprint) * 100).toFixed(2) : 0;
 	return (
 		<Box className="flex flex-col">
-			<Box>
-				<Typography>CARBON FOOTPRINT</Typography>
+			<Box className="mb-4">
+				<Typography color="textSecondary">CARBON FOOTPRINT</Typography>
 				<Typography color="secondary">
-					<span className="text-9xl">{footprint}</span>tCO<sub>2</sub>e
+					<span className="text-7xl">{footprint}</span>tCO<sub>2</sub>e
 				</Typography>
 			</Box>
 			<Divider />

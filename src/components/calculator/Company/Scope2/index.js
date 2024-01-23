@@ -1,12 +1,25 @@
 /** @format */
 
+import { useEffectOnce, useSetState } from '@/hooks';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ActivityCard from '../../ActivityCard';
-import { useCalculatorForm } from '../../CalculatorProvider';
-import factors from './factors.json';
 export default function Scope2() {
-	const { formik } = useCalculatorForm();
+	const [state, setState] = useSetState({
+		loading: true,
+		factors: [],
+		activities: []
+	});
+
+	useEffectOnce(() => {
+		fetch('/api/activities/scope2')
+			.then((res) => res.json())
+			.then(({ activities }) => {
+				setState({ activities });
+			})
+			.then((err) => console.error('/api/activities/scope2', err))
+			.finally(() => setState({ loading: false }));
+	}, []);
 	
 	return (
 		<Box className="flex p-4 flex-col">
@@ -24,8 +37,8 @@ export default function Scope2() {
 				</Typography>
 			</Box>
 			<Box className="my-2 flex flex-col gap-4">
-				{factors.map(({ name, label, types }, index) => (
-					<ActivityCard types={types} name={name} label={label} key={`${name}-${index}`} />
+				{state.activities.map((activity, index) => (
+					<ActivityCard {...activity} key={`${activity.id}-${index}`} />
 				))}
 			</Box>
 		</Box>

@@ -1,5 +1,6 @@
 [
-	{ "name": "scope1_stationary_combustion", "label": "Stationary Combustion & Own Energy Production", "types": [
+	{ "name": "scope1_stationary_combustion", "label": "Stationary Combustion & Own Energy Production", 
+	"types": [
 		{
 			"id": "c3EfuEltd0yOg4sa1OSvaw",
 			"name": "Anthracite, coal",
@@ -600,7 +601,8 @@
 			"yearTo": 2025
 		}
 	] },
-	{ "name": "scope1_mobile_combustion", "label": "Mobile Combustion", "types": [
+	{ "name": "scope1_mobile_combustion", "label": "Mobile Combustion", 
+	"types": [
 		{
 			"id": "fh3iq3l1T0yy7-xGNNImew",
 			"name": "Diesel",

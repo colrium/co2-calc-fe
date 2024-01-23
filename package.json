@@ -24,6 +24,7 @@
     "dayjs": "^1.11.10",
     "formik": "^2.4.5",
     "framer-motion": "^10.17.9",
+    "miragejs": "^0.1.48",
     "next": "14.0.4",
     "next-redux-wrapper": "^8.1.0",
     "react": "^18",

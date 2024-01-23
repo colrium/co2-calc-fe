@@ -28,7 +28,7 @@ const CustomEditTextField = (props) => {
 
 
 
-export default function ActivityGrid({ rows, name }) {
+export default function ActivityGrid({ rows, name, type }) {
     const { formik } = useCalculatorForm();
     const handleRowEditStop = (params, event) => {
 		if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -37,10 +37,10 @@ export default function ActivityGrid({ rows, name }) {
 	};
     const processRowUpdate = (newRow) => {
         const activities = JSON.parse(JSON.stringify(formik.values?.activities || {}));
-        activities[name] = activities[name] || [];
-        const activityIndex = activities[name].findIndex((activity) => activity.id === newRow.id);
+		activities[type] = {...activities[type], [name]: activities?.[type]?.[name] || []};
+        const activityIndex = activities[type][name].findIndex((activity) => activity.id === newRow.id);
         if (activityIndex > -1) {
-            activities[name][activityIndex] = newRow;
+            activities[type][name][activityIndex] = newRow;
             formik.setFieldValue('activities', activities);
 		}
         return newRow;
@@ -49,15 +49,16 @@ export default function ActivityGrid({ rows, name }) {
     const handleDeleteClick = useCallback(
 		(id) => {
 			const activities = JSON.parse(JSON.stringify(formik.values?.activities || {}));
-			activities[name] = activities[name] || [];
-			activities[name] = activities[name].filter((activity) => activity.id !== id);
+			activities[type] = activities[type] || {};
+			activities[type][name] = activities[type][name] || [];
+			activities[type][name] = activities[type][name].filter((activity) => activity.id !== id);
 			formik.setFieldValue('activities', activities);
 		},
 		[formik.values, name]
 	);
     
     const columns = [
-		{ field: 'id', headerName: 'ID', hide: true },
+		//{ field: 'id', headerName: 'ID', hide: true },
 		{ field: 'name', headerName: 'Name', width: 200 },
 		{
 			field: 'amount',

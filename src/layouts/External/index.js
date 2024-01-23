@@ -4,8 +4,10 @@ import AppBar from './AppBar';
 export default function ExternalLayout({ children }) {
 	return (
 		<ThemeRegistry options={{ key: 'mui-theme' }}>
-			<AppBar />
-			<Box>{children}</Box>
+			<Box sx={{ minHeight: '100vh' }} className="flex flex-col relative">
+				<AppBar />
+				{children}
+			</Box>
 		</ThemeRegistry>
 	);
 }

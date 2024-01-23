@@ -8,20 +8,21 @@ import Typography from '@mui/material/Typography';
 import ActivityGrid from '../ActivityGrid';
 import AddActivityButton from '../AddActivityButton';
 import { useCalculatorForm } from '../CalculatorProvider';
-export default function ActivityCard({name, label, types}) {
+export default function ActivityCard(props) {
+	const {name, label, type} = props
     const { formik } = useCalculatorForm();
     const formikActivities = formik.values.activities || {};
-    const activities =  formikActivities[name] || [];
+	const activities = formikActivities[type]?.[name] || [];
 	return (
 		<Card key={name} variant="outlined">
 			<CardContent>
 				<Typography variant="h6">{label}</Typography>
 				<Box>
-					<ActivityGrid rows={activities} name={name} />
+					<ActivityGrid rows={activities} name={name} type={type} />
 				</Box>
 			</CardContent>
 			<CardActions>
-				<AddActivityButton name={name} options={types} />
+				<AddActivityButton label={label} name={name} type={type} />
 			</CardActions>
 		</Card>
 	);

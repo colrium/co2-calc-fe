@@ -1,7 +1,9 @@
 /** @format */
 
+import { useUniqueEffect } from '@/hooks';
 import { selectCalculator, setCalculatorContext, updateCompanyAssessment, updateProductAssessment } from '@/store/calculatorSlice';
 import { Box, Grid, Step, StepLabel, Stepper } from '@mui/material';
+import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -118,13 +120,20 @@ export default function CalculatorForm() {
 	const persistValues = useCallback(
 		debounce(50, () => {
 			const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
-			dispatch(action({ index: active, value: formik.values }));
+			dispatch(action({ index: active, value: {...formik.values, lastModified: dayjs().toISOString()} }));
 		}),
 		[active, name, formik.values]
 	);
-	useEffect(() => {
-		return persistValues;
-	}, [step]);
+
+	const estimateEmissions = useCallback(
+		debounce(1000, () => {
+			
+		}),
+		[active, name, formik.values]
+	);
+	useUniqueEffect(() => {
+		persistValues();
+	}, [formik.values]);
 
 	return (
 		<Grid container>

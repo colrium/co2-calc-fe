@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import * as React from 'react';
 
-const title = 'Textile Manufacturing Carbon Footprint';
+const title = 'Manufacturing Carbon Footprint';
 const subtitle = 'Carbon Footprint Calculator';
 const pages = [
 	{ path: '/', label: 'Home' },
