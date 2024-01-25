@@ -1,45 +1,40 @@
 /** @format */
 
-import { useEffectOnce, useSetState } from '@/hooks';
+import { useUniqueEffect } from '@/hooks';
+import { CircularProgress } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ActivityCard from '../../ActivityCard';
+import { useCalculatorForm } from '../../CalculatorProvider';
 export default function Scope3Upstream() {
-	const [state, setState] = useSetState({
-		loading: true,
-		factors: [],
-		activities: []
-	});
+	const {
+		activityTypes: { loading, scope3us },
+		fetchActivityTypes
+	} = useCalculatorForm();
 
-	useEffectOnce(() => {
-		fetch('/api/activities/scope3us')
-			.then((res) => res.json())
-			.then(({ activities }) => {
-				setState({ activities });
-			})
-			.then((err) => console.error('/api/activities/scope3us', err))
-			.finally(() => setState({ loading: false }));
+	useUniqueEffect(() => {
+		fetchActivityTypes('scope3us');
 	}, []);
-
 	return (
 		<Box className="flex p-4 flex-col">
 			<Box className="my-2 flex gap-4">
 				<Box className=" flex flex-col gap-4 justify-center">
-					<Typography variant="h4">Scope 3 Upstream</Typography>
+					<Typography variant="h4">Scope 3 Downstream</Typography>
 					<Typography paragraph>
-						Indirect value-chain emissions before products or services reach company.
+						Indirect value-chain emissions after products or services leave company.
 					</Typography>
 					<Typography paragraph>
-						Build your inventory of activities to calculate Scope 3 Upstream fossil emissions and non-Scope
+						Build your inventory of activities to calculate Scope 3 Downstream fossil emissions and non-Scope
 						biogenic emissions. Either select from the list of predefined Emission Factors or use your own Custom
 						Emission Factors.
 					</Typography>
 				</Box>
 			</Box>
 			<Box className="my-2 flex flex-col gap-4">
-				{state.activities.map((activity, index) => (
-					<ActivityCard {...activity} key={`${activity.id}-${index}`} />
-				))}
+				{loading === 'scope3us' && <Box className="p-6 h-64 w-full flex items-center justify-center">
+					<CircularProgress size={24} />
+				</Box>}
+				{loading !== 'scope3us' && scope3us?.map((type, index) => <ActivityCard {...type} key={`${type.id}-${index}`} />)}
 			</Box>
 		</Box>
 	);

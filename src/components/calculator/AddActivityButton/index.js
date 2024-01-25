@@ -8,13 +8,13 @@ import Button from '@mui/material/Button';
 // import MenuItem from '@mui/material/MenuItem';
 import { useCalculatorForm } from '../CalculatorProvider';
 export default function AddActivityButton({ name, label, type }) {
-	const { formik } = useCalculatorForm();
+	const { formik, factors, fetchFactors } = useCalculatorForm();
 	const [state, setState] = useSetState({
 		loading: true,
 		options: [],
 		selections: [],
 	});
-
+	const loading = factors?.loading === name;
 	const open = Boolean(state.anchorEl);
 	const activities = formik.values?.activities?.[type]?.[name] || [];
 	const existingActivities = activities.map((activity) => activity.name);
@@ -42,7 +42,7 @@ export default function AddActivityButton({ name, label, type }) {
 					factors = factors.map((factor) => ({ ...factor, label: factor.name, value: factor.id }));
 					setState({ factors });
 				})
-				.then((err) => console.error(`/api/factors/${name}`, err))
+				.catch((err) => console.error(`/api/factors/${name}`, err))
 				.finally(() => setState({ loading: false }));
 		} else {
 			setState({ loading: false });
@@ -71,23 +71,23 @@ export default function AddActivityButton({ name, label, type }) {
 			.then((res) => res.json())
 			.then(({factor}) => {
 			})
-			.then((err) => console.error(`/api/factors`, err))
+			.catch((err) => console.error(`/api/factors`, err))
 			.finally(() => setState({ loading: false }));
 	};
 ;
-	useUniqueEffect(() => fetchData, [name]);
+	useUniqueEffect(() => fetchFactors(name), [name]);
 
 	return (
 		<Box className="flex items-center gap-4 w-full">
 			<AsyncAutocomplete
-				loading={state.loading}
+				loading={loading}
 				className="flex-1"
 				size="small"
 				margin="dense"
 				label={`Activity's`}
 				placeholder={'Select or create Activity'}
 				getOptionDisabled={(option) => existingActivities.includes(option.name)}
-				options={state.factors}
+				options={factors[name] || []}
 				value={state.selections}
 				onChange={handleOnChange}
 				onCreateOption={handleOnCreateOption}

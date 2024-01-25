@@ -1,26 +1,20 @@
 /** @format */
 
-import { useEffectOnce, useSetState } from '@/hooks';
+import { useUniqueEffect } from '@/hooks';
+import { CircularProgress } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ActivityCard from '../../ActivityCard';
+import { useCalculatorForm } from '../../CalculatorProvider';
 export default function Scope3Downstream() {
-	const [state, setState] = useSetState({
-		loading: true,
-		factors: [],
-		activities: []
-	});
+	const {
+		activityTypes: { loading, scope3ds },
+		fetchActivityTypes
+	} = useCalculatorForm();
 
-	useEffectOnce(() => {
-		fetch('/api/activities/scope3ds')
-			.then((res) => res.json())
-			.then(({ activities }) => {
-				setState({ activities });
-			})
-			.then((err) => console.error('/api/activities/scope3ds', err))
-			.finally(() => setState({ loading: false }));
+	useUniqueEffect(() => {
+		fetchActivityTypes('scope3ds');
 	}, []);
-
 	return (
 		<Box className="flex p-4 flex-col">
 			<Box className="my-2 flex gap-4">
@@ -37,9 +31,10 @@ export default function Scope3Downstream() {
 				</Box>
 			</Box>
 			<Box className="my-2 flex flex-col gap-4">
-				{state.activities.map((activity, index) => (
-					<ActivityCard {...activity} key={`${activity.id}-${index}`} />
-				))}
+				{loading === 'scope3ds' && <Box className="p-6 h-64 w-full flex items-center justify-center">
+					<CircularProgress size={24} />
+				</Box>}
+				{loading !== 'scope3ds' && scope3ds?.map((type, index) => <ActivityCard {...type} key={`${type.id}-${index}`} />)}
 			</Box>
 		</Box>
 	);

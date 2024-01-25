@@ -3,7 +3,7 @@ import Divider from '@mui/material/Divider';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import { useCalculatorForm } from '../CalculatorProvider';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 	height: 10,
@@ -12,29 +12,37 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 		backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800]
 	},
 	[`& .${linearProgressClasses.bar}`]: {
-		borderRadius: 5,
+		borderRadius: 5
 		// backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8'
 	}
 }));
 
+export default function Summary() {
+	const { formik } = useCalculatorForm();
+	const {
+		results
+	} = { ...formik.values };
+
+	const scope1 = typeof results?.byScope?.scope1 === 'number' && !isNaN(results?.byScope?.scope1) ? results.byScope.scope1 : 0;
+	const scope2 = typeof results?.byScope?.scope2 === 'number' && !isNaN(results?.byScope?.scope2) ? results.byScope.scope2 : 0;
+	const scope3us =
+		typeof results?.byScope?.scope3us === 'number' && !isNaN(results?.byScope?.scope3us) ? results.byScope.scope3us : 0;
+	const scope3ds =
+		typeof results?.byScope?.scope3ds === 'number' && !isNaN(results?.byScope?.scope3ds) ? results.byScope.scope3ds : 0;
+	const total = scope1 + scope2 + scope3us + scope3ds;
+	const scope1Percentage = total > 0 ? ((scope1 / total) * 100).toFixed(2) : 0;
+	const scope2Percentage = total > 0 ? ((scope2 / total) * 100).toFixed(2) : 0;
+	const scope3usPercentage = total > 0 ? ((scope3us / total) * 100).toFixed(2) : 0;
+	const scope3dsPercentage = total > 0 ? ((scope3ds / total) * 100).toFixed(2) : 0;
 
 
-export default function ResultsSidebar() {
-	const [footprint, setFootprint] = useState(33.567)
-	const [scope1Footprint, setScope1Footprint] = useState(20);
-	const [scope2Footprint, setScope2Footprint] = useState(2);
-	const [scope3UpFootprint, setScope3UpFootprint] = useState(0);
-	const [scope3DownFootprint, setScope3DownFootprint] = useState(0);
-	const scope1Percentage = footprint > 0 ? ((scope1Footprint / footprint) * 100).toFixed(2) : 0;
-	const scope2Percentage = footprint > 0 ? ((scope2Footprint / footprint) * 100).toFixed(2) : 0;
-	const scope3UpPercentage = footprint > 0 ? ((scope3UpFootprint / footprint) * 100).toFixed(2) : 0;
-	const scope3DownPercentage = footprint > 0 ? ((scope3DownFootprint / footprint) * 100).toFixed(2) : 0;
+	console.log('total', total);
 	return (
 		<Box className="flex flex-col">
 			<Box className="mb-4">
 				<Typography color="textSecondary">CARBON FOOTPRINT</Typography>
 				<Typography color="secondary">
-					<span className="text-7xl">{footprint}</span>tCO<sub>2</sub>e
+					<span className="text-7xl">{total}</span>tCO<sub>2</sub>e
 				</Typography>
 			</Box>
 			<Divider />
@@ -52,7 +60,7 @@ export default function ResultsSidebar() {
 						Scope 1
 					</Typography>
 					<Typography color="textSecondary" variant="h6">
-						{scope1Footprint > 0 ? scope1Footprint : '--.--'}
+						{scope1 > 0 ? scope1 : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -69,7 +77,7 @@ export default function ResultsSidebar() {
 						Scope 2
 					</Typography>
 					<Typography color="textSecondary" variant="h6">
-						{scope2Footprint > 0 ? scope2Footprint : '--.--'}
+						{scope2 > 0 ? scope2 : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -91,18 +99,18 @@ export default function ResultsSidebar() {
 						Scope 3 Upstream
 					</Typography>
 					<Typography color="textSecondary" variant="h6">
-						{scope3UpFootprint > 0 ? scope3UpFootprint : '--.--'}
+						{scope3us > 0 ? scope3us : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
 					<BorderLinearProgress
 						variant="determinate"
-						value={scope3UpPercentage}
+						value={scope3usPercentage}
 						className="flex-1"
 						color="success"
 					/>
 					<Typography color="textSecondary" variant="body2">
-						{scope3UpPercentage}%
+						{scope3usPercentage}%
 					</Typography>
 				</Box>
 			</Box>
@@ -113,22 +121,25 @@ export default function ResultsSidebar() {
 						Scope 3 Downstream
 					</Typography>
 					<Typography color="textSecondary" variant="h6">
-						{scope3DownFootprint > 0 ? scope3DownFootprint : '--.--'}
+						{scope3ds > 0 ? scope3ds : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
 					<BorderLinearProgress
 						variant="determinate"
-						value={scope3DownPercentage}
+						value={scope3dsPercentage}
 						className="flex-1"
 						color="tertiary"
 					/>
 					<Typography color="textSecondary" variant="body2">
-						{scope3DownPercentage}%
+						{scope3dsPercentage}%
 					</Typography>
 				</Box>
 			</Box>
 			<Divider />
+			<Typography color="textSecondary" variant="body2">
+				Values above will update as you add activity data.
+			</Typography>
 		</Box>
 	);
 }

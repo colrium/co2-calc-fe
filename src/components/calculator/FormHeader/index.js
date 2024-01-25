@@ -1,4 +1,5 @@
 import { addCompanyAssessment, addProductAssessment, selectCalculator, setCalculatorContext } from '@/store/calculatorSlice';
+import MenuIcon from '@mui/icons-material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Chip } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
@@ -13,7 +14,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,6 +32,9 @@ export default function FormHeader() {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const { formik, setContext } = useCalculatorForm();
 	const [popupContext, setPopupContext] = React.useState(context.name);
+
+	const { toggleDrawer } = useCalculatorForm()
+	
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
@@ -92,7 +95,7 @@ export default function FormHeader() {
 							label="Description"
 						/>
 					</Box>
-					<TextField required margin="dense" id="year" name="year" label="Year" type="number"/>
+					<TextField required margin="dense" id="year" name="year" label="Year" type="number" />
 				</DialogContent>
 				<DialogActions>
 					<Button color="error" onClick={handleClosePopup}>
@@ -103,13 +106,13 @@ export default function FormHeader() {
 			</Dialog>
 			<AppBar position="static" color="inverse" elevation={0}>
 				<Toolbar>
-					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-						{formik.values?.name}
-					</Typography>
+					<Box className="flex gap-2 flex-1">
+						<Chip label={formik.values?.name} />
+						<Chip label={formik.values?.year} />
+					</Box>
 
-					<div>
+					<Box className="flex gap-4">
 						<IconButton
-							size="large"
 							aria-label="account of current user"
 							aria-controls="menu-appbar"
 							aria-haspopup="true"
@@ -117,6 +120,9 @@ export default function FormHeader() {
 							color="inherit"
 						>
 							<MoreVertIcon />
+						</IconButton>
+						<IconButton onClick={toggleDrawer('right')} color="secondary">
+							<MenuIcon />
 						</IconButton>
 						<Menu
 							id="menu-appbar"
@@ -139,7 +145,7 @@ export default function FormHeader() {
 							<MenuItem onClick={handleAddCompany}>Add company assessment (Scope 1 - 3)</MenuItem>
 							<MenuItem onClick={handleAddProduct}>Add product assessment (LCA)</MenuItem>
 						</Menu>
-					</div>
+					</Box>
 				</Toolbar>
 			</AppBar>
 		</Box>

@@ -43,7 +43,7 @@ function ResponsiveAppBar() {
 	};
 
 	return (
-		<AppBar position="static">
+		<AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
 			<Container maxWidth="xl">
 				<Toolbar disableGutters>
 					<Box
@@ -145,13 +145,13 @@ function ResponsiveAppBar() {
 						))}
 					</Box>
 
-					<Box className="flex gap-8" sx={{ flexGrow: 0,  }}>
+					<Box className="flex gap-8" sx={{ flexGrow: 0 }}>
 						<Button href={'/get-started'} color="inverse" sx={{ p: 0 }}>
-								Get Started
-							</Button>
-							<Button href={'/auth/login'} color="inverse" sx={{ p: 0 }}>
-								Login
-							</Button>
+							Get Started
+						</Button>
+						<Button href={'/auth/login'} color="inverse" sx={{ p: 0 }}>
+							Login
+						</Button>
 					</Box>
 				</Toolbar>
 			</Container>

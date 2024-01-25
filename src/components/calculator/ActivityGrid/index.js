@@ -65,7 +65,7 @@ export default function ActivityGrid({ rows, name, type }) {
 			headerName: 'Amount',
 			editable: true,
 			type: 'number',
-			width: 160,
+			width: 80,
 			min: 0,
 			renderEditCell: (params) => <CustomEditTextField {...params} />
 		},
@@ -77,7 +77,8 @@ export default function ActivityGrid({ rows, name, type }) {
 			field: 'description',
 			headerName: 'Description',
 			editable: true,
-			width: 160
+			width: 160,
+			renderEditCell: (params) => <CustomEditTextField {...params} />
 		},
 		{
 			field: 'actions',
@@ -119,7 +120,6 @@ export default function ActivityGrid({ rows, name, type }) {
                 // density={'compact'}
 				pageSizeOptions={[5, 10, 20]}
 				onRowEditStop={handleRowEditStop}
-				checkboxSelection
 				disableRowSelectionOnClick
 				processRowUpdate={processRowUpdate}
 			/>

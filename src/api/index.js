@@ -1,5 +1,5 @@
 import { Model, createServer } from 'miragejs';
-import activities from './activities.json';
+import activityTypes from './activity-types.json';
 import factors from './factors.json';
 import types from './types.json';
 /* const types = typesJson.map((item, index) => ({ ...item, id: index + 1 }));
@@ -10,15 +10,15 @@ const gases = Object.entries(gasesJson).map(([name, label], index) => ({ name, l
 const units = Object.entries(unitsJson).map(([name, label], index) => ({ name, label, id: index + 1 }));*/
 const server = createServer({
     models: {
-        activity: Model,
+        activityType: Model,
 		type: Model,
         factor: Model,
         gas: Model,
         unit: Model
 	},
 	seeds(server) {
-		for (const activity of activities) {
-			server.create('activity', activity);
+		for (const activityType of activityTypes) {
+			server.create('activityType', activityType);
 		}
         for (const factor of factors) {
 			server.create('factor', factor);
@@ -38,11 +38,11 @@ const server = createServer({
 				// https://miragejs.com/api/classes/db/#load-data
 				server.db.loadData(JSON.parse(dbData));
 			}
-			this.pretender.handledRequest = (verb, path) => {
+			/* this.pretender.handledRequest = (verb, path) => {
 				if (verb.toLowerCase() !== 'get' && verb.toLowerCase() !== 'head') {
 					// localStorage.setItem('ghg-db', JSON.stringify(server.db.dump()));
 				}
-			};
+			}; */
 		}
 		
         let nextFactorId = factors.length + 1;
@@ -68,12 +68,16 @@ const server = createServer({
 			return schema.factors.create(attrs);
         });
 
-        this.get('/api/activities', (schema) => {
-			return schema.activities.all();
+        this.get('/api/activity-types', (schema) => {
+			return schema.activityTypes.all();
 		});
-		this.get('/api/activities/:type', (schema, request) => {
-			let type = request.params.type;
-			return schema.activities.where({ type: type });
+		this.get('/api/activity-types/:scope', (schema, request) => {
+			const scope = request.params.scope;
+			
+			const data = schema.activityTypes.where({ scope });
+			console.log('scope', scope);
+			console.log('data', data);
+			return data;
 		});
 		this.post('/api/activities', (schema, request) => {
 			let attrs = JSON.parse(request.requestBody);
