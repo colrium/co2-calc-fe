@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  ghg-beta:
+    build:
+      context: ../../
+      dockerfile: docker/production/Dockerfile
+    image: with-docker-multi-env-production
+    ports:
+      - "8080:8080"
