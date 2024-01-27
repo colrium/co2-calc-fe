@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { debounce } from 'throttle-debounce';
 import CalculatorProvider from './CalculatorProvider';
 import CompanyOverview from './Company/Overview';
-import CompanyResults from './Company/Results';
 import CompanyScope1 from './Company/Scope1';
 import CompanyScope2 from './Company/Scope2';
 import CompanyScope3Downstream from './Company/Scope3Downstream';
@@ -50,11 +49,11 @@ const companySteps = [
 		label: 'Scope 3 Downstream',
 		Component: CompanyScope3Downstream
 	},
-	{
-		name: 'results',
-		label: 'Results',
-		Component: CompanyResults
-	}
+	// {
+	// 	name: 'results',
+	// 	label: 'Results',
+	// 	Component: CompanyResults
+	// }
 ];
 const productSteps = [
 	{
@@ -121,7 +120,8 @@ export default function CalculatorForm() {
 	const validationSchema = useMemo(() => contextValidationSchemas[name], [name]);
 	const formik = useFormik({
 		initialValues: {
-			activities: { scope1: {}, scope2: {}, scope3us: {}, scope3ds: {}, year: dayjs().year() },
+			year: dayjs().year(),
+			activities: { scope1: {}, scope2: {}, scope3us: {}, scope3ds: {} },
 			results: {
 				byScope: {
 					scope1: 0,
@@ -139,8 +139,8 @@ export default function CalculatorForm() {
 		},
 		validationSchema: validationSchema
 	});
-
-	const activities = formik.values?.activities
+	const { lastModified, ...values } = formik.values || {};
+	const {activities, year} = values
 	const changeContext = (name, active) => {
 		dispatch(setCalculatorContext({name, active}));
 		formik.resetForm();
@@ -187,11 +187,11 @@ export default function CalculatorForm() {
 
 	
 	const persistValues = useCallback(
-		debounce(50, () => {
+		debounce(50, (values) => {
 			const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
-			dispatch(action({ index: active, value: {...formik.values, lastModified: dayjs().toISOString()} }));
+			dispatch(action({ index: active, value: { ...values, lastModified: dayjs().toISOString() } }));
 		}),
-		[active, name, formik.values]
+		[active, name]
 	);
 
 	const calculateEmissions = debounce(1000, (activities) => {
@@ -215,13 +215,12 @@ export default function CalculatorForm() {
 						for (let i = 0; i < entries?.length; i++) {
 							const activity = entries[i];
 							const amount = activity.amount || 0;
-							const emmissionFactor = activity.emmissionFactor || 1;
+							const emissionFactor = activity.emissionFactor > 0? activity.emissionFactor : activity.emissionsType === 'biogenic'? 0.1 : 0.8;
 							const emissionsType = activity.emissionsType;
-							const emmissions = emmissionFactor * amount;
-							console.log('emmissions', emmissions, 'scope', scope, 'name', name);
-							results.byScope[scope] += emmissions;
+							const emissions = emissionFactor * amount;
+							results.byScope[scope] += emissions;
 							if (emissionsType) {
-								results.byEmissionsType[emissionsType] += emmissions;
+								results.byEmissionsType[emissionsType] += emissions;
 							}
 						}
 					}
@@ -230,7 +229,6 @@ export default function CalculatorForm() {
 					
 			
 		}
-		console.log('results', results);
 
 		formik.setFieldValue('results', results);
 	});
@@ -244,10 +242,10 @@ export default function CalculatorForm() {
 		if (data) {
 			formik.setValues({ activities: {}, ...rows[active] });
 		}
-	}, [name, active]);
+	}, [name, active, year]);
 	useUniqueEffect(() => {
-		persistValues();
-	}, [formik.values]);
+		persistValues(values);
+	}, [values]);
 
 	useUniqueEffect(() => {
 		calculateEmissions(activities);
@@ -276,7 +274,17 @@ export default function CalculatorForm() {
 					toggleDrawer
 				}}
 			>
-				<Box className="flex" sx={{ pt: (theme) => theme.spacing(7) }}>
+				<Box
+					className="flex"
+					sx={{
+						pt: (theme) => theme.spacing(10),
+						display: 'grid',
+						gridTemplateColumns: 'auto 1fr auto',
+						gridTemplateRows: '1fr',
+						gridColumnGap: '10px',
+						gridRowGap: '0px'
+					}}
+				>
 					<LeftSidebar
 						open={state.leftDrawerOpen}
 						onClose={() => setState({ leftDrawerOpen: false })}
@@ -290,7 +298,7 @@ export default function CalculatorForm() {
 						<Component />
 					</Box>
 					<RightSidebar
-						open={state.rightDrawerOpen}
+						open={state.rightDrawerOpen && stepName !== 'results'}
 						onClose={() => setState({ rightDrawerOpen: false })}
 						variant={drawerVariant}
 					/>

@@ -8,20 +8,18 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import ActivityGrid from '../ActivityGrid';
-import AddActivityButton from '../AddActivityButton';
+import AddActivity from '../AddActivity';
 import { useCalculatorForm } from '../CalculatorProvider';
 export default function ActivityCard(props) {
-	const {name, label, type, definition } = props
+	const { name, label, scope, definition } = props;
     const { formik } = useCalculatorForm();
     const formikActivities = formik.values.activities || {};
-	const activities = formikActivities[type]?.[name] || [];
+	const activities = formikActivities[scope]?.[name] || [];
 	return (
 		<Card key={name} variant="outlined">
 			<CardContent>
 				<Box className="flex gap-2 mb-2">
-					<Typography variant="h6" >
-						{label}
-					</Typography>
+					<Typography variant="h6">{label}</Typography>
 					<Tooltip title={definition}>
 						<IconButton>
 							<HelpOutlineOutlinedIcon />
@@ -30,11 +28,11 @@ export default function ActivityCard(props) {
 				</Box>
 
 				<Box>
-					<ActivityGrid rows={activities} name={name} type={type} />
+					<ActivityGrid rows={activities} name={name} scope={scope} />
 				</Box>
 			</CardContent>
 			<CardActions>
-				<AddActivityButton label={label} name={name} type={type} />
+				<AddActivity label={label} name={name} scope={scope} />
 			</CardActions>
 		</Card>
 	);

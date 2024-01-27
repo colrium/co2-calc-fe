@@ -24,13 +24,13 @@ function GetStarted() {
 							size="small"
 							margin="dense"
 						/>
-						<Button component={Link} variant="contained" href="/calculate">
+						<Button component={Link} variant="contained" href="/overview">
 							Get Started
 						</Button>
 					</Box>
 
 					<Box className="flex flex-col items-center">
-						<Button component={Link} href="/calculate" startIcon={<GoogleIcon color='error'/>}>
+						<Button component={Link} href="/overview" startIcon={<GoogleIcon color="error" />}>
 							Proceed with Google
 						</Button>
 					</Box>

@@ -4,15 +4,17 @@ import Toolbar from '@mui/material/Toolbar';
 
 import { useCalculatorForm } from '../CalculatorProvider';
 const drawerWidth = 320;
+
+const StepComponent = () => {}
 export default function LeftSidebar({ steps, step, onChangeStep, open, onClose, variant }) {
-	const { formik } = useCalculatorForm();
+	const { formik, stepName } = useCalculatorForm();
 	
 
 	return (
 		<Drawer
 			variant={variant}
 			sx={{
-				width: drawerWidth,
+				width: open? drawerWidth : 0,
 				flexShrink: 0,
 				[`& .MuiDrawer-paper`]: {
 					width: drawerWidth,
@@ -28,11 +30,13 @@ export default function LeftSidebar({ steps, step, onChangeStep, open, onClose, 
 			<Toolbar />
 
 			<Stepper className="w-full" activeStep={step} orientation="vertical">
-				{steps.map(({ label, Component, name }, index) => (
-					<Step key={name} onClick={() => onChangeStep(index)}>
-						<StepLabel>{label}</StepLabel>
-					</Step>
-				))}
+				{steps.map(({ label, Component, name }, index) => {
+					const completed = Object.keys(formik.values?.activities?.[name] || {}).length > 0;
+					return (
+						<Step key={name} onClick={() => onChangeStep(index)}>
+							<StepLabel completed={completed}>{label}</StepLabel>
+						</Step>
+					);})}
 			</Stepper>
 		</Drawer>
 	);

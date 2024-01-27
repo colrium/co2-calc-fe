@@ -4,16 +4,16 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useCalculatorForm } from '../CalculatorProvider';
-
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 	height: 10,
 	borderRadius: 5,
-	[`&.${linearProgressClasses.colorPrimary}`]: {
-		backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800]
-	},
 	[`& .${linearProgressClasses.bar}`]: {
 		borderRadius: 5
-		// backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8'
+		// backgroundColor: theme.palette.mode === 'light' ? '#CCCCCC' : '#308fe8'
+	},
+	[`&.${linearProgressClasses.root}`]: {
+		borderRadius: 5,
+		backgroundColor: `${theme.palette.mode === 'light' ? '#CCCCCC' : '#308fe8'} !important`
 	}
 }));
 
@@ -23,20 +23,31 @@ export default function Summary() {
 		results
 	} = { ...formik.values };
 
+	
+	
 	const scope1 = typeof results?.byScope?.scope1 === 'number' && !isNaN(results?.byScope?.scope1) ? results.byScope.scope1 : 0;
-	const scope2 = typeof results?.byScope?.scope2 === 'number' && !isNaN(results?.byScope?.scope2) ? results.byScope.scope2 : 0;
+	const scope2 = typeof results?.byScope?.scope2 === 'number' && !isNaN(results?.byScope?.scope2) ? results.byScope.scope2 : 0;	
 	const scope3us =
 		typeof results?.byScope?.scope3us === 'number' && !isNaN(results?.byScope?.scope3us) ? results.byScope.scope3us : 0;
 	const scope3ds =
 		typeof results?.byScope?.scope3ds === 'number' && !isNaN(results?.byScope?.scope3ds) ? results.byScope.scope3ds : 0;
+	const biogenic =
+		typeof results?.byEmissionsType?.biogenic === 'number' && !isNaN(results?.byEmissionsType?.biogenic)
+			? results.byEmissionsType.biogenic
+			: 0;
+	const fossil =
+		typeof results?.byEmissionsType?.fossil === 'number' && !isNaN(results?.byEmissionsType?.fossil)
+			? results.byEmissionsType.fossil
+			: 0;
 	const total = scope1 + scope2 + scope3us + scope3ds;
 	const scope1Percentage = total > 0 ? ((scope1 / total) * 100).toFixed(2) : 0;
 	const scope2Percentage = total > 0 ? ((scope2 / total) * 100).toFixed(2) : 0;
 	const scope3usPercentage = total > 0 ? ((scope3us / total) * 100).toFixed(2) : 0;
 	const scope3dsPercentage = total > 0 ? ((scope3ds / total) * 100).toFixed(2) : 0;
+	const biogenicPercentage = total > 0 ? ((biogenic / total) * 100).toFixed(2) : 0;
+	const fossilPercentage = total > 0 ? ((fossil / total) * 100).toFixed(2) : 0;
 
 
-	console.log('total', total);
 	return (
 		<Box className="flex flex-col">
 			<Box className="mb-4">
@@ -47,7 +58,7 @@ export default function Summary() {
 			</Box>
 			<Divider />
 			<Box className="flex flex-row items-center py-4 gap-4">
-				<Typography className="flex-1" variant="h6" color="textSecondary">
+				<Typography className="flex-1" variant="subtitle2" color="textSecondary">
 					Emissions by scope
 				</Typography>
 				<Typography color="textSecondary" variant="body2">
@@ -56,10 +67,10 @@ export default function Summary() {
 			</Box>
 			<Box className="py-2">
 				<Box className="flex flex-row items-center gap-4">
-					<Typography className="flex-1" variant="h6" color="textSecondary">
+					<Typography className="flex-1" variant="subtitle2" color="textSecondary">
 						Scope 1
 					</Typography>
-					<Typography color="textSecondary" variant="h6">
+					<Typography color="textSecondary" variant="subtitle2">
 						{scope1 > 0 ? scope1 : '--.--'}
 					</Typography>
 				</Box>
@@ -73,10 +84,10 @@ export default function Summary() {
 
 			<Box className="py-2">
 				<Box className="flex flex-row items-center gap-4">
-					<Typography className="flex-1" variant="h6" color="textSecondary">
+					<Typography className="flex-1" variant="subtitle2" color="textSecondary">
 						Scope 2
 					</Typography>
-					<Typography color="textSecondary" variant="h6">
+					<Typography color="textSecondary" variant="subtitle2">
 						{scope2 > 0 ? scope2 : '--.--'}
 					</Typography>
 				</Box>
@@ -95,10 +106,10 @@ export default function Summary() {
 
 			<Box className="py-2">
 				<Box className="flex flex-row items-center gap-4">
-					<Typography className="flex-1" variant="h6" color="textSecondary">
+					<Typography className="flex-1" variant="subtitle2" color="textSecondary">
 						Scope 3 Upstream
 					</Typography>
-					<Typography color="textSecondary" variant="h6">
+					<Typography color="textSecondary" variant="subtitle2">
 						{scope3us > 0 ? scope3us : '--.--'}
 					</Typography>
 				</Box>
@@ -117,10 +128,10 @@ export default function Summary() {
 
 			<Box className="py-2 mb-4">
 				<Box className="flex flex-row items-center gap-4">
-					<Typography className="flex-1" variant="h6" color="textSecondary">
+					<Typography className="flex-1" variant="subtitle2" color="textSecondary">
 						Scope 3 Downstream
 					</Typography>
-					<Typography color="textSecondary" variant="h6">
+					<Typography color="textSecondary" variant="subtitle2">
 						{scope3ds > 0 ? scope3ds : '--.--'}
 					</Typography>
 				</Box>
@@ -134,6 +145,59 @@ export default function Summary() {
 					<Typography color="textSecondary" variant="body2">
 						{scope3dsPercentage}%
 					</Typography>
+				</Box>
+			</Box>
+			<Divider />
+			<Box className="py-2 mb-4">
+				<Box className="flex flex-row items-center gap-4 mb-2">
+					<Typography className="flex-1" variant="subtitle1" color="textSecondary">
+						Emissions by type
+					</Typography>
+					<Typography color="textSecondary" variant="body2">
+						tCO<sub>2</sub>e
+					</Typography>
+				</Box>
+				<Box className="py-2">
+					<Box className="flex flex-row items-center gap-4">
+						<Typography className="flex-1" variant="subtitle2" color="textSecondary">
+							Biogenic
+						</Typography>
+						<Typography color="textSecondary" variant="subtitle2">
+							{biogenic > 0 ? biogenic : '--.--'}
+						</Typography>
+					</Box>
+					<Box className="flex flex-row items-center gap-4">
+						<BorderLinearProgress
+							variant="determinate"
+							value={biogenicPercentage}
+							className="flex-1"
+							color="cyan"
+						/>
+						<Typography color="textSecondary" variant="body2">
+							{biogenicPercentage}%
+						</Typography>
+					</Box>
+				</Box>
+				<Box className="py-2">
+					<Box className="flex flex-row items-center gap-4">
+						<Typography className="flex-1" variant="subtitle2" color="textSecondary">
+							Fossil
+						</Typography>
+						<Typography color="textSecondary" variant="subtitle2">
+							{fossil > 0 ? fossil : '--.--'}
+						</Typography>
+					</Box>
+					<Box className="flex flex-row items-center gap-4">
+						<BorderLinearProgress
+							variant="determinate"
+							value={fossilPercentage}
+							className="flex-1"
+							color="brown"
+						/>
+						<Typography color="textSecondary" variant="body2">
+							{fossilPercentage}%
+						</Typography>
+					</Box>
 				</Box>
 			</Box>
 			<Divider />

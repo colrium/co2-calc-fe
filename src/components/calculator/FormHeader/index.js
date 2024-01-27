@@ -1,3 +1,4 @@
+import { useSetState } from '@/hooks';
 import { addCompanyAssessment, addProductAssessment, selectCalculator, setCalculatorContext } from '@/store/calculatorSlice';
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -14,10 +15,14 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+import { useFormik } from 'formik';
 import Link from 'next/link';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCalculatorForm } from '../CalculatorProvider';
+import validationSchema from '../Company/validationSchema';
 
 const contextTitles = {
 	company: 'New company assessment (Scope 1 - 3)',
@@ -32,6 +37,13 @@ export default function FormHeader() {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const { formik, setContext } = useCalculatorForm();
 	const [popupContext, setPopupContext] = React.useState(context.name);
+	const [formValues, setFormValues] = useSetState({
+		year: dayjs().year(formik.values?.year || dayjs().year()),
+		name: '',
+		description: ''
+	});
+
+	
 
 	const { toggleDrawer } = useCalculatorForm()
 	
@@ -65,10 +77,26 @@ export default function FormHeader() {
 		const name = formJson.name;
 		const data = calculator[popupContext];
 		const action = popupContext === 'product' ? addProductAssessment : addCompanyAssessment;
-		dispatch(action(formJson));
 		dispatch(setCalculatorContext({ active: data.length ?? 0, name: popupContext }));
+		dispatch(action(formJson));		
 		handleClosePopup();
 	};
+
+	const contextFormik = useFormik({
+		initialValues: {
+			name: '',
+			description: '',
+			year: dayjs().year(formik.values?.year || dayjs().year())
+		},
+		validationSchema: validationSchema,
+		onSubmit: (values) => {
+			const data = calculator[popupContext];
+			const action = popupContext === 'product' ? addProductAssessment : addCompanyAssessment;
+			dispatch(setCalculatorContext({ active: data.length ?? 0, name: popupContext }));
+			dispatch(action(values));
+			handleClosePopup();
+		}
+	});
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
@@ -77,7 +105,7 @@ export default function FormHeader() {
 				onClose={handleClose}
 				PaperProps={{
 					component: 'form',
-					onSubmit: handleOnSubmit
+					onSubmit: contextFormik.handleSubmit
 				}}
 			>
 				<DialogTitle>
@@ -85,7 +113,20 @@ export default function FormHeader() {
 				</DialogTitle>
 				<DialogContent>
 					<Box className="flex gap-8">
-						<TextField autoFocus required margin="dense" id="name" name="name" label="Name" type="text" />
+						<TextField
+							autoFocus
+							required
+							margin="dense"
+							id="name"
+							name="name"
+							label="Name"
+							type="text"
+							value={contextFormik.values?.name}
+							onChange={contextFormik.handleChange}
+							onBlur={contextFormik.handleBlur}
+							error={contextFormik.touched.name && Boolean(contextFormik.errors.name)}
+							helperText={contextFormik.touched.name && contextFormik.errors.name}
+						/>
 						<TextField
 							multiline
 							rows={3}
@@ -93,9 +134,25 @@ export default function FormHeader() {
 							id="description"
 							name="description"
 							label="Description"
+							value={contextFormik.values?.description}
+							onChange={contextFormik.handleChange}
+							onBlur={contextFormik.handleBlur}
+							error={contextFormik.touched.description && Boolean(contextFormik.errors.description)}
+							helperText={contextFormik.touched.description && contextFormik.errors.description}
 						/>
 					</Box>
-					<TextField required margin="dense" id="year" name="year" label="Year" type="number" />
+					<DatePicker
+						label={'Year'}
+						openTo="year"
+						views={['year']}
+						minDate={dayjs().year(2000)}
+						maxDate={dayjs().year(2050)}
+						value={dayjs().year(contextFormik.values?.year || dayjs().year())}
+						onChange={(newValue) => contextFormik.setFieldValue('year', newValue.year())}
+						error={contextFormik.touched.year && Boolean(contextFormik.errors.year)}
+						helperText={contextFormik.touched.year && contextFormik.errors.year}
+					/>
+					{/* <TextField required margin="dense" id="year" name="year" label="Year" type="number" /> */}
 				</DialogContent>
 				<DialogActions>
 					<Button color="error" onClick={handleClosePopup}>
@@ -106,9 +163,12 @@ export default function FormHeader() {
 			</Dialog>
 			<AppBar position="static" color="inverse" elevation={0}>
 				<Toolbar>
+					<IconButton onClick={toggleDrawer('left')} color="secondary" className="mr-4">
+						<MenuIcon />
+					</IconButton>
 					<Box className="flex gap-2 flex-1">
-						<Chip label={formik.values?.name} />
-						<Chip label={formik.values?.year} />
+						{formik.values?.name && <Chip label={formik.values?.name} />}
+						{formik.values?.year && <Chip label={formik.values?.year} />}
 					</Box>
 
 					<Box className="flex gap-4">

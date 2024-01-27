@@ -31,10 +31,13 @@ export default function Scope3Upstream() {
 				</Box>
 			</Box>
 			<Box className="my-2 flex flex-col gap-4">
-				{loading === 'scope3us' && <Box className="p-6 h-64 w-full flex items-center justify-center">
-					<CircularProgress size={24} />
-				</Box>}
-				{loading !== 'scope3us' && scope3us?.map((type, index) => <ActivityCard {...type} key={`${type.id}-${index}`} />)}
+				{loading === 'scope3us' && (
+					<Box className="p-6 h-64 w-full flex items-center justify-center">
+						<CircularProgress size={24} />
+					</Box>
+				)}
+				{loading !== 'scope3us' &&
+					scope3us?.map((type, index) => <ActivityCard {...type} scope={'scope3us'} key={`${type.id}-${index}`} />)}
 			</Box>
 		</Box>
 	);

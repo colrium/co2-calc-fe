@@ -20,23 +20,26 @@ export default function Scope2() {
 			<Box className="my-2 flex gap-4">
 				<Box className=" flex flex-col gap-4 justify-center">
 					<Typography variant="h4">Scope 2</Typography>
-				<Typography paragraph>Indirect emissions from purchased energy.</Typography>
-				<Typography paragraph>
-					Build your inventory of activities to calculate Scope 2 fossil emissions and non-Scope biogenic
-					emissions.
-				</Typography>
-				<Typography paragraph>
-					Calculate Scope 2 emissions with the Market-based (energy supplier specific) and/or Location-based
-					(regional specific) approach. Either select from the list of predefined Emission Factors or use your own
-					Custom Emission Factors.
-				</Typography>
+					<Typography paragraph>Indirect emissions from purchased energy.</Typography>
+					<Typography paragraph>
+						Build your inventory of activities to calculate Scope 2 fossil emissions and non-Scope biogenic
+						emissions.
+					</Typography>
+					<Typography paragraph>
+						Calculate Scope 2 emissions with the Market-based (energy supplier specific) and/or Location-based
+						(regional specific) approach. Either select from the list of predefined Emission Factors or use your
+						own Custom Emission Factors.
+					</Typography>
 				</Box>
 			</Box>
 			<Box className="my-2 flex flex-col gap-4">
-				{loading === 'scope2' && <Box className="p-6 h-64 w-full flex items-center justify-center">
-					<CircularProgress size={24} />
-				</Box>}
-				{loading !== 'scope2' && scope2?.map((type, index) => <ActivityCard {...type} key={`${type.id}-${index}`} />)}
+				{loading === 'scope2' && (
+					<Box className="p-6 h-64 w-full flex items-center justify-center">
+						<CircularProgress size={24} />
+					</Box>
+				)}
+				{loading !== 'scope2' &&
+					scope2?.map((type, index) => <ActivityCard {...type} scope={'scope2'} key={`${type.id}-${index}`} />)}
 			</Box>
 		</Box>
 	);

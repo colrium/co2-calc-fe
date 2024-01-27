@@ -1,34 +1,41 @@
 /** @format */
 
 import AsyncAutocomplete from '@/components/common/AsyncAutocomplete';
-import { useSetState, useUniqueEffect } from '@/hooks';
+import { useMutationsCount, useSetState, useUniqueEffect } from '@/hooks';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 // import Menu from '@mui/material/Menu';
 // import MenuItem from '@mui/material/MenuItem';
+import { useCallback } from 'react';
 import { useCalculatorForm } from '../CalculatorProvider';
-export default function AddActivityButton({ name, label, type }) {
+export default function AddActivity({ name, label, scope }) {
 	const { formik, factors, fetchFactors } = useCalculatorForm();
 	const [state, setState] = useSetState({
 		loading: true,
 		options: [],
-		selections: [],
+		selections: []
 	});
 	const loading = factors?.loading === name;
 	const open = Boolean(state.anchorEl);
-	const activities = formik.values?.activities?.[type]?.[name] || [];
+	const activities = formik.values?.activities?.[scope]?.[name] || [];
 	const existingActivities = activities.map((activity) => activity.name);
-	
-	
-	const handleOnAddActivity = () => {
-		let activities = JSON.parse(JSON.stringify(formik.values?.activities || {}));
-		activities = {
-			...activities,
-			[type]: { ...activities[type], [name]: (activities[name] || []).concat(state.selections) }
+	const mutationCount = useMutationsCount([activities, state.selections]);
+	const handleOnAddActivity = useCallback(() => {
+		let formikActivities = JSON.parse(JSON.stringify(formik.values?.activities || {}));
+		if (!formikActivities[scope]) {
+			formikActivities[scope] = {};
+		}
+		if (!Array.isArray(formikActivities[scope]?.[name])) {
+			formikActivities[scope][name] = [];
+		}
+		formikActivities[scope] = {
+			...formikActivities[scope],
+			[name]: (formikActivities[scope][name] || []).concat(state.selections)
 		};
-		formik.setFieldValue('activities', activities);
+
+		formik.setFieldValue('activities', formikActivities);
 		setState({ selections: [] });
-	};
+	}, [mutationCount]);
 
 	const handleOnChange = (e, selections) => {
 		selections = selections.map((selection) => ({ ...selection, amount: 0, description: '' }));
@@ -47,9 +54,9 @@ export default function AddActivityButton({ name, label, type }) {
 		} else {
 			setState({ loading: false });
 		}
-	}
-	const handleOnCreateOption = ({option}) => {
-		const {id, label} = option
+	};
+	const handleOnCreateOption = ({ option }) => {
+		const { id, label } = option;
 		const payload = {
 			name: label,
 			emissionsType: 'fossil',
@@ -69,12 +76,10 @@ export default function AddActivityButton({ name, label, type }) {
 		}
 		fetch(`/api/factors`, { method: 'POST', body: formData })
 			.then((res) => res.json())
-			.then(({factor}) => {
-			})
+			.then(({ factor }) => {})
 			.catch((err) => console.error(`/api/factors`, err))
 			.finally(() => setState({ loading: false }));
 	};
-;
 	useUniqueEffect(() => fetchFactors(name), [name]);
 
 	return (

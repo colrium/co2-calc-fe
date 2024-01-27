@@ -15,7 +15,6 @@ export default function Scope1() {
 	useUniqueEffect(() => {
 		fetchActivityTypes('scope1');
 	}, []);
-	console.log('loading', loading)
 	return (
 		<Box className="flex p-4 flex-col">
 			<Box className="my-2 flex gap-4">
@@ -33,7 +32,7 @@ export default function Scope1() {
 				{loading === 'scope1' && <Box className="p-6 h-64 w-full flex items-center justify-center">
 					<CircularProgress size={24} />
 				</Box>}
-				{loading !== 'scope1' && scope1.map((type, index) => <ActivityCard {...type} key={`${type.id}-${index}`} />)}
+				{loading !== 'scope1' && scope1.map((type, index) => <ActivityCard {...type} scope={'scope1'} key={`${type.id}-${index}`} />)}
 			</Box>
 		</Box>
 	);

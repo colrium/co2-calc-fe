@@ -39,6 +39,7 @@ export default function Overview() {
 						name="description"
 						multiline
 						minRows={4}
+						maxRows={6}
 						id="description"
 						value={formik.values?.description}
 						onChange={formik.handleChange}

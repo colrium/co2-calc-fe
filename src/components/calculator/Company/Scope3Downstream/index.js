@@ -31,10 +31,13 @@ export default function Scope3Downstream() {
 				</Box>
 			</Box>
 			<Box className="my-2 flex flex-col gap-4">
-				{loading === 'scope3ds' && <Box className="p-6 h-64 w-full flex items-center justify-center">
-					<CircularProgress size={24} />
-				</Box>}
-				{loading !== 'scope3ds' && scope3ds?.map((type, index) => <ActivityCard {...type} key={`${type.id}-${index}`} />)}
+				{loading === 'scope3ds' && (
+					<Box className="p-6 h-64 w-full flex items-center justify-center">
+						<CircularProgress size={24} />
+					</Box>
+				)}
+				{loading !== 'scope3ds' &&
+					scope3ds?.map((type, index) => <ActivityCard {...type} scope={'scope3ds'} key={`${type.id}-${index}`} />)}
 			</Box>
 		</Box>
 	);

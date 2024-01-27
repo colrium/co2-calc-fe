@@ -28,36 +28,36 @@ const CustomEditTextField = (props) => {
 
 
 
-export default function ActivityGrid({ rows, name, type }) {
-    const { formik } = useCalculatorForm();
-    const handleRowEditStop = (params, event) => {
+export default function ActivityGrid({ rows, name, scope }) {
+	const { formik } = useCalculatorForm();
+	const handleRowEditStop = (params, event) => {
 		if (params.reason === GridRowEditStopReasons.rowFocusOut) {
 			// event.defaultMuiPrevented = true;
 		}
 	};
-    const processRowUpdate = (newRow) => {
-        const activities = JSON.parse(JSON.stringify(formik.values?.activities || {}));
-		activities[type] = {...activities[type], [name]: activities?.[type]?.[name] || []};
-        const activityIndex = activities[type][name].findIndex((activity) => activity.id === newRow.id);
-        if (activityIndex > -1) {
-            activities[type][name][activityIndex] = newRow;
-            formik.setFieldValue('activities', activities);
+	const processRowUpdate = (newRow) => {
+		const activities = JSON.parse(JSON.stringify(formik.values?.activities || {}));
+		activities[scope] = { ...activities[scope], [name]: activities?.[scope]?.[name] || [] };
+		const activityIndex = activities[scope][name].findIndex((activity) => activity.id === newRow.id);
+		if (activityIndex > -1) {
+			activities[scope][name][activityIndex] = newRow;
+			formik.setFieldValue('activities', activities);
 		}
-        return newRow;
-    };
+		return newRow;
+	};
 
-    const handleDeleteClick = useCallback(
+	const handleDeleteClick = useCallback(
 		(id) => {
 			const activities = JSON.parse(JSON.stringify(formik.values?.activities || {}));
-			activities[type] = activities[type] || {};
-			activities[type][name] = activities[type][name] || [];
-			activities[type][name] = activities[type][name].filter((activity) => activity.id !== id);
+			activities[scope] = activities[scope] || {};
+			activities[scope][name] = activities[scope][name] || [];
+			activities[scope][name] = activities[scope][name].filter((activity) => activity.id !== id);
 			formik.setFieldValue('activities', activities);
 		},
 		[formik.values, name]
 	);
-    
-    const columns = [
+
+	const columns = [
 		//{ field: 'id', headerName: 'ID', hide: true },
 		{ field: 'name', headerName: 'Name', width: 200 },
 		{
@@ -98,7 +98,7 @@ export default function ActivityGrid({ rows, name, type }) {
 		}
 	];
 	return (
-		<Box sx={{ height: 200, width: '100%' }}>
+		<Box sx={{ height: 300, width: '100%' }}>
 			<DataGrid
 				rows={rows}
 				columns={columns}
@@ -108,16 +108,16 @@ export default function ActivityGrid({ rows, name, type }) {
 							pageSize: 5
 						}
 					}
-                }}
-                sx={{
-                    '.MuiDataGrid-cell.MuiDataGrid-cell--editing': {
-                    boxShadow: 'none'
-                    },
-                    '.MuiDataGrid-cell.MuiDataGrid-cell--editing:focus-within': {
-                        outline: 'none'
-                    }
-                }}
-                // density={'compact'}
+				}}
+				sx={{
+					'.MuiDataGrid-cell.MuiDataGrid-cell--editing': {
+						boxShadow: 'none'
+					},
+					'.MuiDataGrid-cell.MuiDataGrid-cell--editing:focus-within': {
+						outline: 'none'
+					}
+				}}
+				// density={'compact'}
 				pageSizeOptions={[5, 10, 20]}
 				onRowEditStop={handleRowEditStop}
 				disableRowSelectionOnClick

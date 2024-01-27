@@ -146,7 +146,7 @@ function ResponsiveAppBar() {
 					</Box>
 
 					<Box className="flex gap-8" sx={{ flexGrow: 0 }}>
-						<Button href={'/get-started'} color="inverse" sx={{ p: 0 }}>
+						<Button href={'/overview'} color="inverse" sx={{ p: 0 }}>
 							Get Started
 						</Button>
 						<Button href={'/auth/login'} color="inverse" sx={{ p: 0 }}>
