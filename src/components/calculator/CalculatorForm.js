@@ -186,15 +186,14 @@ export default function CalculatorForm() {
 	};
 
 	
-	const persistValues = useCallback(
-		debounce(50, (values) => {
+	const persistValues = useCallback((values) => {
 			const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
 			dispatch(action({ index: active, value: { ...values, lastModified: dayjs().toISOString() } }));
-		}),
+		},
 		[active, name]
 	);
 
-	const calculateEmissions = debounce(1000, (activities) => {
+	const calculateEmissions = debounce(500, (activities) => {
 		let results = {
 			byScope: {
 				scope1: 0,
@@ -217,7 +216,7 @@ export default function CalculatorForm() {
 							const amount = activity.amount || 0;
 							const emissionFactor = activity.emissionFactor > 0? activity.emissionFactor : activity.emissionsType === 'biogenic'? 0.1 : 0.8;
 							const emissionsType = activity.emissionsType;
-							const emissions = emissionFactor * amount;
+							const emissions = (emissionFactor * amount);
 							results.byScope[scope] += emissions;
 							if (emissionsType) {
 								results.byEmissionsType[emissionsType] += emissions;
@@ -243,8 +242,15 @@ export default function CalculatorForm() {
 			formik.setValues({ activities: {}, ...rows[active] });
 		}
 	}, [name, active, year]);
+
+	const debouncedPersistValues = debounce(1000, ({values, active, name}) => {
+		const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
+		dispatch(action({ index: active, value: { ...values, lastModified: dayjs().toISOString() } }));
+	})
+	
 	useUniqueEffect(() => {
-		persistValues(values);
+		
+		debouncedPersistValues({values, active, name});
 	}, [values]);
 
 	useUniqueEffect(() => {
