@@ -17,7 +17,7 @@ export default function Home() {
 				</Typography>
 
 				<Typography className="mb-4">
-				Start by entering relevant data into the calculator. We've organized the input categories to cover different emission sources:
+					Start by entering relevant data into the calculator. We've organized the input categories to cover different emission sources:
 				</Typography>
 
 				<Typography variant="h6">
@@ -66,6 +66,25 @@ export default function Home() {
 
 				<Typography className="mb-4">
 					Our calculator doesn't just highlight the problem; it guides you toward solutions. Access a list of recommended reduction strategies tailored to your specific emission profile. These suggestions are based on industry best practices and proven methods to lower carbon footprints.
+				</Typography>
+
+				<Typography variant="h5">
+					Step 6: Set Goals and Track Progress
+				</Typography>
+
+				<Typography className="mb-4">
+					Establish emission reduction goals and use our calculator regularly to track progress. Our tool allows you to save multiple calculations, making it easy to monitor changes over time and adjust strategies accordingly.
+				</Typography>
+
+				<Typography variant="h5">
+					Step 7: Share and Inspire
+				</Typography>
+
+				<Typography className="mb-4">
+				Emission reduction is a collective effort. Share your achievements, strategies, and insights with your community. Encourage others to join the movement toward a more sustainable future.
+				</Typography>
+
+				<Typography className="mb-4">Ready to make a positive impact? Start calculating your carbon emissions today and take 	 meaningful steps toward a greener, more sustainable tomorrow!
 				</Typography>
 
 
