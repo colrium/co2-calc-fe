@@ -33,7 +33,6 @@ const server = createServer({
 	routes() {
 		if (this.pretender) {
 			const dbData = localStorage.getItem('ghg-db');
-			console.log(`dbData`, dbData);
 			if (dbData) {
 				// https://miragejs.com/api/classes/db/#load-data
 				server.db.loadData(JSON.parse(dbData));
@@ -75,8 +74,6 @@ const server = createServer({
 			const scope = request.params.scope;
 			
 			const data = schema.activityTypes.where({ scope });
-			console.log('scope', scope);
-			console.log('data', data);
 			return data;
 		});
 		this.post('/api/activities', (schema, request) => {

@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  ghg-fe-dev:
+    container_name: ghg-fe-dev
+    restart: unless-stopped
+    build:
+      context: ../../
+      dockerfile: docker/development/Dockerfile
+    image: ghg-fe-env-dev
+    ports:
+      - "3001:3000"
+networks:
+  default:
+    external:
+      name: gateway

@@ -1,10 +1,16 @@
 version: "3"
 
 services:
-  ghg-beta:
+  ghg-fe-prod:
+    container_name: ghg-fe-prod
+    restart: unless-stopped
     build:
       context: ../../
       dockerfile: docker/production/Dockerfile
-    image: with-docker-multi-env-production
+    image: ghg-fe-env-prod
     ports:
-      - "8080:8080"
+      - "3003:3000"
+networks:
+  default:
+    external:
+      name: gateway

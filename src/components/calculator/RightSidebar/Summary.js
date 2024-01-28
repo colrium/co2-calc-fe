@@ -39,13 +39,14 @@ export default function Summary() {
 		typeof results?.byEmissionsType?.fossil === 'number' && !isNaN(results?.byEmissionsType?.fossil)
 			? results.byEmissionsType.fossil
 			: 0;
-	const total = scope1 + scope2 + scope3us + scope3ds;
-	const scope1Percentage = total > 0 ? ((scope1 / total) * 100).toFixed(2) : 0;
-	const scope2Percentage = total > 0 ? ((scope2 / total) * 100).toFixed(2) : 0;
-	const scope3usPercentage = total > 0 ? ((scope3us / total) * 100).toFixed(2) : 0;
-	const scope3dsPercentage = total > 0 ? ((scope3ds / total) * 100).toFixed(2) : 0;
-	const biogenicPercentage = total > 0 ? ((biogenic / total) * 100).toFixed(2) : 0;
-	const fossilPercentage = total > 0 ? ((fossil / total) * 100).toFixed(2) : 0;
+	let total = (scope1 + scope2 + scope3us + scope3ds);
+	total = total > 0? total.toPrecision(2) : 0;
+	const scope1Percentage = total > 0 ? ((scope1 / total) * 100).toPrecision(2) : 0;
+	const scope2Percentage = total > 0 ? ((scope2 / total) * 100).toPrecision(2) : 0;
+	const scope3usPercentage = total > 0 ? ((scope3us / total) * 100).toPrecision(2) : 0;
+	const scope3dsPercentage = total > 0 ? ((scope3ds / total) * 100).toPrecision(2) : 0;
+	const biogenicPercentage = total > 0 ? ((biogenic / total) * 100).toPrecision(2) : 0;
+	const fossilPercentage = total > 0 ? ((fossil / total) * 100).toPrecision(2) : 0;
 
 
 	return (

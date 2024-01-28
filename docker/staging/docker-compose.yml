@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  ghg-fe-staging:
+    container_name: ghg-fe-staging
+    restart: unless-stopped
+    build:
+      context: ../../
+      dockerfile: docker/staging/Dockerfile
+    image: ghg-fe-env-staging
+    ports:
+      - "3002:3000"
+networks:
+  default:
+    external:
+      name: gateway
