@@ -38,7 +38,7 @@ function GetStarted() {
 			</Grid>
 			<Grid item md={6} className="p-4">
 				<Box className="flex flex-col items-center justify-center w-full h-full">
-					<Image src={'/banner2.jpg'} width={300} height={300} alt="banner" />
+					<Image src={'/banner3.jpg'} width={300} height={300} alt="banner" />
 				</Box>
 			</Grid>
 		</Grid>
