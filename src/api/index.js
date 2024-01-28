@@ -73,8 +73,7 @@ const server = createServer({
 		this.get('/api/activity-types/:scope', (schema, request) => {
 			const scope = request.params.scope;
 			
-			const data = schema.activityTypes.where({ scope });
-			return data;
+			return schema.activityTypes.where({ scope });
 		});
 		this.post('/api/activities', (schema, request) => {
 			let attrs = JSON.parse(request.requestBody);

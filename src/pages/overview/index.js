@@ -27,14 +27,13 @@ export default function Overview() {
 		const action = type === 'product' ? addProductAssessment : addCompanyAssessment;
 		dispatch(setCalculatorContext({ active: index, name: type, step: 0 }));
 		if (index < 0) {
-			dispatch(action({ name: '', description: '', year: dayjs().year() }));
-		}
-		
+			dispatch(action({ name: 'New Assessment', description: 'New Assessment', year: dayjs().year() }));
+		}		
 		router.push('/calculate');
 	};
 	return (
 		<Box className="w-full">
-			<Box className="py-32 mt-12 px-8" sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
+			<Box className="py-32 px-8" sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
 				<Typography variant="h4">All company assessments (Scope 1 - 3)</Typography>
 			</Box>
 			<Box className="flex gap-8 px-8 py-8">
@@ -135,7 +134,7 @@ export default function Overview() {
 										}}
 										aria-label={assessment.name}
 									>
-										{i + 1}
+										{assessment.name?.charAt(0)?.toUpperCase()?? 'NA'}
 									</Avatar>
 								}
 								action={

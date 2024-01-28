@@ -23,7 +23,7 @@ import ProductOverview from './Product/Overview';
 import RawMaterials from './Product/RawMaterials';
 import productValidationSchema from './Product/validationSchema';
 import RightSidebar from './RightSidebar';
-const companySteps = [
+const companyStages = [
 	{
 		name: 'overview',
 		label: 'Overview',
@@ -81,7 +81,7 @@ const units = {
 	kpl: 'Kpl'
 };
 const contextSteps = {
-	company: companySteps,
+	company: companyStages,
 	product: productSteps
 };
 const contextValidationSchemas = {
