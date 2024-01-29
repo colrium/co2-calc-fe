@@ -22,6 +22,7 @@ export default function Home() {
 		fetch(`/api/activity-types`)
 			.then((res) => res.json())
 			.then(({ activityTypes }) => {
+				console.log('activityTypes', activityTypes)
 				setState({ activityTypes, loading: false });
 			})
 			.catch((err) => {
@@ -29,7 +30,7 @@ export default function Home() {
 			})
 			.finally(() => setState({ loading: false }));
 	};
-	useEffect(() => fetchActivityTypes, []);
+	useEffect(fetchActivityTypes, []);
 	return (
 		<Box className="flex min-h-screen flex-col">
 			<Breadcrumbs title={'Help'} loading={state.loading} />

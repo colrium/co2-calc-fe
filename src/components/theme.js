@@ -22,6 +22,11 @@ const theme = createTheme({
 		background: {
 			paper: '#FFFFFF',
 			default: '#f2f2f2'
+		},
+		text: {
+			primary: '#424242',
+			secondary: '#757575',
+			disabled: '#dedede'
 		}
 	},
 	typography: {
@@ -50,16 +55,6 @@ const theme = createTheme({
 			'"Segoe UI Emoji"',
 			'"Segoe UI Symbol"'
 		].join(',')
-	},
-	components: {
-		// 	MuiCssBaseline: {
-		// 		styleOverrides: ` @font-face {
-		//       font-family: ${googleSans.style.fontFamily};
-		//       font-style: normal;
-		//       font-display: swap;
-		//     }
-		//   `
-		// 	}
 	}
 });
 export default theme;

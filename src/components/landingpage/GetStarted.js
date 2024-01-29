@@ -14,8 +14,8 @@ function GetStarted() {
 						Green transformation
 					</Typography>
 				</Box>
-				<Box className="flex flex-col gap-4">
-					<Box className="w-full flex items-center gap-8">
+				<Box className="flex flex-col  gap-4">
+					<Box className="w-full flex flex-col md:flex-row items-center gap-8">
 						<TextField
 							placeholder="Your Email"
 							label="Enter your Email"
@@ -38,7 +38,7 @@ function GetStarted() {
 			</Grid>
 			<Grid item md={6} className="p-4">
 				<Box className="flex flex-col items-center justify-center w-full h-full">
-					<Image src={'/banner3.jpg'} width={300} height={300} alt="banner" />
+					<Image src={'/uhakika1.png'} width={300} height={300} alt="banner" />
 				</Box>
 			</Grid>
 		</Grid>

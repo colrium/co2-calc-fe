@@ -71,8 +71,7 @@ const server = createServer({
 			return schema.activityTypes.all();
 		});
 		this.get('/api/activity-types/:scope', (schema, request) => {
-			const scope = request.params.scope;
-			
+			const scope = request.params.scope;			
 			return schema.activityTypes.where({ scope });
 		});
 		this.post('/api/activities', (schema, request) => {

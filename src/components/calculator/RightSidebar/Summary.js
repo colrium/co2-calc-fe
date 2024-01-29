@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useCalculatorForm } from '../CalculatorProvider';
 
-console.log('linearProgressClasses', linearProgressClasses)
+
 export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 	height: 10,
 	borderRadius: 5,

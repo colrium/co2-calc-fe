@@ -10,37 +10,39 @@ export default function Home() {
 		<Box>
 			<Breadcrumbs title={`Welcome to Uhakika Tech's EcoCalc`} />
 			<Box className="flex w-full flex-col justify-center items-center flex-1">
+			<Box className="flex flex-col items-center justify-center bg-no-repeat bg-cover" sx={{height: theme => '65vh', backgroundImage: `url('/co2.jpg')`}}>
+
+<Box className="w-10/12 md:w-8/12 p-20 rounded-2xl" sx={{backgroundColor: theme => theme.palette.action.active}}>
+	<Typography color="background.paper" variant="" className='text-center'>
+		At EcoCalc, we believe in the power of informed choices to create a more sustainable and
+		eco-friendly world. Our platform is designed to empower individuals and organizations on
+		their journey towards reducing carbon emissions and fostering a greener future. Explore the
+		possibilities, calculate your carbon footprint, and embark on a path of positive
+		environmental impact.
+	</Typography>
+</Box>
+</Box>
 				<Box className="flex flex-col gap-8 px-8 py-8 gap-4">
-				<Box className="flex flex-col items-center">
-				<Box  className="w-10/12 md:w-8/12">
-				<Typography>
-						At EcoCalc, we believe in the power of informed choices to create a more sustainable and eco-friendly
-						world. Our platform is designed to empower individuals and organizations on their journey towards
-						reducing carbon emissions and fostering a greener future. Explore the possibilities, calculate your
-						carbon footprint, and embark on a path of positive environmental impact.
-					</Typography>
-				</Box>
-				</Box>
-				
 					
+
 					<Box className="flex flex-col items-center gap-4">
-					<Box className="w-10/12 md:w-8/12">
-						<GetStarted />
+						<Box className="w-10/12 md:w-8/12">
+							<GetStarted />
+						</Box>
 					</Box>
-					</Box>
-					
+
 					<Box className="flex flex-col items-center gap-4">
 						<Typography variant="h5">Why EcoCalc?</Typography>
 					</Box>
 					<Grid container spacing={1}>
-						<Grid item xs={12} lg={3} className="flex flex-col gap-4">
+						<Grid item xs={12} sm={6} lg={3} className="flex flex-col gap-4">
 							<Card>
 								<CardContent>
-									<Typography variant="h1" className="text-center p-4">
-										<Diversity1Icon fontSize="inherit" color="error" />
+									<Typography variant="h2" className="text-center p-4">
+										<Diversity1Icon fontSize="inherit" color="warning" />
 									</Typography>
-									<Typography variant="subtitle1" className="text-center">
-										User-Friendly Carbon Emissions Calculator:
+									<Typography variant="subtitle2" color="text.secondary" className="text-center">
+										User-Friendly Calculator
 									</Typography>
 									<Typography>
 										Our intuitive and powerful Carbon Emissions Calculator makes it easy for you to
@@ -51,14 +53,14 @@ export default function Home() {
 							</Card>
 						</Grid>
 
-						<Grid item xs={12} lg={3} className="flex flex-col gap-4">
+						<Grid item xs={12} sm={6} lg={3} className="flex flex-col gap-4">
 							<Card>
 								<CardContent>
-									<Typography variant="h1" className="text-center p-4">
+									<Typography variant="h2" className="text-center p-4">
 										<AssignmentTurnedInRoundedIcon fontSize="inherit" color="info" />
 									</Typography>
-									<Typography variant="subtitle1" className="text-center">
-										Comprehensive Results:
+									<Typography variant="subtitle2" color="text.secondary" className="text-center">
+										Comprehensive Results
 									</Typography>
 									<Typography>
 										Receive detailed breakdowns of your carbon emissions categorized by Scope 1, Scope 2,
@@ -69,13 +71,13 @@ export default function Home() {
 							</Card>
 						</Grid>
 
-						<Grid item xs={12} lg={3} className="flex flex-col gap-4">
+						<Grid item xs={12} sm={6} lg={3} className="flex flex-col gap-4">
 							<Card>
 								<CardContent>
-									<Typography variant="h1" className="text-center p-4">
+									<Typography variant="h2" className="text-center p-4">
 										<EnergySavingsLeafIcon fontSize="inherit" color="success" />
 									</Typography>
-									<Typography variant="subtitle1" className="text-center">
+									<Typography variant="subtitle2" className="text-center" color="text.secondary">
 										Personalized Reduction Strategies:
 									</Typography>
 									<Typography>
@@ -87,13 +89,13 @@ export default function Home() {
 							</Card>
 						</Grid>
 
-						<Grid item xs={12} lg={3} className="flex flex-col gap-4">
+						<Grid item xs={12} sm={6} lg={3} className="flex flex-col gap-4">
 							<Card>
 								<CardContent>
-									<Typography variant="h1" className="text-center p-4">
+									<Typography variant="h2" className="text-center p-4">
 										<TrackChangesIcon fontSize="inherit" color="error" />
 									</Typography>
-									<Typography variant="subtitle1" className="text-center">
+									<Typography variant="subtitle2" className="text-center" color="text.secondary">
 										Goal Setting and Progress Tracking:
 									</Typography>
 									<Typography>

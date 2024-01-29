@@ -110,9 +110,8 @@ function ResponsiveAppBar() {
 							))}
 						</Menu>
 					</Box>
-
-					<Typography
-						variant="h5"
+					<Box className="flex-1"/>
+					{/* <Typography
 						noWrap
 						component="a"
 						href="#app-bar-with-responsive-menu"
@@ -120,16 +119,12 @@ function ResponsiveAppBar() {
 							mr: 2,
 							display: { xs: 'flex', md: 'none' },
 							flexGrow: 1,
-							flex: 1,
-							fontFamily: 'monospace',
-							fontWeight: 700,
-							letterSpacing: '.3rem',
 							color: 'inherit',
 							textDecoration: 'none'
 						}}
 					>
 						{title}
-					</Typography>
+					</Typography> */}
 					<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 						{pages.map(({ label, path }) => (
 							<Button
