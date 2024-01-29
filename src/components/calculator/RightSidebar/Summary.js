@@ -60,7 +60,7 @@ export default function Summary() {
 				</Box>
 				
 				<Typography color="secondary">
-					<span className="text-3xl md:text-5xl">{total.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</span>
+					<span className="text-3xl md:text-5xl">{total.toFixed(2)}</span>
 				</Typography>
 			</Box>
 			<Divider />
@@ -78,7 +78,7 @@ export default function Summary() {
 						Scope 1
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope1 > 0 ? scope1.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
+						{scope1 > 0 ? scope1.toFixed(2) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -95,7 +95,7 @@ export default function Summary() {
 						Scope 2
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope2 > 0 ? scope2.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
+						{scope2 > 0 ? scope2.toFixed(2) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -117,7 +117,7 @@ export default function Summary() {
 						Scope 3 Upstream
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope3us > 0 ? scope3us.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
+						{scope3us > 0 ? scope3us.toFixed(2) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -139,7 +139,7 @@ export default function Summary() {
 						Scope 3 Downstream
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope3ds > 0 ? scope3ds.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
+						{scope3ds > 0 ? scope3ds.toFixed(2) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -170,7 +170,7 @@ export default function Summary() {
 							Biogenic
 						</Typography>
 						<Typography color="textSecondary" variant="subtitle2">
-							{biogenic > 0 ? biogenic.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
+							{biogenic > 0 ? biogenic.toFixed(2) : '--.--'}
 						</Typography>
 					</Box>
 					<Box className="flex flex-row items-center gap-4">
@@ -191,7 +191,7 @@ export default function Summary() {
 							Fossil
 						</Typography>
 						<Typography color="textSecondary" variant="subtitle2">
-							{fossil > 0 ? fossil.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
+							{fossil > 0 ? fossil.toFixed(2) : '--.--'}
 						</Typography>
 					</Box>
 					<Box className="flex flex-row items-center gap-4">
