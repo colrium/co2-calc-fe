@@ -5,6 +5,7 @@ import Diversity1Icon from '@mui/icons-material/Diversity1';
 import EnergySavingsLeafIcon from '@mui/icons-material/EnergySavingsLeaf';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import { Box, Card, CardContent, Grid, Typography } from '@mui/material';
+import Image from 'next/image';
 export default function Home() {
 	return (
 		<Box>
@@ -15,31 +16,40 @@ export default function Home() {
 					sx={{ height: (theme) => '65vh', backgroundImage: `url('/co2.jpg')` }}
 				>
 					<Box
-						className="w-10/12 md:w-8/12 p-20 rounded-2xl"
-						sx={{ backgroundColor: (theme) => theme.palette.action.active }}
+						className="h-full w-full flex flex-col items-center justify-center"
+						sx={{ backgroundColor: `rgba(0,0,0,0.7)` }}
 					>
-						<Typography color="background.paper" variant="subtitle2" className="text-center">
-							At EcoCalc, we believe in the power of informed choices to create a more sustainable and
-							eco-friendly world. Our platform is designed to empower individuals and organizations on their
-							journey towards reducing carbon emissions and fostering a greener future. Explore the
-							possibilities, calculate your carbon footprint, and embark on a path of positive environmental
-							impact.
-						</Typography>
+						<Box className="w-10/12 md:w-8/12 p-20 rounded-2xl flex flex-col gap-8">
+							<Box className="flex flex-col items-center justify-center w-full h-full">
+								<Image src={'/uhakika2.png'} width={150} height={150} alt="banner" />
+							</Box>
+							<Typography color="background.paper" variant="subtitle2" className="text-center">
+								At EcoCalc, we believe in the power of informed choices to create a more sustainable and
+								eco-friendly world. Our platform is designed to empower individuals and organizations on
+								their journey towards reducing carbon emissions and fostering a greener future. Explore the
+								possibilities, calculate your carbon footprint, and embark on a path of positive
+								environmental impact.
+							</Typography>
+						</Box>
 					</Box>
 				</Box>
-				<Box className="flex flex-col gap-8 px-8 py-8 gap-4">
-					<Box className="flex flex-col items-center gap-4">
+				<Box className="flex flex-col gap-8 px-8 py-20 gap-4">
+					<Box
+						className="flex flex-col items-center gap-4 rounded"
+						sx={{ backgroundColor: (theme) => theme.palette.background.paper }}
+					>
 						<Box className="w-10/12 md:w-8/12">
 							<GetStarted />
 						</Box>
 					</Box>
-
-					<Box className="flex flex-col items-center gap-4">
-						<Typography variant="h5">Why EcoCalc?</Typography>
+				</Box>
+				<Box className="flex flex-col gap-8 px-8 py-8 gap-4" sx={{backgroundColor: theme => theme.palette.background.paper}}>
+					<Box className="flex flex-col items-center gap-4 my-8">
+						<Typography variant="h4">Why EcoCalc?</Typography>
 					</Box>
 					<Grid container spacing={1}>
 						<Grid item xs={12} sm={6} lg={3} className="flex flex-col gap-4">
-							<Card>
+							<Card variant="outlined">
 								<CardContent>
 									<Typography variant="h2" className="text-center p-4">
 										<Diversity1Icon fontSize="inherit" color="warning" />
@@ -57,7 +67,7 @@ export default function Home() {
 						</Grid>
 
 						<Grid item xs={12} sm={6} lg={3} className="flex flex-col gap-4">
-							<Card>
+							<Card variant="outlined">
 								<CardContent>
 									<Typography variant="h2" className="text-center p-4">
 										<AssignmentTurnedInRoundedIcon fontSize="inherit" color="info" />
@@ -75,7 +85,7 @@ export default function Home() {
 						</Grid>
 
 						<Grid item xs={12} sm={6} lg={3} className="flex flex-col gap-4">
-							<Card>
+							<Card variant="outlined">
 								<CardContent>
 									<Typography variant="h2" className="text-center p-4">
 										<EnergySavingsLeafIcon fontSize="inherit" color="success" />
@@ -93,7 +103,7 @@ export default function Home() {
 						</Grid>
 
 						<Grid item xs={12} sm={6} lg={3} className="flex flex-col gap-4">
-							<Card>
+							<Card variant="outlined">
 								<CardContent>
 									<Typography variant="h2" className="text-center p-4">
 										<TrackChangesIcon fontSize="inherit" color="error" />

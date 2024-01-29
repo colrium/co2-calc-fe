@@ -1,15 +1,14 @@
 
 import GoogleIcon from '@mui/icons-material/Google';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
-import Image from 'next/image';
 import Link from 'next/link';
 function GetStarted() {
 	return (
 		<Grid className="p-8" container>
-			<Grid item md={6} className={`block min-h-96`}>
+			<Grid item xs={12} className={`block min-h-96`}>
 				<Box className="flex flex-col gap-12 mb-8">
-					<Typography variant="h3">Track your carbon footprint</Typography>
-					<Typography>
+					<Typography variant="h3" className='w-full text-center'>Track your carbon footprint</Typography>
+					<Typography variant='subtitle2' className='w-full text-center'>
 						Step into sustainability: Calculate and Minimize your manufacturing carbon footprint. Begin your
 						Green transformation
 					</Typography>
@@ -36,11 +35,7 @@ function GetStarted() {
 					</Box>
 				</Box>
 			</Grid>
-			<Grid item md={6} className="p-4">
-				<Box className="flex flex-col items-center justify-center w-full h-full">
-					<Image src={'/uhakika1.png'} width={300} height={300} alt="banner" />
-				</Box>
-			</Grid>
+			
 		</Grid>
 	);
 }

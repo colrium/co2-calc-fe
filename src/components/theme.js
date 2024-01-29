@@ -34,7 +34,7 @@ const theme = createTheme({
 			fontSize: 20
 		},
 		subtitle2: {
-			fontSize: 18,
+			fontSize: 16,
 			fontWeight: 400
 		},
 		body1: {
