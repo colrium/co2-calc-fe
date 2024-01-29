@@ -10,21 +10,24 @@ export default function Home() {
 		<Box>
 			<Breadcrumbs title={`Welcome to Uhakika Tech's EcoCalc`} />
 			<Box className="flex w-full flex-col justify-center items-center flex-1">
-			<Box className="flex flex-col items-center justify-center bg-no-repeat bg-cover" sx={{height: theme => '65vh', backgroundImage: `url('/co2.jpg')`}}>
-
-<Box className="w-10/12 md:w-8/12 p-20 rounded-2xl" sx={{backgroundColor: theme => theme.palette.action.active}}>
-	<Typography color="background.paper" variant="" className='text-center'>
-		At EcoCalc, we believe in the power of informed choices to create a more sustainable and
-		eco-friendly world. Our platform is designed to empower individuals and organizations on
-		their journey towards reducing carbon emissions and fostering a greener future. Explore the
-		possibilities, calculate your carbon footprint, and embark on a path of positive
-		environmental impact.
-	</Typography>
-</Box>
-</Box>
+				<Box
+					className="flex flex-col items-center justify-center bg-no-repeat bg-cover bg-fixed bg-center"
+					sx={{ height: (theme) => '65vh', backgroundImage: `url('/co2.jpg')` }}
+				>
+					<Box
+						className="w-10/12 md:w-8/12 p-20 rounded-2xl"
+						sx={{ backgroundColor: (theme) => theme.palette.action.active }}
+					>
+						<Typography color="background.paper" variant="subtitle2" className="text-center">
+							At EcoCalc, we believe in the power of informed choices to create a more sustainable and
+							eco-friendly world. Our platform is designed to empower individuals and organizations on their
+							journey towards reducing carbon emissions and fostering a greener future. Explore the
+							possibilities, calculate your carbon footprint, and embark on a path of positive environmental
+							impact.
+						</Typography>
+					</Box>
+				</Box>
 				<Box className="flex flex-col gap-8 px-8 py-8 gap-4">
-					
-
 					<Box className="flex flex-col items-center gap-4">
 						<Box className="w-10/12 md:w-8/12">
 							<GetStarted />
