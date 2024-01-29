@@ -205,6 +205,21 @@
     "@floating-ui/core" "^1.6.0"
     "@floating-ui/utils" "^0.2.1"
 
+"@floating-ui/dom@^1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.6.1.tgz#d552e8444f77f2d88534372369b3771dc3a2fa5d"
+  integrity sha512-iA8qE43/H5iGozC3W0YSnVSW42Vh522yyM1gj+BqRwVsTNOyr231PsXDaV04yT39PsO0QL2QpbI/M0ZaLUQgRQ==
+  dependencies:
+    "@floating-ui/core" "^1.6.0"
+    "@floating-ui/utils" "^0.2.1"
+
+"@floating-ui/react-dom@^2.0.4":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-2.0.8.tgz#afc24f9756d1b433e1fe0d047c24bd4d9cefaa5d"
+  integrity sha512-HOdqOt3R3OGeTKidaLvJKcgg75S6tibQ3Tif4eyd91QnIJWr0NLvoXFpJA/j8HqkFSL68GDca9AuyWEHlhyClw==
+  dependencies:
+    "@floating-ui/dom" "^1.6.1"
+
 "@floating-ui/react-dom@^2.0.6":
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-2.0.7.tgz#873e0a55a25d8ddbbccd159d6ab4a4b98eb05494"
