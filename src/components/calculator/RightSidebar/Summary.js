@@ -41,22 +41,26 @@ export default function Summary() {
 		typeof results?.byEmissionsType?.fossil === 'number' && !isNaN(results?.byEmissionsType?.fossil)
 			? results.byEmissionsType.fossil
 			: 0;
-	let total = (scope1 + scope2 + scope3us + scope3ds);
-	total = total > 0? total.toPrecision(2) : 0;
-	const scope1Percentage = total > 0 ? ((scope1 / total) * 100).toPrecision(2) : 0;
-	const scope2Percentage = total > 0 ? ((scope2 / total) * 100).toPrecision(2) : 0;
-	const scope3usPercentage = total > 0 ? ((scope3us / total) * 100).toPrecision(2) : 0;
-	const scope3dsPercentage = total > 0 ? ((scope3ds / total) * 100).toPrecision(2) : 0;
-	const biogenicPercentage = total > 0 ? ((biogenic / total) * 100).toPrecision(2) : 0;
-	const fossilPercentage = total > 0 ? ((fossil / total) * 100).toPrecision(2) : 0;
+	const total = (scope1 + scope2 + scope3us + scope3ds);
+	// total = total > 0? total.toFixed(2) : 0;
+	const scope1Percentage = total > 0 ? ((scope1 / total) * 100).toFixed(2) : 0;
+	const scope2Percentage = total > 0 ? ((scope2 / total) * 100).toFixed(2) : 0;
+	const scope3usPercentage = total > 0 ? ((scope3us / total) * 100).toFixed(2) : 0;
+	const scope3dsPercentage = total > 0 ? ((scope3ds / total) * 100).toFixed(2) : 0;
+	const biogenicPercentage = total > 0 ? ((biogenic / total) * 100).toFixed(2) : 0;
+	const fossilPercentage = total > 0 ? ((fossil / total) * 100).toFixed(2) : 0;
 
 
 	return (
 		<Box className="flex flex-col">
 			<Box className="mb-4">
+				<Box className="flex gap-2">
 				<Typography color="textSecondary">CARBON FOOTPRINT</Typography>
+				<Typography color="secondary" compone="span">(tCO<sub>2</sub>e)</Typography>
+				</Box>
+				
 				<Typography color="secondary">
-					<span className="text-7xl">{total}</span>tCO<sub>2</sub>e
+					<span className="text-3xl md:text-5xl">{total.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</span>
 				</Typography>
 			</Box>
 			<Divider />
@@ -74,7 +78,7 @@ export default function Summary() {
 						Scope 1
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope1 > 0 ? scope1 : '--.--'}
+						{scope1 > 0 ? scope1.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -91,7 +95,7 @@ export default function Summary() {
 						Scope 2
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope2 > 0 ? scope2 : '--.--'}
+						{scope2 > 0 ? scope2.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -113,7 +117,7 @@ export default function Summary() {
 						Scope 3 Upstream
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope3us > 0 ? scope3us : '--.--'}
+						{scope3us > 0 ? scope3us.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -135,7 +139,7 @@ export default function Summary() {
 						Scope 3 Downstream
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope3ds > 0 ? scope3ds : '--.--'}
+						{scope3ds > 0 ? scope3ds.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -166,7 +170,7 @@ export default function Summary() {
 							Biogenic
 						</Typography>
 						<Typography color="textSecondary" variant="subtitle2">
-							{biogenic > 0 ? biogenic : '--.--'}
+							{biogenic > 0 ? biogenic.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
 						</Typography>
 					</Box>
 					<Box className="flex flex-row items-center gap-4">
@@ -187,7 +191,7 @@ export default function Summary() {
 							Fossil
 						</Typography>
 						<Typography color="textSecondary" variant="subtitle2">
-							{fossil > 0 ? fossil : '--.--'}
+							{fossil > 0 ? fossil.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }) : '--.--'}
 						</Typography>
 					</Box>
 					<Box className="flex flex-row items-center gap-4">
