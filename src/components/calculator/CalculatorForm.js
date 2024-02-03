@@ -1,6 +1,6 @@
 /** @format */
 
-import { useSetState, useUniqueEffect } from '@/hooks';
+import { useFetcher, useSetState, useUniqueEffect } from '@/hooks';
 import { selectCalculator, setCalculatorContext, updateCompanyAssessment, updateProductAssessment } from '@/store/calculatorSlice';
 import { Box, Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -88,16 +88,19 @@ const contextValidationSchemas = {
 	company: companyValidationSchema,
 	product: productValidationSchema
 };
-export default function CalculatorForm() {		
+export default function CalculatorForm({id=null, rows=[]}) {		
 	const calculator = useSelector(selectCalculator);
-	const context = calculator.context;
-	const { name, active, step = 0 } = { name: 'company', active: -1, ...context};
+	const context = {name: 'company', active: -1, ...calculator.context};
+	const { name, step = 0 } = context;
+	const fetcher = useFetcher();
 	const dispatch = useDispatch();
-	const rows = calculator[name];
 	const headerRef = useRef();
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
 	const drawerVariant = isMobile ? 'temporary' : 'persistent';
+	
+	// let active = idIndex > -1? idIndex: context.active
+	let active = context.active;
 	const [state, setState] = useSetState({
 		activityTypes: {
 			loading: false,
@@ -110,11 +113,13 @@ export default function CalculatorForm() {
 			loading: false
 		},
 		leftDrawerOpen: !isMobile,
-		rightDrawerOpen: !isMobile
+		rightDrawerOpen: !isMobile,
+		data: {}
 	});
 	
 	const [completedSteps, setCompletedStepSteps] = useState([0]);
-	const data = rows[active];
+
+	const data = rows?.find(row => id=== row.id);
 	const steps = useMemo(() => contextSteps[name], [name]);
 	const stepName = steps[step]?.name;
 	const validationSchema = useMemo(() => contextValidationSchemas[name], [name]);
@@ -135,7 +140,7 @@ export default function CalculatorForm() {
 				}
 			},
 
-			...rows[active]
+			...data
 		},
 		validationSchema: validationSchema
 	});
@@ -153,13 +158,13 @@ export default function CalculatorForm() {
 	const fetchActivityTypes = (scope) => {
 		if (scope) {
 			setState((prevState) => ({ activityTypes: { ...prevState.activityTypes, loading: scope } }));
-			fetch(`/api/activity-types/${scope}`)
+			fetcher(`/api/activity-types?scope=${scope}`)
 				.then((res) => res.json())
-				.then(({ activityTypes }) =>
+				.then(({ data }) =>
 					setState((prevState) => ({
 						activityTypes: {
 							...prevState.activityTypes,
-							[scope]: Array.isArray(activityTypes) ? activityTypes : []
+							[scope]: Array.isArray(data) ? data : []
 						}
 					}))
 				)
@@ -171,13 +176,13 @@ export default function CalculatorForm() {
 	const fetchFactors = (activityType) => {
 		if (activityType) {
 			setState((prevState) => ({ factors: { ...prevState.factors, loading: activityType } }));
-			fetch(`/api/factors/${activityType}`)
+			fetcher(`/api/factors?sections={"$in": ["${activityType}"]}`)
 				.then((res) => res.json())
-				.then(({ factors }) => {
-					factors = Array.isArray(factors) ? factors : [];
-					factors = factors.map((factor) => ({ ...factor, label: factor.name, value: factor.id }));
+				.then(({ data }) => {
+					data = Array.isArray(data) ? data : [];
+					data = data.map((factor) => ({ ...factor, label: factor.name, value: factor.id }));
 					setState((prevState) => ({
-						factors: { ...prevState.factors, [activityType]: factors }
+						factors: { ...prevState.factors, [activityType]: data }
 					}));
 				})
 				.catch((err) => console.error(`/api/factors/${scope}`, err))
@@ -239,19 +244,19 @@ export default function CalculatorForm() {
 
 	useUniqueEffect(() => {
 		if (data) {
-			formik.setValues({ activities: {}, ...rows[active] });
+			formik.setValues({ activities: {}, ...data });
 		}
 	}, [name, active, year]);
 
-	const debouncedPersistValues = debounce(1000, ({values, active, name}) => {
-		const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
-		dispatch(action({ index: active, value: { ...values, lastModified: dayjs().toISOString() } }));
-	})
+	const debouncedPersistValues = debounce(1000, ({ values, active, name, id }) => {
+		fetcher(`/api/results/${id}`, { method: 'PATCH', body: { ...values, type: name } });
+		// const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
+		// dispatch(action({ index: active, value: { ...values, lastModified: dayjs().toISOString() } }));
+	});
 	
 	useUniqueEffect(() => {
-		
-		debouncedPersistValues({values, active, name});
-	}, [values]);
+		debouncedPersistValues({ values, active, name, id });
+	}, [values, id]);
 
 	useUniqueEffect(() => {
 		calculateEmissions(activities);
@@ -283,7 +288,7 @@ export default function CalculatorForm() {
 				<Box
 					className="flex"
 					sx={{
-						pt: (theme) => theme.spacing(10),
+						// pt: (theme) => theme.spacing(10),
 						display: 'grid',
 						gridTemplateColumns: 'auto 1fr auto',
 						gridTemplateRows: '1fr',
@@ -299,7 +304,7 @@ export default function CalculatorForm() {
 						steps={steps}
 						step={step}
 					/>
-					<Box>
+					<Box sx={{pt: 9}}>
 						<FormHeader ref={headerRef} />
 						<Component />
 					</Box>

@@ -7,8 +7,12 @@ const theme = createTheme({
 		primary: {
 			main: '#000000'
 		},
+		secondary: {
+			// main: '#89bfd7'
+			main: '#4290b3'
+		},
 		tertiary: {
-			main: '#320557'
+			main: '#FF0000'
 		},
 		inverse: {
 			main: '#FFFFFF'

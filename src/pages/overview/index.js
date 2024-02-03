@@ -1,4 +1,5 @@
 /** @format */
+import { useFetcher, useSetState } from '@/hooks';
 import { addCompanyAssessment, addProductAssessment, selectCalculator, setCalculatorContext } from '@/store/calculatorSlice';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -12,32 +13,97 @@ import CardHeader from '@mui/material/CardHeader';
 import IconButton from '@mui/material/IconButton';
 import { red } from '@mui/material/colors';
 import dayjs from 'dayjs';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 var relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
 export default function Overview() {
 	const router = useRouter();
 	const dispatch = useDispatch();
+	const [state, setState] = useSetState({
+		loading: true,
+		company: {
+			page: 1,
+			pages: 1,
+			count: 0,
+			data: []
+		},
+		product: {
+			page: 1,
+			pages: 1,
+			count: 0,
+			data: []
+		}
+	});
     const calculator = useSelector(selectCalculator);
     const company = calculator?.company ?? [];
 	const product = calculator?.product ?? [];
-	
-	const handleOnGoToAssessment = (type, index) => () => {
-		const action = type === 'product' ? addProductAssessment : addCompanyAssessment;
-		dispatch(setCalculatorContext({ active: index, name: type, step: 0 }));
-		if (index < 0) {
-			dispatch(action({ name: 'New Assessment', description: 'New Assessment', year: dayjs().year() }));
-		}		
-		router.push('/calculate');
+	const fetcher = useFetcher()
+
+	const fetchResults = (type='company') => {
+			setState({ loading: true});
+			fetcher(`/api/results?type=${type}`)
+				.then((res) => res.json())
+				.then((results) => {
+					setState((prevState) => ({
+						[type]: results
+					}));
+				})
+				.catch((err) => console.error(`/api/results?type=${type}`, err))
+				.finally(() => setState({ loading: false }));
+		
 	};
+
+
+	
+	const handleOnGoToAssessment = useCallback(
+		(type, id) => () => {
+			const action = type === 'product' ? addProductAssessment : addCompanyAssessment;
+			const result = state[type].data.find(entry => entry.id === id);
+			if (result) {
+				dispatch(setCalculatorContext({ active: result.id, name: type, step: 0 }));
+			}
+			else {
+				setState({ loading: true });
+				fetcher(`/api/results`, {
+					method: 'POST',
+					body: { name: 'New Assessment', description: 'New Assessment', year: dayjs().year() }
+				})
+					.then((res) => res.json())
+					.then((result) => {
+						debugger;
+						setState((prevState) => ({
+							[type]: { ...prevState[type], data: [...prevState[type]?.data, result] }
+						}));
+						dispatch(setCalculatorContext({ active: result.id, name: type, step: 0 }));
+						router.push(`/calculate/${result.id}`);
+					})
+					.catch((err) => console.error(`/factors`, err))
+					.finally(() => setState({ loading: false }));
+			}
+			
+			// if (id < 0) {
+			// 	dispatch(action({ name: 'New Assessment', description: 'New Assessment', year: dayjs().year(), id: id }));
+			// }
+			
+			
+		},
+		[state.company, state.product]
+	);
+
+	useEffect(() => {
+		fetchResults();
+	}, []);
+
 	return (
 		<Box className="w-full">
 			<Box className="py-32 px-8" sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
 				<Typography variant="h4">All company assessments (Scope 1 - 3)</Typography>
 			</Box>
 			<Box className="flex gap-8 px-8 py-8">
-				{company.map((assessment, i) => (
+				{state.company.data.length && state.company.data.map((assessment, i) => (
 					<Card sx={{ maxWidth: 400 }} className="flex flex-col" key={`company-${i}`}>
 						<CardHeader
 							avatar={
@@ -49,9 +115,9 @@ export default function Overview() {
 										fontSize: 14,
 										color: (theme) => theme.palette.background.paper
 									}}
-									aria-label={assessment.name}
+									aria-label={assessment?.name}
 								>
-									{assessment.name.charAt(0).toUpperCase()}
+									{assessment?.name.charAt(0).toUpperCase()}
 								</Avatar>
 							}
 							action={
@@ -59,26 +125,39 @@ export default function Overview() {
 									<MoreVertIcon />
 								</IconButton>
 							}
-							title={assessment.name}
-							subheader={assessment.year}
+							title={assessment?.name}
+							subheader={assessment?.year}
 						/>
 						<CardContent className="flex-1 flex-col">
 							<Typography className="flex-1">
-								{assessment.description || 'No description added yet'}
+								{assessment?.description || 'No description added yet'}
 							</Typography>
 							<Typography variant="body2" color="text.disabled" className="pt-4">
-								{dayjs().toNow(dayjs(assessment.lastModified))}
+								{dayjs().toNow(dayjs(assessment?.lastModified))}
 							</Typography>
 						</CardContent>
 						<CardActions disableSpacing>
-							<Button
-								color="secondary"
-								aria-label="View Assessment"
-								endIcon={<ArrowForwardIcon />}
-								onClick={handleOnGoToAssessment('company', i)}
-							>
-								View Assessment
-							</Button>
+							{assessment && 'id' in assessment ? (
+								<Button
+									color="secondary"
+									aria-label="View Assessment"
+									endIcon={<ArrowForwardIcon />}
+									component={Link}
+									// onClick={handleOnGoToAssessment('company', i)}
+									href={`/calculate/${assessment?.id}`}
+								>
+									View Assessment
+								</Button>
+							) : (
+								<Button
+									color="secondary"
+									aria-label="View Assessment"
+									endIcon={<ArrowForwardIcon />}
+									onClick={handleOnGoToAssessment('company', i)}
+								>
+									View Assessment
+								</Button>
+							)}
 						</CardActions>
 					</Card>
 				))}
@@ -120,7 +199,7 @@ export default function Overview() {
 					<Typography variant="h4">All products</Typography>
 				</Box>
 				<Box className="flex gap-8 px-8 py-8">
-					{product.map((assessment, i) => (
+					{state.product.data.length && state.product.data.map((assessment, i) => (
 						<Card sx={{ maxWidth: 345 }} className="flex flex-col" key={`company-${i}`}>
 							<CardHeader
 								avatar={
@@ -132,9 +211,9 @@ export default function Overview() {
 											fontSize: 14,
 											color: (theme) => theme.palette.background.paper
 										}}
-										aria-label={assessment.name}
+										aria-label={assessment?.name}
 									>
-										{assessment.name?.charAt(0)?.toUpperCase()?? 'NA'}
+										{assessment?.name?.charAt(0)?.toUpperCase() ?? 'NA'}
 									</Avatar>
 								}
 								action={
@@ -142,15 +221,15 @@ export default function Overview() {
 										<MoreVertIcon />
 									</IconButton>
 								}
-								title={assessment.name}
-								subheader={assessment.year}
+								title={assessment?.name}
+								subheader={assessment?.year}
 							/>
 							<CardContent className="flex-1 flex-col">
 								<Typography className="flex-1">
-									{assessment.description || 'No description added yet'}
+									{assessment?.description || 'No description added yet'}
 								</Typography>
 								<Typography variant="body2" color="text.disabled" className="pt-4">
-									{dayjs().toNow(dayjs(assessment.lastModified))}
+									{dayjs().toNow(dayjs(assessment?.lastModified))}
 								</Typography>
 							</CardContent>
 							<CardActions disableSpacing>

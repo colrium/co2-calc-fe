@@ -77,7 +77,6 @@ export default function AssessmentsGrid({ rows }) {
 						outline: 'none'
 					}
                 }}
-                getRowId={(row) => row.year}
                 hideFooter
 				disableRowSelectionOnClick
 			/>

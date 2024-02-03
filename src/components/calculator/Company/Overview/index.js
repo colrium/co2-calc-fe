@@ -7,7 +7,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
-import AssessmentsGrid from '../../AssessmentsGrid';
 import { useCalculatorForm } from '../../CalculatorProvider';
 export default function Overview() {
 	const { formik } = useCalculatorForm();
@@ -76,7 +75,7 @@ export default function Overview() {
 				<Typography variant="subtitle1" component="div">
 					Assessments
 				</Typography>
-				<AssessmentsGrid rows={assessments} />
+				{/* <AssessmentsGrid rows={assessments} /> */}
 				<Button size="small" color="error">
 					Delete assessment
 				</Button>

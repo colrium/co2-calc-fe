@@ -46,14 +46,14 @@ const server = createServer({
 		
         let nextFactorId = factors.length + 1;
         let nextActivityId = types.length + 1;
-		this.get('/api/factors', (schema) => {
+		this.get('/factors', (schema) => {
 			return schema.factors.all();
 		});
-		this.get('/api/factors/:section', (schema, request) => {
+		this.get('/factors/:section', (schema, request) => {
 			let section = request.params.section;
 			return schema.factors.where((factor) => Array.isArray(factor.sections) && factor.sections.includes(section));
 		});
-		this.post('/api/factors', (schema, request) => {
+		this.post('/factors', (schema, request) => {
 			
 			const formData = request.requestBody;
 

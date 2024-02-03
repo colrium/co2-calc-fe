@@ -5,6 +5,41 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "Launch on Chrome",
+			"type": "chrome",
+			"request": "launch",
+			// "runtimeArgs": ["--disable-web-security"],
+			"url": "http://localhost:3000/",
+			"urlFilter": "http://localhost:3000/*",
+			"webRoot": "${workspaceFolder}/",
+			"preLaunchTask": "Application",
+			"postDebugTask": "Terminate All Tasks",
+			"sourceMapPathOverrides": {
+				"webpack:///./src/*": "${workspaceRoot}/src/*",
+				"webpack:///./node_modules/*": "${workspaceFolder}/node_modules/*"
+			},
+			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js", "webpack://node_modules/**/*.js", "webpack:///./node_modules/**/*.js", "webpack-internal:///node_modules/**/*.js"]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Next.js Node Debug",
+			"runtimeExecutable": "${workspaceFolder}/node_modules/next/dist/bin/next",
+			"env": {
+				"NODE_OPTIONS": "--inspect"
+			},
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"sourceMapPathOverrides": {
+				"meteor://💻app/*": "${workspaceFolder}/*",
+				"webpack:///./~/*": "${workspaceFolder}/node_modules/*",
+				"webpack://?:*/*": "${workspaceFolder}/*"
+			},
+			"preLaunchTask": "Application",
+			"postDebugTask": "Terminate All Tasks",
+			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js", "webpack:///./~/*"]
+		},
+		{
 			"name": "Launch on current Chrome",
 			"type": "chrome",
 			"request": "launch",
@@ -15,18 +50,11 @@
 			"webRoot": "${workspaceFolder}/",
 			"preLaunchTask": "Application",
 			"postDebugTask": "Terminate All Tasks",
-			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js"]
-		},
-		{
-			"name": "Launch on Chrome",
-			"type": "chrome",
-			"request": "launch",
-			// "runtimeArgs": ["--disable-web-security"],
-			"url": "http://localhost:3000/",
-			"urlFilter": "http://localhost:3000/*",
-			"webRoot": "${workspaceFolder}/",
-			"preLaunchTask": "Application",
-			"postDebugTask": "Terminate All Tasks",
+
+			"sourceMapPathOverrides": {
+				"webpack:///./src/*": "${workspaceRoot}/src/*",
+				"webpack:///./~/*": "${workspaceFolder}/node_modules/*"
+			},
 			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js"]
 		},
 
@@ -39,7 +67,10 @@
 			"webRoot": "${workspaceFolder}/cat-viewer/Application/src",
 			"preLaunchTask": "Application",
 			"postDebugTask": "Terminate All Tasks",
-			"skipFiles": ["<node_internals>/cat-viewer/Application/**", "${workspaceFolder}/cat-viewer/Application/node_modules/**/*.js"]
+			"skipFiles": [
+				"<node_internals>/cat-viewer/Application/**",
+				"${workspaceFolder}/cat-viewer/Application/node_modules/**/*.js"
+			]
 		},
 		{
 			"name": "Attach to Chrome",

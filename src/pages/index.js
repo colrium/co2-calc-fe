@@ -1,4 +1,3 @@
-import Breadcrumbs from '@/components/landingpage/Breadcrumbs';
 import GetStarted from '@/components/landingpage/GetStarted';
 import AssignmentTurnedInRoundedIcon from '@mui/icons-material/AssignmentTurnedInRounded';
 import Diversity1Icon from '@mui/icons-material/Diversity1';
@@ -9,21 +8,25 @@ import Image from 'next/image';
 export default function Home() {
 	return (
 		<Box>
-			<Breadcrumbs title={`Welcome to Uhakika Tech's EcoCalc`} />
+			{/* <Breadcrumbs title={`Welcome to Uhakika Tech's EcoCalc`} /> */}
 			<Box className="flex w-full flex-col justify-center items-center flex-1">
 				<Box
 					className="flex flex-col items-center justify-center bg-no-repeat bg-cover bg-fixed bg-center"
-					sx={{ height: (theme) => '65vh', backgroundImage: `url('/co2.jpg')` }}
+					sx={{
+						height: (theme) => '65vh'
+						// backgroundImage: `url('/co2.jpg')`
+						// backgroundColor: theme => theme.palette.background.paper
+					}}
 				>
 					<Box
 						className="h-full w-full flex flex-col items-center justify-center"
-						sx={{ backgroundColor: `rgba(0,0,0,0.7)` }}
+						// sx={{ backgroundColor: `rgba(0,0,0,0.7)` }}
 					>
 						<Box className="w-10/12 md:w-8/12 p-20 rounded-2xl flex flex-col gap-8">
 							<Box className="flex flex-col items-center justify-center w-full h-full">
 								<Image src={'/uhakika2.png'} width={150} height={150} alt="banner" />
 							</Box>
-							<Typography color="background.paper" variant="subtitle2" className="text-center">
+							<Typography color="secondary" variant="subtitle2" className="text-center">
 								At EcoCalc, we believe in the power of informed choices to create a more sustainable and
 								eco-friendly world. Our platform is designed to empower individuals and organizations on
 								their journey towards reducing carbon emissions and fostering a greener future. Explore the
@@ -43,7 +46,7 @@ export default function Home() {
 						</Box>
 					</Box>
 				</Box>
-				<Box className="flex flex-col gap-8 px-8 py-8 gap-4" sx={{backgroundColor: theme => theme.palette.background.paper}}>
+				<Box className="flex flex-col gap-8 px-8 py-8 gap-4">
 					<Box className="flex flex-col items-center gap-4 my-8">
 						<Typography variant="h4">Why EcoCalc?</Typography>
 					</Box>

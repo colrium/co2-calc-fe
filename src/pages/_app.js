@@ -1,9 +1,11 @@
-import '@/api';
+// import '@/api';
 import RootLayout from '@/layouts';
 import { wrapper } from '@/store';
 import "@/styles/globals.css";
 import { useStore } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+
+
 const App = ({ Component, pageProps }) => {
   const store = useStore();
   return (
