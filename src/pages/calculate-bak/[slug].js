@@ -1,6 +1,7 @@
 import CalculatorForm from '@/components/calculator/CalculatorForm';
 import { useFetcher, useSetState } from '@/hooks';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 export default function CalculateId() {
@@ -10,10 +11,8 @@ export default function CalculateId() {
 	const fetcher = useFetcher();
 	const fetchResults = (type='company') => {
 			setState({ loading: true});
-			fetcher(`/api/results`)
-				.then((res) => res.json())
-				.then((results) => {
-					debugger
+			axios.get(`/api/results`)
+				.then(({data: results}) => {
 					setState(results);
 				})
 				.catch((err) => console.error(`/api/results?type`, err))
@@ -23,5 +22,14 @@ export default function CalculateId() {
 	useEffect(() => {
 		fetchResults();
 	}, [])
-	return <Box className="w-full">{!state.loading && <CalculatorForm id={id} rows={state.data} />}</Box>;
+	return (
+		<Grid container>
+			<Grid item xs={12}>
+				{state.loading && <Box> 
+				
+				</Box>}
+				{!state.loading && <CalculatorForm id={id} rows={state.data} />}
+			</Grid>
+		</Grid>
+	);
 }

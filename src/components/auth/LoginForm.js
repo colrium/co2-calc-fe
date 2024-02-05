@@ -4,10 +4,14 @@ import { useState } from 'react';
 import * as Yup from 'yup';
 ;
 
+import { setAuthToken, setAuthUser, setLoggedIn } from '@/store/authSlice';
 import { Icon } from '@iconify/react';
 import { LoadingButton } from '@mui/lab';
 import { Box, Checkbox, FormControlLabel, IconButton, InputAdornment, Link, Stack, TextField } from '@mui/material';
+import axios from 'axios';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -21,9 +25,10 @@ const animate = {
 };
 
 const LoginForm = ({ setAuth }) => {
-
+	const dispatch = useDispatch();
+	const router = useRouter()
 	const [showPassword, setShowPassword] = useState(false);
-
+	const [loading, setLoading] = useState(false);
 	const LoginSchema = Yup.object().shape({
 		email: Yup.string().email('Provide a valid email address').required('Email is required'),
 		password: Yup.string().required('Password is required')
@@ -37,9 +42,21 @@ const LoginForm = ({ setAuth }) => {
 		},
 		validationSchema: LoginSchema,
 		onSubmit: () => {
-			setTimeout(() => {
-				setAuth(true);
-			}, 2000);
+			 setLoading(true);
+				return axios
+					.post('/api/auth/login', values)
+					.then((res) => {
+						const { token, user } = res.data
+						debugger;
+						if (user && token) {
+							dispatch(setAuthUser(user));
+							dispatch(setAuthToken(token));
+							dispatch(setLoggedIn(true));
+							router.push('/dashboard/overview');
+						}
+					})
+					.catch((err) => console.error('error logging in', err))
+					.finally(() => setLoading(false));
 		}
 	});
 

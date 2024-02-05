@@ -10,11 +10,21 @@ export default function Home() {
 		<Box>
 			{/* <Breadcrumbs title={`Welcome to Uhakika Tech's EcoCalc`} /> */}
 			<Box className="flex w-full flex-col justify-center items-center flex-1">
+				<Box className="flex flex-col gap-8 px-8 py-20 gap-4">
+					<Box
+						className="flex flex-col items-center gap-4 rounded"
+						sx={{ backgroundColor: (theme) => theme.palette.background.paper }}
+					>
+						<Box className="w-10/12 md:w-8/12">
+							<GetStarted />
+						</Box>
+					</Box>
+				</Box>
 				<Box
 					className="flex flex-col items-center justify-center bg-no-repeat bg-cover bg-fixed bg-center"
 					sx={{
-						height: (theme) => '65vh'
-						// backgroundImage: `url('/co2.jpg')`
+						height: (theme) => '65vh',
+						backgroundImage: `url('/co2.jpg')`
 						// backgroundColor: theme => theme.palette.background.paper
 					}}
 				>
@@ -36,16 +46,7 @@ export default function Home() {
 						</Box>
 					</Box>
 				</Box>
-				<Box className="flex flex-col gap-8 px-8 py-20 gap-4">
-					<Box
-						className="flex flex-col items-center gap-4 rounded"
-						sx={{ backgroundColor: (theme) => theme.palette.background.paper }}
-					>
-						<Box className="w-10/12 md:w-8/12">
-							<GetStarted />
-						</Box>
-					</Box>
-				</Box>
+
 				<Box className="flex flex-col gap-8 px-8 py-8 gap-4">
 					<Box className="flex flex-col items-center gap-4 my-8">
 						<Typography variant="h4">Why EcoCalc?</Typography>

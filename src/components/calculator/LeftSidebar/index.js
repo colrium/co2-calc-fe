@@ -1,20 +1,22 @@
 import { Step, StepLabel, Stepper } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
-
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useCalculatorForm } from '../CalculatorProvider';
 const drawerWidth = 320;
 
 const StepComponent = () => {}
 export default function LeftSidebar({ steps, step, onChangeStep, open, onClose, variant }) {
 	const { formik, stepName } = useCalculatorForm();
-	
+	const theme = useTheme();
+	const matches = useMediaQuery(theme.breakpoints.up('lg'));
 
 	return (
 		<Drawer
 			variant={variant}
 			sx={{
-				width: open? drawerWidth : 0,
+				width: open ? drawerWidth : 0,
 				flexShrink: 0,
 				[`& .MuiDrawer-paper`]: {
 					width: drawerWidth,
@@ -27,7 +29,7 @@ export default function LeftSidebar({ steps, step, onChangeStep, open, onClose, 
 			open={open}
 			onClose={onClose}
 		>
-			<Toolbar />
+			{matches && <Toolbar sx={{ height: theme.mixins.toolbar.height }} />}
 
 			<Stepper className="w-full" activeStep={step} orientation="vertical">
 				{steps.map(({ label, Component, name }, index) => {
@@ -36,7 +38,8 @@ export default function LeftSidebar({ steps, step, onChangeStep, open, onClose, 
 						<Step key={name} onClick={() => onChangeStep(index)}>
 							<StepLabel completed={completed}>{label}</StepLabel>
 						</Step>
-					);})}
+					);
+				})}
 			</Stepper>
 		</Drawer>
 	);

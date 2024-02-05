@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function Login() {
 	
 	return (
-		<main className="flex p-4 flex-col items-center">
+		<Box className="flex p-4 flex-col items-center justify-center min-h-screen">
 			<Box className="z"></Box>
 			<Box className="my-8">
 				<Typography variant="h4">Login</Typography>
@@ -18,6 +18,6 @@ export default function Login() {
 			<Box className="my-2">
 				<Button component={Link} href="/auth/register">Signup</Button>
 			</Box>
-		</main>
+		</Box>
 	);
 }

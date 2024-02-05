@@ -3,6 +3,7 @@
 import Breadcrumbs from '@/components/landingpage/Breadcrumbs';
 import { useSetState } from '@/hooks';
 import { Box, Button, Card, CardActions, CardContent, Chip, Typography } from '@mui/material';
+import axios from 'axios';
 import { useEffect } from 'react';
 
 const scopeLabels = {
@@ -19,11 +20,10 @@ export default function Home() {
 	});
 	const fetchActivityTypes = () => {
 		setState({ loading: true });
-		fetch(`/api/activity-types`)
-			.then((res) => res.json())
-			.then(({ activityTypes }) => {
-				console.log('activityTypes', activityTypes)
-				setState({ activityTypes, loading: false });
+		axios.ger(`/api/activity-types`)
+			.then(({ data }) => {
+				
+				setState({ activityTypes: data, loading: false });
 			})
 			.catch((err) => {
 				console.error(`/api/activity-types`, err);

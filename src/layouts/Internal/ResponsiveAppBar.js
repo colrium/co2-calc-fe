@@ -1,197 +1,148 @@
 /** @format */
 
 'use client';
-import MenuIcon from '@mui/icons-material/Menu';
+import { useSetState } from '@/hooks';
+import { selectAuth, setLoggedIn } from '@/store/authSlice';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { Divider } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import { alpha, useTheme } from '@mui/material/styles';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as React from 'react';
-
-const title = 'Textile Manufacturing Carbon Footprint';
+import { useDispatch, useSelector } from 'react-redux';
+const title = 'Manufacturing Carbon Footprint';
 const subtitle = 'Carbon Footprint Calculator';
-const pages = [
-	{ path: '/', label: 'Home' },
-	{ path: '/how-it-works', label: 'How it works' },
-	{ path: '/help', label: 'Help' }
+const useractions = [
+	{ path: '/overview', label: 'Overview' },
+	
 ];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const ElevationScroll = (props) => {
+	const theme = useTheme();
+	const { children, window } = props;
+	// Note that you normally won't need to set the window ref as useScrollTrigger
+	// will default to window.
+	// This is only being set here because the demo is in an iframe.
+	const trigger = useScrollTrigger({
+		disableHysteresis: true,
+		threshold: 0,
+		target: window ? window() : undefined
+	});
 
-function ResponsiveAppBar() {
-	const [anchorElNav, setAnchorElNav] = React.useState(null);
-	const [anchorElUser, setAnchorElUser] = React.useState(null);
+	return React.cloneElement(children, {
+		elevation: trigger ? 4 : 0,
+		sx: {
+			borderBottomColor: theme.palette.divider,
+			borderBottomWidth: `1px`,
+			...(trigger
+				? {
+						backgroundColor: `${alpha(theme.palette.background.paper, 0.8)} !important`,
+						WebkitBackdropFilter: 'blur(5px) !important',
+						backdropFilter: 'blur(5px) !important'
+				  }
+				: { backgroundColor: 'transparent !important' })
+		}
+	});
+};
 
+function ResponsiveAppBar(props) {
+	const dispatch = useDispatch();
+	const router = useRouter();
+	const {user} = useSelector(selectAuth)
+	const [state, setState] = useSetState({
+		anchorElNav: null,
+		drawerMenuOpen: false
+	});
 	const handleOpenNavMenu = (event) => {
-		setAnchorElNav(event.currentTarget);
+		setState({ anchorElNav: event.currentTarget });
 	};
 	const handleOpenUserMenu = (event) => {
-		setAnchorElUser(event.currentTarget);
+		setState({anchorElNav: event.currentTarget});
 	};
 
 	const handleCloseNavMenu = () => {
-		setAnchorElNav(null);
+		setState({ anchorElNav: null });
 	};
 
 	const handleCloseUserMenu = () => {
-		setAnchorElUser(null);
+		setState({ anchorElNav: null });
 	};
 
 	return (
-		<AppBar position="static">
-			<Container maxWidth="xl">
-				<Toolbar disableGutters>
-					<Box
-						className="flex-col"
-						sx={{
-							mr: 2,
-							display: { xs: 'none', md: 'flex' },
+		<ElevationScroll {...props}>
+			<AppBar
+				sx={{
+					'MuiAppBar-root': 'bg-transparent'
+				}}
+				className="MainAppbar"
+				color="inherit"
+			>
+				<Container maxWidth="xl">
+					<Toolbar className="flex" sx={{ height: 8 }}>
+						<Box className="flex-col flex-1">
+							<Typography variant="subtitle1" component={Link} href="/overview">
+								{subtitle}
+							</Typography>
+						</Box>
 
-							flex: 1
-						}}
-					>
-						<Typography
-							variant="h6"
-							noWrap
-							component="a"
-							href="#app-bar-with-responsive-menu"
-							sx={{
-								mr: 2,
-								display: { xs: 'none', md: 'flex' },
-								fontFamily: 'monospace',
-								fontWeight: 700,
-								color: 'inherit',
-								textDecoration: 'none'
-							}}
-						>
-							{title}
-						</Typography>
-						<Typography>{subtitle}</Typography>
-					</Box>
-
-					<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-						<IconButton
-							size="large"
-							aria-label="account of current user"
-							aria-controls="menu-appbar"
-							aria-haspopup="true"
-							onClick={handleOpenNavMenu}
-							color="inherit"
-						>
-							<MenuIcon />
-						</IconButton>
-						<Menu
-							id="menu-appbar"
-							anchorEl={anchorElNav}
-							anchorOrigin={{
-								vertical: 'bottom',
-								horizontal: 'left'
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: 'top',
-								horizontal: 'left'
-							}}
-							open={Boolean(anchorElNav)}
-							onClose={handleCloseNavMenu}
-							sx={{
-								display: { xs: 'block', md: 'none' }
-							}}
-						>
-							{pages.map(({ path, label }) => (
-								<MenuItem
-									key={path}
-									onClick={handleCloseNavMenu}
-									href={path}
-									component={Link}
-								>
-									<Typography textAlign="center">{label}</Typography>
-								</MenuItem>
-							))}
-						</Menu>
-					</Box>
-
-					<Typography
-						variant="h5"
-						noWrap
-						component="a"
-						href="#app-bar-with-responsive-menu"
-						sx={{
-							mr: 2,
-							display: { xs: 'flex', md: 'none' },
-							flexGrow: 1,
-							flex: 1,
-							fontFamily: 'monospace',
-							fontWeight: 700,
-							letterSpacing: '.3rem',
-							color: 'inherit',
-							textDecoration: 'none'
-						}}
-					>
-						{title}
-					</Typography>
-					<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-						{pages.map(({ label, path }) => (
-							<Button
-								key={path}
-								onClick={handleCloseNavMenu}
-								sx={{ my: 2, color: 'white', display: 'block' }}
-								component={Link}
-								href={path}
-							>
-								{label}
-							</Button>
-						))}
-					</Box>
-
-					<Box sx={{ flexGrow: 0 }}>
-						<Tooltip title="Open settings">
+						<Box sx={{ display: { xs: 'flex' } }} className="items-center gap-4">
+							<Typography color="info">{`${user.firstname} ${user.lastname}`}</Typography>
 							<IconButton
+								size="large"
+								aria-label="account of current user"
+								aria-controls="menu-appbar"
+								aria-haspopup="true"
 								onClick={handleOpenUserMenu}
-								sx={{ p: 0 }}
+								color="inherit"
 							>
-								<Avatar
-									alt="Remy Sharp"
-									src="/static/images/avatar/2.jpg"
-								/>
+								<AccountCircleOutlinedIcon />
 							</IconButton>
-						</Tooltip>
-						<Menu
-							sx={{ mt: '45px' }}
-							id="menu-appbar"
-							anchorEl={anchorElUser}
-							anchorOrigin={{
-								vertical: 'top',
-								horizontal: 'right'
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: 'top',
-								horizontal: 'right'
-							}}
-							open={Boolean(anchorElUser)}
-							onClose={handleCloseUserMenu}
-						>
-							{settings.map((setting) => (
+							<Menu
+								id="menu-appbar"
+								anchorEl={state.anchorElNav}
+								anchorOrigin={{
+									vertical: 'bottom',
+									horizontal: 'left'
+								}}
+								keepMounted
+								transformOrigin={{
+									vertical: 'top',
+									horizontal: 'left'
+								}}
+								open={Boolean(state.anchorElNav)}
+								onClose={handleCloseUserMenu}
+							>
+								{useractions.map(({ path, label }) => (
+									<MenuItem key={path} onClick={handleCloseUserMenu} href={path} component={Link}>
+										<Typography textAlign="center">{label}</Typography>
+									</MenuItem>
+								))}
+								<Divider />
 								<MenuItem
-									key={setting}
-									onClick={handleCloseUserMenu}
+									color="error"
+									onClick={() => {
+										dispatch(setLoggedIn(false));
+										router.push('/');
+									}}
 								>
-									<Typography textAlign="center">{setting}</Typography>
+									<Typography textAlign="center" color="error">
+										Logout
+									</Typography>
 								</MenuItem>
-							))}
-						</Menu>
-					</Box>
-				</Toolbar>
-			</Container>
-		</AppBar>
+							</Menu>
+						</Box>
+					</Toolbar>
+				</Container>
+			</AppBar>
+		</ElevationScroll>
 	);
 }
 export default ResponsiveAppBar;

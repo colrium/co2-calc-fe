@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Link from 'next/link';
 import * as React from 'react';
@@ -53,6 +53,35 @@ const ToggleScroll = (props) => {
 	
 }
 
+const ElevationScroll = (props) => {
+	const theme = useTheme()
+	const { children, window } = props;
+	// Note that you normally won't need to set the window ref as useScrollTrigger
+	// will default to window.
+	// This is only being set here because the demo is in an iframe.
+	const trigger = useScrollTrigger({
+		disableHysteresis: true,
+		threshold: 0,
+		target: window ? window() : undefined
+	});
+
+	return React.cloneElement(children, {
+		elevation: trigger ? 4 : 0,
+		sx: {
+			borderBottomColor: theme.palette.divider,
+			borderBottomWidth: `1px`,
+			...(trigger
+				? {
+						backgroundColor: `${alpha(theme.palette.background.paper, 0.8)} !important`,
+						WebkitBackdropFilter: 'blur(5px) !important',
+						backdropFilter: 'blur(5px) !important'
+				  }
+				: { backgroundColor: 'transparent !important' })
+		}
+	});
+}
+
+
 
 function ResponsiveAppBar(props) {
 	const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -77,12 +106,17 @@ function ResponsiveAppBar(props) {
 	};
 
 	return (
-		<ToggleScroll {...props}>
+		<ElevationScroll {...props}>
 			<AppBar
 				// position="relative"
 				// elevation={0}
-				className="backdrop-blur-sm bg-white/30"
-				enableColorOnDark
+				sx={{
+					'MuiAppBar-root': 'bg-transparent'
+				}}
+				className="MainAppbar"
+				color="inherit"
+
+				// enableColorOnDark
 			>
 				<Container maxWidth="xl">
 					<Toolbar disableGutters sx={{ height: 8 }}>
@@ -94,7 +128,7 @@ function ResponsiveAppBar(props) {
 								flex: 1
 							}}
 						>
-							<Typography
+							{/* <Typography
 								variant="h6"
 								noWrap
 								component="a"
@@ -109,8 +143,10 @@ function ResponsiveAppBar(props) {
 								}}
 							>
 								{title}
+							</Typography> */}
+							<Typography variant="subtitle1" component={Link} href="/">
+								{subtitle}
 							</Typography>
-							<Typography>{subtitle}</Typography>
 						</Box>
 
 						<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -170,7 +206,7 @@ function ResponsiveAppBar(props) {
 									key={path}
 									onClick={handleCloseNavMenu}
 									sx={{ my: 2, display: 'block' }}
-									color="inverse"
+									color="inherit"
 									component={Link}
 									href={path}
 								>
@@ -180,17 +216,17 @@ function ResponsiveAppBar(props) {
 						</Box>
 
 						<Box className="flex gap-8" sx={{ flexGrow: 0 }}>
-							<Button href={'/overview'} color="inverse" sx={{ p: 0 }}>
+							<Button href={'/auth/register'} color="inherit" sx={{ p: 0 }}>
 								Get Started
 							</Button>
-							<Button href={'/auth/login'} color="inverse" sx={{ p: 0 }}>
+							<Button href={'/auth/login'} color="inherit" sx={{ p: 0 }}>
 								Login
 							</Button>
 						</Box>
 					</Toolbar>
 				</Container>
 			</AppBar>
-		</ToggleScroll>
+		</ElevationScroll>
 	);
 }
 export default ResponsiveAppBar;

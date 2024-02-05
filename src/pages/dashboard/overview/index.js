@@ -12,6 +12,7 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import IconButton from '@mui/material/IconButton';
 import { red } from '@mui/material/colors';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -44,9 +45,8 @@ export default function Overview() {
 
 	const fetchResults = (type='company') => {
 			setState({ loading: true});
-			fetcher(`/api/results?type=${type}`)
-				.then((res) => res.json())
-				.then((results) => {
+			axios.get(`/api/results?type=${type}`)
+				.then(({data: results}) => {
 					setState((prevState) => ({
 						[type]: results
 					}));
@@ -64,21 +64,18 @@ export default function Overview() {
 			const result = state[type].data.find(entry => entry.id === id);
 			if (result) {
 				dispatch(setCalculatorContext({ active: result.id, name: type, step: 0 }));
+				router.push(`/dashboard/calculate/${result.id}`);
 			}
 			else {
 				setState({ loading: true });
-				fetcher(`/api/results`, {
-					method: 'POST',
-					body: { name: 'New Assessment', description: 'New Assessment', year: dayjs().year() }
-				})
-					.then((res) => res.json())
-					.then((result) => {
-						debugger;
+				axios.post(`/api/results`, { name: 'New Assessment', description: 'New Assessment', year: dayjs().year() }
+				)
+					.then(({data: result}) => {
 						setState((prevState) => ({
 							[type]: { ...prevState[type], data: [...prevState[type]?.data, result] }
 						}));
 						dispatch(setCalculatorContext({ active: result.id, name: type, step: 0 }));
-						router.push(`/calculate/${result.id}`);
+						router.push(`/dashboard/calculate/${result.id}`);
 					})
 					.catch((err) => console.error(`/factors`, err))
 					.finally(() => setState({ loading: false }));
@@ -103,7 +100,7 @@ export default function Overview() {
 				<Typography variant="h4">All company assessments (Scope 1 - 3)</Typography>
 			</Box>
 			<Box className="flex gap-8 px-8 py-8">
-				{state.company.data.length && state.company.data.map((assessment, i) => (
+				{state.company?.data?.length > 0 && state.company.data.map((assessment, i) => (
 					<Card sx={{ maxWidth: 400 }} className="flex flex-col" key={`company-${i}`}>
 						<CardHeader
 							avatar={
@@ -144,7 +141,7 @@ export default function Overview() {
 									endIcon={<ArrowForwardIcon />}
 									component={Link}
 									// onClick={handleOnGoToAssessment('company', i)}
-									href={`/calculate/${assessment?.id}`}
+									href={`/dashboard/calculate/${assessment?.id}`}
 								>
 									View Assessment
 								</Button>
@@ -199,7 +196,7 @@ export default function Overview() {
 					<Typography variant="h4">All products</Typography>
 				</Box>
 				<Box className="flex gap-8 px-8 py-8">
-					{state.product.data.length && state.product.data.map((assessment, i) => (
+					{state.product.data.length > 0 && state.product.data.map((assessment, i) => (
 						<Card sx={{ maxWidth: 345 }} className="flex flex-col" key={`company-${i}`}>
 							<CardHeader
 								avatar={

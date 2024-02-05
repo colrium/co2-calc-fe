@@ -1,11 +1,13 @@
 import ThemeRegistry from '@/components/ThemeRegistry';
+import NotificationsProvider, { Notifications } from '@/contexts/Notifications';
+import PrerequisitesProvider from '@/contexts/Prerequisites';
 import { useSelector } from 'react-redux';
 import ExternalLayout from './External';
 import InternalLayout from './Internal';
 
 
 export default function RootLayout({ children }) {
-	const { isLoggedIn, token } = useSelector(storeState => storeState.auth);
+	const { loggedin, token } = useSelector(storeState => storeState.auth);
 
 	/* const oldFetch = window.fetch;
 
@@ -14,10 +16,17 @@ export default function RootLayout({ children }) {
 		args[1].headers = { Authorization: `${token?.tokenType || 'Bearer'} ${token?.accessToken || ''}` };
 		return oldFetch.apply(window, args);
 	}; */
-	const Layout = isLoggedIn? InternalLayout : ExternalLayout;
+	const Layout = loggedin ? InternalLayout : ExternalLayout;
 	return (
 		<ThemeRegistry options={{ key: 'mui-theme' }}>
-			<Layout>{children}</Layout>
+			<NotificationsProvider>
+				<PrerequisitesProvider>
+					<Layout>
+						{children}
+						<Notifications />
+					</Layout>
+				</PrerequisitesProvider>
+			</NotificationsProvider>
 		</ThemeRegistry>
 	);
 }

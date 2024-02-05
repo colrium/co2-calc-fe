@@ -6,10 +6,14 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 // import Menu from '@mui/material/Menu';
 // import MenuItem from '@mui/material/MenuItem';
+import { selectAuth } from '@/store/authSlice';
+import axios from 'axios';
 import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { useCalculatorForm } from '../CalculatorProvider';
 export default function AddActivity({ name, label, scope }) {
 	const { formik, factors, fetchFactors } = useCalculatorForm();
+	const {user} = useSelector(selectAuth)
 	const [state, setState] = useSetState({
 		loading: true,
 		options: [],
@@ -43,9 +47,7 @@ export default function AddActivity({ name, label, scope }) {
 	};
 	const fetchData = () => {
 		if (name) {
-			fetch(`/api/factors/${name}`)
-				.then((res) => res.json())
-				.then(({ factors }) => {
+			axios.get(`/api/factors/${name}`).then(({ data: {data: factors} }) => {
 					factors = factors.map((factor) => ({ ...factor, label: factor.name, value: factor.id }));
 					setState({ factors });
 				})
@@ -68,15 +70,19 @@ export default function AddActivity({ name, label, scope }) {
 			yearTo: 2025,
 			sections: [name],
 			custom: true,
+			userId: user?.id?? null,
 			unit: null
 		};
-		const formData = new FormData();
-		for (const [key, value] of Object.entries(payload)) {
-			formData.append(key, value);
-		}
-		fetch(`/api/factors`, { method: 'POST', body: formData })
-			.then((res) => res.json())
-			.then(({ factor }) => {})
+		axios
+			.post(`/api/factors`, payload)
+			.then(({ data: factor }) => {
+				setState((prevState) => ({
+					options: [{ ...factor, label: factor.name, value: factor.id }].concat(
+						Array.isArray(prevState.options) ? prevState.options : []
+					)
+				}));
+				console.log('factor', factor);
+			})
 			.catch((err) => console.error(`/api/factors`, err))
 			.finally(() => setState({ loading: false }));
 	};

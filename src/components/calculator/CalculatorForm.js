@@ -1,10 +1,12 @@
 /** @format */
 
-import { useFetcher, useSetState, useUniqueEffect } from '@/hooks';
+import { useDidUpdate, useFetcher, useSetState, useUniqueEffect } from '@/hooks';
 import { selectCalculator, setCalculatorContext, updateCompanyAssessment, updateProductAssessment } from '@/store/calculatorSlice';
+import { deepEqual } from '@/util';
 import { Box, Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -158,9 +160,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 	const fetchActivityTypes = (scope) => {
 		if (scope) {
 			setState((prevState) => ({ activityTypes: { ...prevState.activityTypes, loading: scope } }));
-			fetcher(`/api/activity-types?scope=${scope}`)
-				.then((res) => res.json())
-				.then(({ data }) =>
+			axios.get(`/api/activity-types?scope=${scope}`).then(({ data: {data} }) =>
 					setState((prevState) => ({
 						activityTypes: {
 							...prevState.activityTypes,
@@ -176,16 +176,16 @@ export default function CalculatorForm({id=null, rows=[]}) {
 	const fetchFactors = (activityType) => {
 		if (activityType) {
 			setState((prevState) => ({ factors: { ...prevState.factors, loading: activityType } }));
-			fetcher(`/api/factors?sections={"$in": ["${activityType}"]}`)
-				.then((res) => res.json())
-				.then(({ data }) => {
+			axios
+				.get(`/api/factors?sections={"$in": ["${activityType}"]}`)
+				.then(({ data: { data } }) => {
 					data = Array.isArray(data) ? data : [];
 					data = data.map((factor) => ({ ...factor, label: factor.name, value: factor.id }));
 					setState((prevState) => ({
 						factors: { ...prevState.factors, [activityType]: data }
 					}));
 				})
-				.catch((err) => console.error(`/api/factors/${scope}`, err))
+				.catch((err) => console.error(`/api/factors?sections={"$in": ["${activityType}"]}`, err))
 				.finally(() => setState((prevState) => ({ factors: { ...prevState.factors, loading: false } })));
 		}
 	};
@@ -248,15 +248,26 @@ export default function CalculatorForm({id=null, rows=[]}) {
 		}
 	}, [name, active, year]);
 
+	useUniqueEffect(() => {
+		if (id) {
+			axios.get(`/api/results/${id}`).then(({data}) => {
+				setState({data})
+				formik.setValues({ activities: {}, ...data });
+			})			
+		}
+	}, [id]);
+
 	const debouncedPersistValues = debounce(1000, ({ values, active, name, id }) => {
-		fetcher(`/api/results/${id}`, { method: 'PATCH', body: { ...values, type: name } });
+		axios.put(`/api/results/${id}`, { ...values, type: name, updatedAt: dayjs().toISOString() });
 		// const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
 		// dispatch(action({ index: active, value: { ...values, lastModified: dayjs().toISOString() } }));
 	});
 	
-	useUniqueEffect(() => {
-		debouncedPersistValues({ values, active, name, id });
-	}, [values, id]);
+	useDidUpdate(() => {
+		if (id && !deepEqual(state.data, values)) {
+			debouncedPersistValues({ values, active, name, id });
+		}		
+	}, [values]);
 
 	useUniqueEffect(() => {
 		calculateEmissions(activities);
@@ -292,7 +303,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 						display: 'grid',
 						gridTemplateColumns: 'auto 1fr auto',
 						gridTemplateRows: '1fr',
-						gridColumnGap: '10px',
+						gridColumnGap: '0px',
 						gridRowGap: '0px'
 					}}
 				>
@@ -304,7 +315,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 						steps={steps}
 						step={step}
 					/>
-					<Box sx={{pt: 9}}>
+					<Box>
 						<FormHeader ref={headerRef} />
 						<Component />
 					</Box>
