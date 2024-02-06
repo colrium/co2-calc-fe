@@ -30,13 +30,13 @@ export default function Home() {
 				>
 					<Box
 						className="h-full w-full flex flex-col items-center justify-center"
-						// sx={{ backgroundColor: `rgba(0,0,0,0.7)` }}
+						sx={{ backgroundColor: `rgba(0,0,0,0.7)` }}
 					>
 						<Box className="w-10/12 md:w-8/12 p-20 rounded-2xl flex flex-col gap-8">
 							<Box className="flex flex-col items-center justify-center w-full h-full">
 								<Image src={'/uhakika2.png'} width={150} height={150} alt="banner" />
 							</Box>
-							<Typography color="secondary" variant="subtitle2" className="text-center">
+							<Typography color="background.paper" variant="subtitle2" className="text-center">
 								At EcoCalc, we believe in the power of informed choices to create a more sustainable and
 								eco-friendly world. Our platform is designed to empower individuals and organizations on
 								their journey towards reducing carbon emissions and fostering a greener future. Explore the

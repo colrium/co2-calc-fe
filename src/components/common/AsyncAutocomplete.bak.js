@@ -1,55 +1,13 @@
+/** @format */
+
+import { useSetState, useUniqueEffect } from '@/hooks';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import {
-    Box,
-    Checkbox,
-    CircularProgress,
-    Divider,
-    FormControlLabel,
-    IconButton,
-    InputAdornment,
-    ListItemButton,
-    Paper,
-    TextField
-} from '@mui/material';
+import { CircularProgress, IconButton, InputAdornment, TextField } from '@mui/material';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import * as React from 'react';
 import { debounce } from 'throttle-debounce';
-import strings from '../../Globalization';
-import { useSetState, useUniqueEffect } from '../../hooks';
 
-const PaperComponent = ({ children, multiple, options, value, onSelectAll, ...paperProps }) => {
-	return (
-		<Paper {...paperProps}>
-			{multiple && (
-				<Box>
-					<ListItemButton
-						onMouseDown={(e) => e.preventDefault()} // prevent blur
-						dense
-					>
-						<FormControlLabel
-							onClick={onSelectAll}
-							label="Select all"
-							control={
-								<Checkbox
-									id="select-all-checkbox"
-									checked={
-										Array.isArray(value) &&
-										Array.isArray(options) &&
-										options.length > 0 &&
-										value?.length === options?.length
-									}
-								/>
-							}
-						/>
-					</ListItemButton>
-					<Divider />
-				</Box>
-			)}
 
-			{children}
-		</Paper>
-	);
-};
 
 const filter = createFilterOptions();
 
@@ -106,10 +64,7 @@ const AsyncAutocomplete = ({
 			return targetOptions.findIndex((entry) => {
 				for (const [k, v] of Object.entries(entry)) {
 					if (k === 'id' || k === 'label') {
-						if (
-							v === option ||
-							(option && option.constructor === {}.constructor && k in option && option[k] === v)
-						) {
+						if (v === option || (option && option.constructor === {}.constructor && k in option && option[k] === v)) {
 							return true;
 						}
 					}
@@ -205,11 +160,11 @@ const AsyncAutocomplete = ({
 				const isExisting = findIndexOfOption(inputValue, options) !== -1;
 				if (inputValue !== '' && !isExisting) {
 					let freeSoloOption = {
+						name: inputValue,
 						id: inputValue,
+						value: inputValue,
 						label: inputValue,
-						freeSoloLabel: `${
-							typeof strings.CreateOption === 'string' ? strings.CreateOption : 'Create'
-						} "${inputValue}"`
+						freeSoloLabel: `Create "${inputValue}"`
 					};
 					filtered.unshift(freeSoloOption);
 				}
@@ -261,12 +216,7 @@ const AsyncAutocomplete = ({
 
 			Promise.all([
 				typeof deriver === 'function'
-					? options(
-							...[
-								...deriverArgs,
-								{ page: state.page, keyword: keywordRef.current?.value, pagination, ...context }
-							]
-					  )
+					? options(...[...deriverArgs, { page: state.page, keyword: keywordRef.current?.value, pagination, ...context }])
 					: deriver
 			])
 				.then((res) => {
@@ -372,7 +322,12 @@ const AsyncAutocomplete = ({
 						endAdornment: (
 							<InputAdornment position="end">
 								{!!params.InputProps?.endAdornment && params.InputProps?.endAdornment}
-								{(loading || state.loading) && <CircularProgress color="primary" size="1rem" />}
+								{(loading || state.loading) && (
+									<CircularProgress
+										color="primary"
+										size="1rem"
+									/>
+								)}
 								{textFieldProps?.InputProps?.endAdornment}
 								{typeof options === 'function' &&
 									!loading &&
@@ -409,7 +364,10 @@ const AsyncAutocomplete = ({
 	};
 
 	const renderOption = (params, option) => (
-		<li {...params} key={`key-${params.id}`}>
+		<li
+			{...params}
+			key={`key-${params.id}`}
+		>
 			{option.freeSoloLabel || option.label}
 		</li>
 	);
@@ -455,11 +413,17 @@ const AsyncAutocomplete = ({
 			renderOption={renderOption}
 			openOnFocus
 			onInputChange={handleOnInputChange}
-			PaperComponent={(paperProps) => (
-				<PaperComponent {...paperProps} multiple={multiple} value={derivedValue} options={state.options} />
-			)}
-			{...rest}
+			// renderTags={(value, getTagProps, ownerState) =>
+			// 	Array.isArray(value) && (
+			// 		<Box className="flex flex-wrap">
+			// 			{value.map(({ id, value, label }, i) => (
+			// 				<Chip {...getTagProps(i)} label={label || value} key={`value-${i}`} />
+			// 			))}
+			// 		</Box>
+			// 	)
+			// }
 			filterSelectedOptions
+			{...rest}
 			value={derivedValue}
 			options={state.options}
 			onChange={handleOnChange}

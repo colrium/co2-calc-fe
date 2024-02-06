@@ -2,9 +2,7 @@
 
 import { Box, TextField, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { useCalculatorForm } from '../../CalculatorProvider';
@@ -17,47 +15,52 @@ export default function Overview() {
 				<Typography variant="h6">Overview</Typography>
 				<Typography>You can add general information for the assessment and select assessment years</Typography>
 			</Box>
-			<Box className="my-2 flex-col gap-4">
+			<Box className="my-2 flex-col gap-2">
 				<Typography variant="h6" className="mb-8">
 					Basic Information
 				</Typography>
-				<Box className="flex gap-2 mb-4">
-					<TextField
-						label="Name"
-						name="name"
-						id="name"
-						value={formik.values?.name}
-						onChange={formik.handleChange}
-						onBlur={formik.handleBlur}
-						error={formik.touched.name && Boolean(formik.errors.name)}
-						helperText={formik.touched.name && formik.errors.name}
-					/>
+				<TextField
+					label="Name"
+					name="name"
+					id="name"
+					fullWidth
+					InputProps={{
+						className: 'my-2'
+					}}
+					value={formik.values?.name}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					error={formik.touched.name && Boolean(formik.errors.name)}
+					helperText={formik.touched.name && formik.errors.name}
+				/>
 
-					<TextField
-						label="Description"
-						name="description"
-						multiline
-						minRows={4}
-						maxRows={6}
-						id="description"
-						value={formik.values?.description}
-						onChange={formik.handleChange}
-						onBlur={formik.handleBlur}
-						error={formik.touched.description && Boolean(formik.errors.description)}
-						helperText={formik.touched.description && formik.errors.description}
-					/>
-				</Box>
-				<LocalizationProvider dateAdapter={AdapterDayjs}>
-					<DatePicker
-						label={'Year'}
-						openTo="year"
-						views={['year']}
-						value={dayjs().year(formik.values?.year || dayjs().year())}
-						onChange={(newValue) => formik.setFieldValue('year', newValue.year())}
-						error={formik.touched.year && Boolean(formik.errors.year)}
-						helperText={formik.touched.year && formik.errors.year}
-					/>
-				</LocalizationProvider>
+				<TextField
+					label="Description"
+					name="description"
+					multiline
+					minRows={4}
+					maxRows={6}
+					id="description"
+					fullWidth
+					InputProps={{
+						className: 'my-2'
+					}}
+					value={formik.values?.description}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					error={formik.touched.description && Boolean(formik.errors.description)}
+					helperText={formik.touched.description && formik.errors.description}
+				/>
+				<DatePicker
+					label={'Year'}
+					openTo="year"
+					views={['year']}
+					className="w-full my-2"
+					value={dayjs().year(formik.values?.year || dayjs().year())}
+					onChange={(newValue) => formik.setFieldValue('year', newValue.year())}
+					error={formik.touched.year && Boolean(formik.errors.year)}
+					helperText={formik.touched.year && formik.errors.year}
+				/>
 				{/* <TextField
 					label="Year"
 					name="year"

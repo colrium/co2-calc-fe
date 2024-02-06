@@ -1,6 +1,7 @@
 /** @format */
-import { useFetcher, useSetState } from '@/hooks';
-import { addCompanyAssessment, addProductAssessment, selectCalculator, setCalculatorContext } from '@/store/calculatorSlice';
+import { useSetState } from '@/hooks';
+import { selectAuth } from '@/store/authSlice';
+import { addCompanyAssessment, addProductAssessment, setCalculatorContext } from '@/store/calculatorSlice';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -38,10 +39,7 @@ export default function Overview() {
 			data: []
 		}
 	});
-    const calculator = useSelector(selectCalculator);
-    const company = calculator?.company ?? [];
-	const product = calculator?.product ?? [];
-	const fetcher = useFetcher()
+    const {loggedin, user} = useSelector(selectAuth);
 
 	const fetchResults = (type='company') => {
 			setState({ loading: true});
@@ -68,7 +66,7 @@ export default function Overview() {
 			}
 			else {
 				setState({ loading: true });
-				axios.post(`/api/results`, { name: 'New Assessment', description: 'New Assessment', year: dayjs().year() }
+				axios.post(`/api/results`, { name: 'New Assessment', description: 'New Assessment', year: dayjs().year(), userId: user.id }
 				)
 					.then(({data: result}) => {
 						setState((prevState) => ({
@@ -87,7 +85,7 @@ export default function Overview() {
 			
 			
 		},
-		[state.company, state.product]
+		[state.company, state.product, loggedin]
 	);
 
 	useEffect(() => {

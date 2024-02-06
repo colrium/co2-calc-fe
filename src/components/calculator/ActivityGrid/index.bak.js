@@ -55,37 +55,32 @@ export default function ActivityGrid({ rows, name, scope }) {
 
 	const columns = [
 		//{ field: 'id', headerName: 'ID', hide: true },
-		{ field: 'name', headerName: 'Name' },
+		{ field: 'name', headerName: 'Name', width: 200 },
 		{
 			field: 'amount',
 			headerName: 'Amount',
 			editable: true,
 			type: 'number',
+			width: 80,
 			min: 0,
 			renderEditCell: (params) => <CustomEditTextField {...params} />
 		},
 		{
 			field: 'unit',
-			headerName: 'Unit',
-			editable: true
-		},
-		{
-			field: 'emissionFactor',
-			headerName: 'Emission Factor',
-			type: 'number',
-			min: 0,
-			editable: true
+			headerName: 'Unit'
 		},
 		{
 			field: 'description',
 			headerName: 'Description',
 			editable: true,
+			width: 160,
 			renderEditCell: (params) => <CustomEditTextField {...params} />
 		},
 		{
 			field: 'actions',
 			type: 'actions',
 			headerName: 'Actions',
+			width: 100,
 			cellClassName: 'actions',
 			getActions: ({ id }) => [
 				<GridActionsCellItem

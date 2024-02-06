@@ -4,6 +4,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { LoadingButton } from '@mui/lab';
 import { Box, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
+import axios from 'axios';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
@@ -52,9 +53,8 @@ const RegisterForm = ({ initialValues }) => {
 		validationSchema: LoginSchema,
 		onSubmit: (values) => {
             setState({loading: true})
-			return fetch('/api/auth/register', { method: 'POST', body: values })
-				.then((res) => res.json())
-				.then(({ token, user }) => {
+			return axios.post('/api/auth/register', values)
+				.then(({data: { token, user }}) => {
 					if (user && token) {
 						dispatch(setAuthUser(user));
 						dispatch(setAuthToken(token));

@@ -18,7 +18,7 @@
 				"webpack:///./src/*": "${workspaceRoot}/src/*",
 				"webpack:///./node_modules/*": "${workspaceFolder}/node_modules/*"
 			},
-			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js", "webpack://node_modules/**/*.js", "webpack:///./node_modules/**/*.js", "webpack-internal:///node_modules/**/*.js"]
+			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js", "webpack://node_modules/**/*.js", "webpack://./node_modules/**/*.js", "webpack-internal:///node_modules/**/*.js"]
 		},
 		{
 			"type": "node",

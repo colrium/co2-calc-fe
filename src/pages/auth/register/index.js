@@ -6,10 +6,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 export default function Register() {
-    const router = useRouter()
-    console.log('router', router.query)
+    const router = useRouter();
 	return (
-		<Box className="flex p-4 flex-col items-center justify-center min-h-screen">
+		<Box className="flex p-4 flex-col items-center justify-center auth-page">
 			<Box className="z"></Box>
 			<Box className="my-8">
 				<Typography variant="h4">Create Account</Typography>

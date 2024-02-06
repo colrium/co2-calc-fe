@@ -41,13 +41,14 @@ const LoginForm = ({ setAuth }) => {
 			remember: true
 		},
 		validationSchema: LoginSchema,
-		onSubmit: () => {
+		onSubmit: (values) => {
 			 setLoading(true);
 				return axios
 					.post('/api/auth/login', values)
 					.then((res) => {
+						console.log('res', res)
 						const { token, user } = res.data
-						debugger;
+						debugger
 						if (user && token) {
 							dispatch(setAuthUser(user));
 							dispatch(setAuthToken(token));
@@ -60,11 +61,11 @@ const LoginForm = ({ setAuth }) => {
 		}
 	});
 
-	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, isValid } = formik;
 
 	return (
 		<FormikProvider value={formik}>
-			<Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+			<Form autocomplete="off" noValidate onSubmit={handleSubmit}>
 				<Box
 					component={motion.div}
 					animate={{
@@ -86,7 +87,7 @@ const LoginForm = ({ setAuth }) => {
 						<TextField
 							fullWidth
 							size="small"
-							autoComplete="username"
+							autoComplete="new-password"
 							type="email"
 							label="Email Address"
 							{...getFieldProps('email')}
@@ -133,7 +134,14 @@ const LoginForm = ({ setAuth }) => {
 							</Link>
 						</Stack>
 
-						<LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+						<LoadingButton
+							disabled={!isValid}
+							fullWidth
+							size="large"
+							type="submit"
+							variant="contained"
+							loading={isSubmitting}
+						>
 							{isSubmitting ? 'loading...' : 'Login'}
 						</LoadingButton>
 					</Box>

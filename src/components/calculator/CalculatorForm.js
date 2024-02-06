@@ -297,14 +297,16 @@ export default function CalculatorForm({id=null, rows=[]}) {
 				}}
 			>
 				<Box
-					className="flex"
+					className="w-full"
 					sx={{
+						[theme.breakpoints.up('lg')]: {
+							display: 'grid',
+							gridTemplateColumns: 'auto 1fr auto',
+							gridTemplateRows: '1fr',
+							gridColumnGap: '0px',
+							gridRowGap: '0px'
+						}
 						// pt: (theme) => theme.spacing(10),
-						display: 'grid',
-						gridTemplateColumns: 'auto 1fr auto',
-						gridTemplateRows: '1fr',
-						gridColumnGap: '0px',
-						gridRowGap: '0px'
 					}}
 				>
 					<LeftSidebar
@@ -315,7 +317,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 						steps={steps}
 						step={step}
 					/>
-					<Box>
+					<Box >
 						<FormHeader ref={headerRef} />
 						<Component />
 					</Box>

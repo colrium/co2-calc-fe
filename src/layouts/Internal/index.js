@@ -1,5 +1,5 @@
 import ThemeRegistry from '@/components/ThemeRegistry';
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import ResponsiveAppBar from './ResponsiveAppBar';
 
 export default function InternalLayout({children}) {
@@ -10,9 +10,9 @@ export default function InternalLayout({children}) {
 				className={`flex flex-col min-h-screen w-full max-w-full overflow-x-hidden relative overflow-x-hidden bg-gradient-to-br from-gray-50 to-blue-100`}
 			>
 				<ResponsiveAppBar />
-				<Container disableGutters maxWidth="xl" sx={{ marginTop: 8 }}>
+				<Box  className="w-full" sx={{ marginTop: 8 }}>
 					{children}
-				</Container>
+				</Box>
 			</Box>
 		</ThemeRegistry>
 	);

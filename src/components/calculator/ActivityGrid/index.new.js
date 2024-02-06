@@ -1,6 +1,6 @@
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import { Box, TextField } from '@mui/material';
-import { DataGrid, GridActionsCellItem, useGridApiContext } from '@mui/x-data-grid';
+import { Box, TextField, Typography } from '@mui/material';
+import { GridActionsCellItem, useGridApiContext } from '@mui/x-data-grid';
 import { useCallback } from 'react';
 import { useCalculatorForm } from '../CalculatorProvider';
 
@@ -55,37 +55,32 @@ export default function ActivityGrid({ rows, name, scope }) {
 
 	const columns = [
 		//{ field: 'id', headerName: 'ID', hide: true },
-		{ field: 'name', headerName: 'Name' },
+		{ field: 'name', headerName: 'Name', width: 200 },
 		{
 			field: 'amount',
 			headerName: 'Amount',
 			editable: true,
 			type: 'number',
+			width: 80,
 			min: 0,
 			renderEditCell: (params) => <CustomEditTextField {...params} />
 		},
 		{
 			field: 'unit',
-			headerName: 'Unit',
-			editable: true
-		},
-		{
-			field: 'emissionFactor',
-			headerName: 'Emission Factor',
-			type: 'number',
-			min: 0,
-			editable: true
+			headerName: 'Unit'
 		},
 		{
 			field: 'description',
 			headerName: 'Description',
 			editable: true,
+			width: 160,
 			renderEditCell: (params) => <CustomEditTextField {...params} />
 		},
 		{
 			field: 'actions',
 			type: 'actions',
 			headerName: 'Actions',
+			width: 100,
 			cellClassName: 'actions',
 			getActions: ({ id }) => [
 				<GridActionsCellItem
@@ -99,31 +94,23 @@ export default function ActivityGrid({ rows, name, scope }) {
 		}
 	];
 	return (
-		<Box sx={{ height: 300, width: '100%' }}>
-			<DataGrid
-				rows={rows}
-				columns={columns}
-				initialState={{
-					pagination: {
-						paginationModel: {
-							pageSize: 5
-						}
-					}
-				}}
-				sx={{
-					'.MuiDataGrid-cell.MuiDataGrid-cell--editing': {
-						boxShadow: 'none'
-					},
-					'.MuiDataGrid-cell.MuiDataGrid-cell--editing:focus-within': {
-						outline: 'none'
-					}
-				}}
-				// density={'compact'}
-				pageSizeOptions={[5, 10, 20]}
-				onRowEditStop={handleRowEditStop}
-				disableRowSelectionOnClick
-				processRowUpdate={processRowUpdate}
-			/>
+		<Box className={'flex flex-col h-80 gap-6'} sx={{ width: '100%' }}>
+			<Box
+				className={'grid grid-cols-4 w-full gap-6'}
+				sx={{ width: '100%', gridTemplateRows: `repeat(1, minmax(0, 1fr))` }}
+			>
+				<Typography>Name</Typography>
+				<Typography>Amount</Typography>
+				<Typography>Activity Description</Typography>
+			</Box>
+			{rows?.length > 0 &&
+				rows.map((row, i) => (
+					<Box
+						className={'grid grid-cols-4 w-full gap-6'}
+						sx={{ width: '100%', gridTemplateRows: `repeat(1, minmax(0, 1fr))` }}
+						key={`row-${i}`}
+					></Box>
+				))}
 		</Box>
 	);
 }
