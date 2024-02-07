@@ -20,8 +20,8 @@ export default function Home() {
 	});
 	const fetchActivityTypes = () => {
 		setState({ loading: true });
-		axios.ger(`/api/activity-types`)
-			.then(({ data }) => {
+		axios.get(`/api/help`)
+			.then(({ data: {data} }) => {
 				
 				setState({ activityTypes: data, loading: false });
 			})

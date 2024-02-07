@@ -1,3 +1,4 @@
+import { useSetState, useUniqueEffect } from '@/hooks';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {
     Box,
@@ -14,8 +15,6 @@ import {
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import * as React from 'react';
 import { debounce } from 'throttle-debounce';
-import strings from '../../Globalization';
-import { useSetState, useUniqueEffect } from '../../hooks';
 
 const PaperComponent = ({ children, multiple, options, value, onSelectAll, ...paperProps }) => {
 	return (
@@ -207,9 +206,7 @@ const AsyncAutocomplete = ({
 					let freeSoloOption = {
 						id: inputValue,
 						label: inputValue,
-						freeSoloLabel: `${
-							typeof strings.CreateOption === 'string' ? strings.CreateOption : 'Create'
-						} "${inputValue}"`
+						freeSoloLabel: `Create "${inputValue}"`
 					};
 					filtered.unshift(freeSoloOption);
 				}

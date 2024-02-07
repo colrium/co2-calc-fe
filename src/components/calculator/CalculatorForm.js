@@ -317,8 +317,8 @@ export default function CalculatorForm({id=null, rows=[]}) {
 						steps={steps}
 						step={step}
 					/>
-					<Box >
-						<FormHeader ref={headerRef} />
+					<Box>
+						<FormHeader ref={headerRef} />						
 						<Component />
 					</Box>
 					<RightSidebar

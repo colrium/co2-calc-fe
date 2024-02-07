@@ -1,6 +1,7 @@
 import { useSetState } from '@/hooks';
 import { addCompanyAssessment, addProductAssessment, selectCalculator, setCalculatorContext } from '@/store/calculatorSlice';
-import MenuIcon from '@mui/icons-material/Menu';
+import { mdiBackburger } from '@mdi/js';
+import Icon from '@mdi/react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Chip } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
@@ -45,7 +46,7 @@ export default function FormHeader() {
 
 	
 
-	const { toggleDrawer } = useCalculatorForm()
+	const { toggleDrawer, leftDrawerOpen, rightDrawerOpen } = useCalculatorForm()
 	
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -164,7 +165,7 @@ export default function FormHeader() {
 			<AppBar position="static" color="inverse" elevation={0}>
 				<Toolbar>
 					<IconButton onClick={toggleDrawer('left')} color="secondary" className="mr-4">
-						<MenuIcon />
+						<Icon path={mdiBackburger} rotate={leftDrawerOpen? 0 : 180} size={1} />
 					</IconButton>
 					<Box className="flex gap-2 flex-1">
 						{formik.values?.name && <Chip label={formik.values?.name} />}
@@ -182,7 +183,7 @@ export default function FormHeader() {
 							<MoreVertIcon />
 						</IconButton>
 						<IconButton onClick={toggleDrawer('right')} color="secondary">
-							<MenuIcon />
+							<Icon path={mdiBackburger} rotate={rightDrawerOpen? 180 : 0} size={1} />
 						</IconButton>
 						<Menu
 							id="menu-appbar"

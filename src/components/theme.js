@@ -33,6 +33,9 @@ const theme = createTheme({
 			disabled: '#dedede'
 		}
 	},
+	mixins: {
+		drawerWidth: 280
+	},
 	typography: {
 		subtitle1: {
 			fontSize: 20

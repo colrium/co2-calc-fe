@@ -48,7 +48,6 @@ const LoginForm = ({ setAuth }) => {
 					.then((res) => {
 						console.log('res', res)
 						const { token, user } = res.data
-						debugger
 						if (user && token) {
 							dispatch(setAuthUser(user));
 							dispatch(setAuthToken(token));

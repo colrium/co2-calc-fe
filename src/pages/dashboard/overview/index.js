@@ -37,6 +37,12 @@ export default function Overview() {
 			pages: 1,
 			count: 0,
 			data: []
+		},
+		overview: {
+			yearly: {},
+			scope: { scope1: 0, scope2: 0, scope3us: 0, scope3ds: 0 },
+			emissionType: { biogenic: 0, fossil: 0 },
+			total: 0
 		}
 	});
     const {loggedin, user} = useSelector(selectAuth);
@@ -45,6 +51,8 @@ export default function Overview() {
 			setState({ loading: true});
 			axios.get(`/api/results?type=${type}`)
 				.then(({data: results}) => {
+					const {data} = results;
+					
 					setState((prevState) => ({
 						[type]: results
 					}));
@@ -52,6 +60,19 @@ export default function Overview() {
 				.catch((err) => console.error(`/api/results?type=${type}`, err))
 				.finally(() => setState({ loading: false }));
 		
+	};
+
+	const fetchOverview = () => {
+		setState({ loading: true });
+		axios
+			.get(`/api/overview`)
+			.then(({ data: overview }) => {
+				setState((prevState) => ({
+					overview: overview
+				}));
+			})
+			.catch((err) => console.error(`/api/overview`, err))
+			.finally(() => setState({ loading: false }));
 	};
 
 
@@ -90,6 +111,7 @@ export default function Overview() {
 
 	useEffect(() => {
 		fetchResults();
+		fetchOverview();
 	}, []);
 
 	return (
@@ -189,6 +211,7 @@ export default function Overview() {
 					</CardActions>
 				</Card>
 			</Box>
+
 			<Box className="w-full">
 				<Box className="py-12 mt-6 px-8">
 					<Typography variant="h4">All products</Typography>
@@ -272,6 +295,10 @@ export default function Overview() {
 						</CardActions>
 					</Card>
 				</Box>
+			</Box>
+
+			<Box className="w-full">
+				{JSON.stringify(state.overview)}
 			</Box>
 		</Box>
 	);

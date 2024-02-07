@@ -4,7 +4,9 @@
 import { useSetState } from '@/hooks';
 import { selectAuth, setLoggedIn } from '@/store/authSlice';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import { Button, Divider } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import { Button, Divider, IconButton } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
@@ -51,10 +53,10 @@ const ElevationScroll = (props) => {
 	});
 };
 
-function ResponsiveAppBar(props) {
+function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 	const dispatch = useDispatch();
 	const router = useRouter();
-	const {user} = useSelector(selectAuth)
+	const { user } = useSelector(selectAuth);
 	const [state, setState] = useSetState({
 		anchorElNav: null,
 		drawerMenuOpen: false
@@ -63,7 +65,7 @@ function ResponsiveAppBar(props) {
 		setState({ anchorElNav: event.currentTarget });
 	};
 	const handleOpenUserMenu = (event) => {
-		setState({anchorElNav: event.currentTarget});
+		setState({ anchorElNav: event.currentTarget });
 	};
 
 	const handleCloseNavMenu = () => {
@@ -75,7 +77,7 @@ function ResponsiveAppBar(props) {
 	};
 
 	return (
-		<ElevationScroll {...props}>
+		<ElevationScroll {...rest}>
 			<AppBar
 				sx={{
 					'MuiAppBar-root': 'bg-transparent'
@@ -83,28 +85,30 @@ function ResponsiveAppBar(props) {
 				className="MainAppbar"
 				color="inherit"
 			>
-				<Toolbar className="flex" sx={{ height: 8 }}>
+				<Toolbar className="flex gap-2" sx={{ height: 8 }}>
+					<IconButton onClick={onToggleDrawer} color="tertiary">
+						{drawerOpen ? <MenuOpenIcon fontSize="inherit" /> : <MenuIcon />}
+					</IconButton>
 					<Box className="flex-col flex-1">
-						<Typography variant="subtitle1" component={Link} href="/dashboard/overview">
+						<Typography color={'tertiary'} component={Link} href="/dashboard/overview">
 							{subtitle}
 						</Typography>
 					</Box>
 
 					<Box sx={{ display: { xs: 'flex' } }} className="items-center gap-4">
-						
 						<Button
-							endIcon={<AccountCircleOutlinedIcon />}
+							endIcon={<AccountCircleOutlinedIcon color="tertiary" fontSize="inherit" />}
 							size="large"
 							aria-label="account of current user"
-							className="capitalize"
+							className="capitalize text-sm "
 							aria-haspopup="true"
+							fontSize={10}
 							onClick={handleOpenUserMenu}
 							sx={{
 								'&.MuiButton-text': {
 									textTransform: 'capitalize'
 								}
 							}}
-							color="secondary"
 						>
 							{`${user.firstname || user.lastname}`}
 						</Button>

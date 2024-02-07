@@ -8,7 +8,6 @@ import { useState } from 'react';
 import { useCalculatorForm } from '../CalculatorProvider';
 import Help from './Help';
 import Summary from './Summary';
-const drawerWidth = 320;
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
 	
@@ -40,7 +39,7 @@ export default function RightSidebar({ open, onClose, variant, activityTypes=[] 
 	const [tab, setTab] = useState(0);
 	const theme = useTheme();
 	const matches = useMediaQuery(theme.breakpoints.up('lg'));
-
+	const drawerWidth = theme.mixins.drawerWidth;
 	const handleTabChange = (event, newValue) => {
 		setTab(newValue);
 	};
@@ -56,12 +55,15 @@ export default function RightSidebar({ open, onClose, variant, activityTypes=[] 
 					boxSizing: 'border-box',
 					zIndex: (theme) => theme.zIndex.appBar - 1,
 					padding: (theme) => theme.spacing(2)
+				},
+				[`&.MuiDrawer-modal`]: {
+					zIndex: (theme) => theme.zIndex.drawer
 				}
 			}}
 			open={open}
 			onClose={onClose}
 		>
-			{matches && <Toolbar  sx={{ height: 8 }} /> }
+			{matches && <Toolbar sx={{ height: 8 }} />}
 			<Box sx={{ width: '100%' }}>
 				<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 					<Tabs value={tab} onChange={handleTabChange} aria-label="basic tabs example">

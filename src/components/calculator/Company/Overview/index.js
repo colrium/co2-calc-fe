@@ -16,16 +16,19 @@ export default function Overview() {
 				<Typography>You can add general information for the assessment and select assessment years</Typography>
 			</Box>
 			<Box className="my-2 flex-col gap-2">
-				<Typography variant="h6" className="mb-8">
-					Basic Information
-				</Typography>
+				<Box className="mb-8">
+					<Typography variant="h6">
+						Basic Information
+					</Typography>
+				</Box>
+
 				<TextField
 					label="Name"
 					name="name"
 					id="name"
 					fullWidth
 					InputProps={{
-						className: 'my-2'
+						className: 'mb-6'
 					}}
 					value={formik.values?.name}
 					onChange={formik.handleChange}
@@ -43,7 +46,7 @@ export default function Overview() {
 					id="description"
 					fullWidth
 					InputProps={{
-						className: 'my-2'
+						className: 'mb-6'
 					}}
 					value={formik.values?.description}
 					onChange={formik.handleChange}
@@ -55,7 +58,7 @@ export default function Overview() {
 					label={'Year'}
 					openTo="year"
 					views={['year']}
-					className="w-full my-2"
+					className="w-full mb-4"
 					value={dayjs().year(formik.values?.year || dayjs().year())}
 					onChange={(newValue) => formik.setFieldValue('year', newValue.year())}
 					error={formik.touched.year && Boolean(formik.errors.year)}
