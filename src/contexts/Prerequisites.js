@@ -1,15 +1,17 @@
-import { useEffectOnce, useLiveRef, useUniqueEffect } from '@/hooks';
-import { selectAuth } from '@/store/authSlice';
-import Grow from '@mui/material/Grow';
+import { useEffectOnce, useLiveRef, useSetState, useUniqueEffect } from '@/hooks';
+import { selectAuth, setAuthToken, setAuthUser, setLoggedIn } from '@/store/authSlice';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import { createContext, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { createContext, useCallback, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNotifications } from './Notifications';
-const GrowTransition = (props) => {
-	return <Grow {...props} />;
-};
+
+
+
+
 export const PrerequisitesContext = createContext({});
 
 export const usePrerequisites = () => {
@@ -20,11 +22,44 @@ export const usePrerequisites = () => {
 
 
 const PrerequisitesProvider = ({ children }) => {
-    
-    const { loggedin, token } = useSelector(selectAuth);
+    const dispatch = useDispatch();
+    const { token, user } = useSelector(selectAuth);
     const [, {appendNotification}] = useNotifications();
-    const loggedinRef = useLiveRef(loggedin);
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+    const [state, setState] = useSetState({
+		openDrawers: {
+			external: isMobile,
+			internal:  isMobile,
+			calcLeft:  !isMobile,
+			calcRight:  !isMobile,
+		},
+		
+	});
     const router = useRouter();
+	const tokenType = Cookies.get('tokenType');
+	const refreshToken = Cookies.get('refreshToken');
+	const accessToken = Cookies.get('accessToken');
+	const loggedin = !!accessToken && !!user
+	const loggedinRef = useLiveRef(loggedin);
+
+	const toggleDrawer = (name, open = false) => {
+		if (name) {
+			setState((prev) => {
+				const newValue = open ? open : !prev.openDrawers[name];
+				return {
+					openDrawers: {
+						...prev.openDrawers,
+						calcLeft:
+							name === 'internal' && newValue && prev.openDrawers.calcLeft ? false : prev.openDrawers.calcLeft,
+						internal:
+							name === 'calcLeft' && newValue && prev.openDrawers.internal ? false : prev.openDrawers.internal,
+						[name]: newValue
+					}
+				};
+		});
+		}
+	};
     const onAxiosRequestInterceptor = useCallback((req) => {
 		if (Cookies.get('accessToken')) {
 			return {
@@ -83,9 +118,59 @@ const PrerequisitesProvider = ({ children }) => {
 		});
 		return Promise.reject(error);
 	};
+
+	 
     
 
 	useEffectOnce(() => {
+		(function () {
+			var addEvent = function (el, type, fn) {
+				if (el.addEventListener) el.addEventListener(type, fn, false);
+				else el.attachEvent('on' + type, fn);
+			};
+
+			var extend = function (obj, ext) {
+				for (var key in ext) if (ext.hasOwnProperty(key)) obj[key] = ext[key];
+				return obj;
+			};
+
+			window.fitText = function (el, kompressor, options) {
+				var settings = extend(
+					{
+						minFontSize: -1 / 0,
+						maxFontSize: 1 / 0
+					},
+					options
+				);
+
+				var fit = function (el) {
+					var compressor = kompressor || 1;
+
+					var resizer = function () {
+						el.style.fontSize =
+							Math.max(
+								Math.min(el.clientWidth / (compressor * 10), parseFloat(settings.maxFontSize)),
+								parseFloat(settings.minFontSize)
+							) + 'px';
+					};
+
+					// Call once to set.
+					resizer();
+
+					// Bind events
+					// If you have any js library which support Events, replace this part
+					// and remove addEvent function (or use original jQuery version)
+					addEvent(window, 'resize', resizer);
+					addEvent(window, 'orientationchange', resizer);
+				};
+
+				if (el.length) for (var i = 0; i < el.length; i++) fit(el[i]);
+				else fit(el);
+
+				// return set of elements
+				return el;
+			};
+		})();
 		axios.interceptors.request.use(onAxiosRequestInterceptor, onAxiosRequestError);
 		axios.interceptors.response.use(onAxiosResponseInterceptor, onAxiosResponseError);
 	}, []);
@@ -94,9 +179,33 @@ const PrerequisitesProvider = ({ children }) => {
         if (router.pathname?.startsWith('/dashboard') && !loggedinRef.current) {
             router.push('/auth/login')
 		}
-    }, [router.pathname])
+		else if (loggedinRef.current && !router.pathname?.startsWith('/dashboard')) {
+			// router.push('/dashboard/overview');
+		}
+    }, [router.pathname]);
 
-	return <PrerequisitesContext.Provider value={{ loggedin, token }}>{children}</PrerequisitesContext.Provider>;
+	useUniqueEffect(() => {
+		if (!loggedin) {
+			dispatch(setLoggedIn(false));
+			dispatch(setAuthToken(null));
+			dispatch(setAuthUser(null));
+		}
+	}, [loggedin]);
+
+
+	return (
+		<PrerequisitesContext.Provider
+			value={{
+				...state,
+				loggedin,
+				token: { accessToken, tokenType, refreshToken },
+				toggleDrawer,
+				drawerVariant: isMobile ? 'temporary' : 'persistent'
+			}}
+		>
+			{children}
+		</PrerequisitesContext.Provider>
+	);
 };
 
 

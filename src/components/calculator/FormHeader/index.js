@@ -1,3 +1,4 @@
+import { usePrerequisites } from '@/contexts/Prerequisites';
 import { useSetState } from '@/hooks';
 import { addCompanyAssessment, addProductAssessment, selectCalculator, setCalculatorContext } from '@/store/calculatorSlice';
 import { mdiBackburger } from '@mdi/js';
@@ -45,8 +46,9 @@ export default function FormHeader() {
 	});
 
 	
-
-	const { toggleDrawer, leftDrawerOpen, rightDrawerOpen } = useCalculatorForm()
+	const { toggleDrawer, openDrawers } = usePrerequisites();
+	const leftDrawerOpen = openDrawers.calcLeft;
+	const rightDrawerOpen = openDrawers.calcRight;
 	
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -164,8 +166,8 @@ export default function FormHeader() {
 			</Dialog>
 			<AppBar position="static" color="inverse" elevation={0}>
 				<Toolbar>
-					<IconButton onClick={toggleDrawer('left')} color="secondary" className="mr-4">
-						<Icon path={mdiBackburger} rotate={leftDrawerOpen? 0 : 180} size={1} />
+					<IconButton onClick={() => toggleDrawer('calcLeft')} color="secondary" className="mr-4">
+						<Icon path={mdiBackburger} rotate={leftDrawerOpen ? 0 : 180} size={1} />
 					</IconButton>
 					<Box className="flex gap-2 flex-1">
 						{formik.values?.name && <Chip label={formik.values?.name} />}
@@ -182,8 +184,8 @@ export default function FormHeader() {
 						>
 							<MoreVertIcon />
 						</IconButton>
-						<IconButton onClick={toggleDrawer('right')} color="secondary">
-							<Icon path={mdiBackburger} rotate={rightDrawerOpen? 180 : 0} size={1} />
+						<IconButton onClick={() => toggleDrawer('calcRight')} color="secondary">
+							<Icon path={mdiBackburger} rotate={rightDrawerOpen ? 180 : 0} size={1} />
 						</IconButton>
 						<Menu
 							id="menu-appbar"
@@ -200,7 +202,7 @@ export default function FormHeader() {
 							open={Boolean(anchorEl)}
 							onClose={handleClose}
 						>
-							<MenuItem component={Link} href="/overview">
+							<MenuItem component={Link} href="/dashboard/overview">
 								Overview
 							</MenuItem>
 							<MenuItem onClick={handleAddCompany}>Add company assessment (Scope 1 - 3)</MenuItem>

@@ -1,6 +1,8 @@
 /** @format */
 
 'use client';
+import { publicRoutes } from '@/config';
+import { usePrerequisites } from '@/contexts/Prerequisites';
 import { useSetState } from '@/hooks';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
@@ -8,12 +10,10 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { alpha, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Link from 'next/link';
 import * as React from 'react';
@@ -72,7 +72,7 @@ const ElevationScroll = (props) => {
 			borderBottomWidth: `1px`,
 			...(trigger
 				? {
-						backgroundColor: `${alpha(theme.palette.background.paper, 0.8)} !important`,
+						backgroundColor: `rgba(0, 3, 66, 0.7) !important`,
 						WebkitBackdropFilter: 'blur(5px) !important',
 						backdropFilter: 'blur(5px) !important'
 				  }
@@ -90,6 +90,7 @@ function ResponsiveAppBar(props) {
 		anchorElNav: null,
 		drawerMenuOpen: false
 	});
+	const { openDrawers, toggleDrawer } = usePrerequisites();
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
 	};
@@ -152,63 +153,26 @@ function ResponsiveAppBar(props) {
 						<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
 							<IconButton
 								size="large"
-								aria-label="account of current user"
-								aria-controls="menu-appbar"
+								aria-label="external drawe"
+								aria-controls="external-appbar"
 								aria-haspopup="true"
-								onClick={handleOpenNavMenu}
+								onClick={() => toggleDrawer('external', true)}
 								color="inherit"
 							>
 								<MenuIcon />
 							</IconButton>
-							<Menu
-								id="menu-appbar"
-								anchorEl={anchorElNav}
-								anchorOrigin={{
-									vertical: 'bottom',
-									horizontal: 'left'
-								}}
-								keepMounted
-								transformOrigin={{
-									vertical: 'top',
-									horizontal: 'left'
-								}}
-								open={Boolean(anchorElNav)}
-								onClose={handleCloseNavMenu}
-								sx={{
-									display: { xs: 'block', md: 'none' }
-								}}
-							>
-								{pages.map(({ path, label }) => (
-									<MenuItem key={path} onClick={handleCloseNavMenu} href={path} component={Link}>
-										<Typography textAlign="center">{label}</Typography>
-									</MenuItem>
-								))}
-							</Menu>
 						</Box>
 						<Box className="flex-1" />
-						{/* <Typography
-						noWrap
-						component="a"
-						href="#app-bar-with-responsive-menu"
-						sx={{
-							mr: 2,
-							display: { xs: 'flex', md: 'none' },
-							flexGrow: 1,
-							color: 'inherit',
-							textDecoration: 'none'
-						}}
-					>
-						{title}
-					</Typography> */}
+
 						<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-							{pages.map(({ label, path }) => (
+							{publicRoutes.map(({ label, pathname }) => (
 								<Button
-									key={path}
+									key={pathname}
 									onClick={handleCloseNavMenu}
 									sx={{ my: 2, display: 'block' }}
 									color="inherit"
 									component={Link}
-									href={path}
+									href={pathname}
 								>
 									{label}
 								</Button>
@@ -216,10 +180,10 @@ function ResponsiveAppBar(props) {
 						</Box>
 
 						<Box className="flex gap-8" sx={{ flexGrow: 0 }}>
-							<Button href={'/auth/register'} color="inherit" sx={{ p: 0 }}>
+							<Button href={'/auth/register'} color="inherit">
 								Get Started
 							</Button>
-							<Button href={'/auth/login'} color="inherit" sx={{ p: 0 }}>
+							<Button href={'/auth/login'} color="inherit">
 								Login
 							</Button>
 						</Box>

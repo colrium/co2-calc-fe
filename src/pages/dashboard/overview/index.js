@@ -119,65 +119,66 @@ export default function Overview() {
 			<Box className="py-32 px-8" sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
 				<Typography variant="h4">All company assessments (Scope 1 - 3)</Typography>
 			</Box>
-			<Box className="flex gap-8 px-8 py-8">
-				{state.company?.data?.length > 0 && state.company.data.map((assessment, i) => (
-					<Card sx={{ maxWidth: 400 }} className="flex flex-col" key={`company-${i}`}>
-						<CardHeader
-							avatar={
-								<Avatar
-									sx={{
-										bgcolor: red[500],
-										width: 24,
-										height: 24,
-										fontSize: 14,
-										color: (theme) => theme.palette.background.paper
-									}}
-									aria-label={assessment?.name}
-								>
-									{assessment?.name.charAt(0).toUpperCase()}
-								</Avatar>
-							}
-							action={
-								<IconButton aria-label="settings">
-									<MoreVertIcon />
-								</IconButton>
-							}
-							title={assessment?.name}
-							subheader={assessment?.year}
-						/>
-						<CardContent className="flex-1 flex-col">
-							<Typography className="flex-1">
-								{assessment?.description || 'No description added yet'}
-							</Typography>
-							<Typography variant="body2" color="text.disabled" className="pt-4">
-								{dayjs().toNow(dayjs(assessment?.lastModified))}
-							</Typography>
-						</CardContent>
-						<CardActions disableSpacing>
-							{assessment && 'id' in assessment ? (
-								<Button
-									color="secondary"
-									aria-label="View Assessment"
-									endIcon={<ArrowForwardIcon />}
-									component={Link}
-									// onClick={handleOnGoToAssessment('company', i)}
-									href={`/dashboard/calculate/${assessment?.id}`}
-								>
-									View Assessment
-								</Button>
-							) : (
-								<Button
-									color="secondary"
-									aria-label="View Assessment"
-									endIcon={<ArrowForwardIcon />}
-									onClick={handleOnGoToAssessment('company', i)}
-								>
-									View Assessment
-								</Button>
-							)}
-						</CardActions>
-					</Card>
-				))}
+			<Box className="flex gap-8 px-8 py-8 flex-wrap">
+				{state.company?.data?.length > 0 &&
+					state.company.data.map((assessment, i) => (
+						<Card sx={{ maxWidth: 400 }} className="flex flex-col" key={`company-${i}`}>
+							<CardHeader
+								avatar={
+									<Avatar
+										sx={{
+											bgcolor: red[500],
+											width: 24,
+											height: 24,
+											fontSize: 14,
+											color: (theme) => theme.palette.background.paper
+										}}
+										aria-label={assessment?.name}
+									>
+										{assessment?.name.charAt(0).toUpperCase()}
+									</Avatar>
+								}
+								action={
+									<IconButton aria-label="settings">
+										<MoreVertIcon />
+									</IconButton>
+								}
+								title={assessment?.name}
+								subheader={assessment?.year}
+							/>
+							<CardContent className="flex-1 flex-col">
+								<Typography className="flex-1">
+									{assessment?.description || 'No description added yet'}
+								</Typography>
+								<Typography variant="body2" color="text.disabled" className="pt-4">
+									{dayjs().toNow(dayjs(assessment?.lastModified))}
+								</Typography>
+							</CardContent>
+							<CardActions disableSpacing>
+								{assessment && 'id' in assessment ? (
+									<Button
+										color="secondary"
+										aria-label="View Assessment"
+										endIcon={<ArrowForwardIcon />}
+										component={Link}
+										// onClick={handleOnGoToAssessment('company', i)}
+										href={`/dashboard/calculate/${assessment?.id}`}
+									>
+										View Assessment
+									</Button>
+								) : (
+									<Button
+										color="secondary"
+										aria-label="View Assessment"
+										endIcon={<ArrowForwardIcon />}
+										onClick={handleOnGoToAssessment('company', i)}
+									>
+										View Assessment
+									</Button>
+								)}
+							</CardActions>
+						</Card>
+					))}
 				<Card sx={{ maxWidth: 345 }} variant="outlined" className="flex flex-col">
 					<CardHeader
 						avatar={
@@ -216,52 +217,53 @@ export default function Overview() {
 				<Box className="py-12 mt-6 px-8">
 					<Typography variant="h4">All products</Typography>
 				</Box>
-				<Box className="flex gap-8 px-8 py-8">
-					{state.product.data.length > 0 && state.product.data.map((assessment, i) => (
-						<Card sx={{ maxWidth: 345 }} className="flex flex-col" key={`company-${i}`}>
-							<CardHeader
-								avatar={
-									<Avatar
-										sx={{
-											bgcolor: red[500],
-											width: 24,
-											height: 24,
-											fontSize: 14,
-											color: (theme) => theme.palette.background.paper
-										}}
-										aria-label={assessment?.name}
+				<Box className="flex gap-8 px-8 py-8 flex-wrap">
+					{state.product.data.length > 0 &&
+						state.product.data.map((assessment, i) => (
+							<Card sx={{ maxWidth: 345 }} className="flex flex-col" key={`company-${i}`}>
+								<CardHeader
+									avatar={
+										<Avatar
+											sx={{
+												bgcolor: red[500],
+												width: 24,
+												height: 24,
+												fontSize: 14,
+												color: (theme) => theme.palette.background.paper
+											}}
+											aria-label={assessment?.name}
+										>
+											{assessment?.name?.charAt(0)?.toUpperCase() ?? 'NA'}
+										</Avatar>
+									}
+									action={
+										<IconButton aria-label="settings">
+											<MoreVertIcon />
+										</IconButton>
+									}
+									title={assessment?.name}
+									subheader={assessment?.year}
+								/>
+								<CardContent className="flex-1 flex-col">
+									<Typography className="flex-1">
+										{assessment?.description || 'No description added yet'}
+									</Typography>
+									<Typography variant="body2" color="text.disabled" className="pt-4">
+										{dayjs().toNow(dayjs(assessment?.lastModified))}
+									</Typography>
+								</CardContent>
+								<CardActions disableSpacing>
+									<Button
+										color="secondary"
+										aria-label="View Assessment"
+										endIcon={<ArrowForwardIcon />}
+										onClick={handleOnGoToAssessment('product', i)}
 									>
-										{assessment?.name?.charAt(0)?.toUpperCase() ?? 'NA'}
-									</Avatar>
-								}
-								action={
-									<IconButton aria-label="settings">
-										<MoreVertIcon />
-									</IconButton>
-								}
-								title={assessment?.name}
-								subheader={assessment?.year}
-							/>
-							<CardContent className="flex-1 flex-col">
-								<Typography className="flex-1">
-									{assessment?.description || 'No description added yet'}
-								</Typography>
-								<Typography variant="body2" color="text.disabled" className="pt-4">
-									{dayjs().toNow(dayjs(assessment?.lastModified))}
-								</Typography>
-							</CardContent>
-							<CardActions disableSpacing>
-								<Button
-									color="secondary"
-									aria-label="View Assessment"
-									endIcon={<ArrowForwardIcon />}
-									onClick={handleOnGoToAssessment('product', i)}
-								>
-									View Assessment
-								</Button>
-							</CardActions>
-						</Card>
-					))}
+										View Assessment
+									</Button>
+								</CardActions>
+							</Card>
+						))}
 					<Card sx={{ maxWidth: 345 }} className="flex flex-col" variant="outlined">
 						<CardHeader
 							avatar={
@@ -297,9 +299,7 @@ export default function Overview() {
 				</Box>
 			</Box>
 
-			<Box className="w-full">
-				{JSON.stringify(state.overview)}
-			</Box>
+			<Box className="w-full">{JSON.stringify(state.overview)}</Box>
 		</Box>
 	);
 }

@@ -1,3 +1,5 @@
+import ScalingText from '@/components/common/ScalingText';
+import { emissionTypes } from '@/config';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
@@ -15,14 +17,14 @@ export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 	},
 	[`&.${linearProgressClasses?.root}`]: {
 		borderRadius: 5,
-		backgroundColor: `${theme.palette.mode === 'light' ? '#CCCCCC' : '#308fe8'} !important`
+		backgroundColor: `${theme.palette.divider} !important`
 	}
 }));
 
 export default function Summary() {
 	const { formik } = useCalculatorForm();
 	const {
-		results
+		results, activities
 	} = { ...formik.values };
 
 	
@@ -50,25 +52,27 @@ export default function Summary() {
 	const biogenicPercentage = total > 0 ? ((biogenic / total) * 100).toFixed(2) : 0;
 	const fossilPercentage = total > 0 ? ((fossil / total) * 100).toFixed(2) : 0;
 
+	
+
 
 	return (
 		<Box className="flex flex-col">
 			<Box className="mb-4">
 				<Box className="flex gap-2">
-				<Typography color="textSecondary">CARBON FOOTPRINT</Typography>
-				<Typography color="secondary" compone="span">(tCO<sub>2</sub>e)</Typography>
+					<Typography color="textSecondary">CARBON FOOTPRINT</Typography>
+					<Typography color="primary" compone="span">
+						(tCO<sub>2</sub>e)
+					</Typography>
 				</Box>
-				
-				<Typography color="secondary">
-					<span className="text-3xl md:text-5xl">{total.toFixed(2)}</span>
-				</Typography>
+
+				<ScalingText color="secondary" className="w-full">{total.toFixed(2)}</ScalingText>
 			</Box>
 			<Divider />
 			<Box className="flex flex-row items-center py-4 gap-4">
 				<Typography className="flex-1" variant="subtitle2" color="textSecondary">
 					Emissions by scope
 				</Typography>
-				<Typography color="textSecondary" variant="body2">
+				<Typography color="primary" variant="body2">
 					tCO<sub>2</sub>e
 				</Typography>
 			</Box>
@@ -157,7 +161,7 @@ export default function Summary() {
 			<Divider />
 			<Box className="py-2 mb-4">
 				<Box className="flex flex-row items-center gap-4 mb-2">
-					<Typography className="flex-1" variant="subtitle1" color="textSecondary">
+					<Typography className="flex-1" variant="subtitle2" color="textSecondary">
 						Emissions by type
 					</Typography>
 					<Typography color="textSecondary" variant="body2">
@@ -199,7 +203,7 @@ export default function Summary() {
 							variant="determinate"
 							value={fossilPercentage}
 							className="flex-1"
-							color="brown"
+							color={emissionTypes.fossil.colorName}
 						/>
 						<Typography color="textSecondary" variant="body2">
 							{fossilPercentage}%

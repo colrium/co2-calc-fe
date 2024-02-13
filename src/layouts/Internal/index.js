@@ -1,13 +1,12 @@
 import ThemeRegistry from '@/components/ThemeRegistry';
-import { useSetState } from '@/hooks';
+import { usePrerequisites } from '@/contexts/Prerequisites';
 import { Box } from '@mui/material';
 import AppBar from './AppBar';
 import MainDrawer from './MainDrawer';
 
 export default function InternalLayout({children}) {
-	const [state, setState] = useSetState({
-		drawerOpen: false
-	})
+	
+	const {openDrawers, toggleDrawer} = usePrerequisites()
 	return (
 		<ThemeRegistry options={{ key: 'mui-theme' }}>
 			<Box
@@ -15,16 +14,13 @@ export default function InternalLayout({children}) {
 				className={`flex min-h-screen w-full max-w-full overflow-x-hidden relative overflow-x-hidden bg-gradient-to-br from-gray-50 to-blue-100`}
 			>
 				<MainDrawer
-					open={state.drawerOpen}
-					onOpen={() => setState({ drawerOpen: true })}
-					onClose={() => setState({ drawerOpen: false })}
+					open={openDrawers.internal}
+					onOpen={() => toggleDrawer('internal', true)}
+					onClose={() => toggleDrawer('internal', false)}
 				/>
 				<Box className={`flex flex-col min-h-screen flex-1`}>
-					<AppBar
-						drawerOpen={state.drawerOpen}
-						onToggleDrawer={() => setState((prev) => ({ drawerOpen: !prev.drawerOpen }))}
-					/>
-
+					<AppBar drawerOpen={openDrawers.internal} onToggleDrawer={() => toggleDrawer('internal')} />
+					
 					<Box className="w-full" sx={{ marginTop: 8 }}>
 						{children}
 					</Box>

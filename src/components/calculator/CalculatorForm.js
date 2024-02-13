@@ -1,5 +1,6 @@
 /** @format */
 
+import { usePrerequisites } from '@/contexts/Prerequisites';
 import { useDidUpdate, useFetcher, useSetState, useUniqueEffect } from '@/hooks';
 import { selectCalculator, setCalculatorContext, updateCompanyAssessment, updateProductAssessment } from '@/store/calculatorSlice';
 import { deepEqual } from '@/util';
@@ -14,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { debounce } from 'throttle-debounce';
 import CalculatorProvider from './CalculatorProvider';
 import CompanyOverview from './Company/Overview';
+import CompanyResults from './Company/Results';
 import CompanyScope1 from './Company/Scope1';
 import CompanyScope2 from './Company/Scope2';
 import CompanyScope3Downstream from './Company/Scope3Downstream';
@@ -51,11 +53,11 @@ const companyStages = [
 		label: 'Scope 3 Downstream',
 		Component: CompanyScope3Downstream
 	},
-	// {
-	// 	name: 'results',
-	// 	label: 'Results',
-	// 	Component: CompanyResults
-	// }
+	{
+		name: 'results',
+		label: 'Results',
+		Component: CompanyResults
+	}
 ];
 const productSteps = [
 	{
@@ -99,7 +101,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 	const headerRef = useRef();
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
-	const drawerVariant = isMobile ? 'temporary' : 'persistent';
+	const { drawerVariant, openDrawers, toggleDrawer } = usePrerequisites();
 	
 	// let active = idIndex > -1? idIndex: context.active
 	let active = context.active;
@@ -220,6 +222,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 							const activity = entries[i];
 							const amount = activity.amount || 0;
 							const emissionFactor = activity.emissionFactor > 0? activity.emissionFactor : activity.emissionsType === 'biogenic'? 0.1 : 0.8;
+
 							const emissionsType = activity.emissionsType;
 							const emissions = (emissionFactor * amount);
 							results.byScope[scope] += emissions;
@@ -237,10 +240,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 		formik.setFieldValue('results', results);
 	});
 
-	const toggleDrawer = (side) => () => {
-		const name = side === 'right' ? 'rightDrawerOpen' : 'leftDrawerOpen';
-		setState(prevState => ({[name]: !prevState[name]}))
-	}
+	
 
 	useUniqueEffect(() => {
 		if (data) {
@@ -292,8 +292,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 					stepName,
 					rows,
 					fetchActivityTypes,
-					fetchFactors,
-					toggleDrawer
+					fetchFactors
 				}}
 			>
 				<Box
@@ -310,20 +309,20 @@ export default function CalculatorForm({id=null, rows=[]}) {
 					}}
 				>
 					<LeftSidebar
-						open={state.leftDrawerOpen}
-						onClose={() => setState({ leftDrawerOpen: false })}
+						open={openDrawers.calcLeft}
+						onClose={() => toggleDrawer('calcLeft', false)}
 						variant={drawerVariant}
 						onChangeStep={(index) => setActiveStep(index)}
 						steps={steps}
 						step={step}
 					/>
 					<Box>
-						<FormHeader ref={headerRef} />						
+						<FormHeader ref={headerRef} />
 						<Component />
 					</Box>
 					<RightSidebar
-						open={state.rightDrawerOpen && stepName !== 'results'}
-						onClose={() => setState({ rightDrawerOpen: false })}
+						open={openDrawers.calcRight}
+						onClose={() => toggleDrawer('calcRight', false)}
 						variant={drawerVariant}
 					/>
 				</Box>

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import dayjs from 'dayjs';
 import Cookies from 'js-cookie';
 
 
@@ -30,14 +31,16 @@ export const authSlice = createSlice({
 		setAuthToken(state, action) {
 			state.token = action.payload;
 			if (action.payload) {
+				const expires = (action.payload?.expiresIn? dayjs(action.payload.expiresIn) : dayjs().add(1, 'day')).toDate();
 				Cookies.set('accessToken', action.payload.accessToken);
 				Cookies.set('refreshToken', action.payload.refreshToken);
 				Cookies.set('tokenType', action.payload.tokenType);
 			}
-			// state.loggedin = !!action.payload;
-			// if (!action.payload) {
-			// 	state.loggedin = false;
-			// }
+			else {
+				Cookies.remove('accessToken');
+				Cookies.remove('refreshToken');
+				Cookies.remove('tokenType');
+			}
 		}
 	},
 

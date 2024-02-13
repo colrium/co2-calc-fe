@@ -5,13 +5,13 @@ import * as Yup from 'yup';
 ;
 
 import { setAuthToken, setAuthUser, setLoggedIn } from '@/store/authSlice';
-import { Icon } from '@iconify/react';
 import { LoadingButton } from '@mui/lab';
-import { Box, Checkbox, FormControlLabel, IconButton, InputAdornment, Link, Stack, TextField } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, Link, Stack, TextField } from '@mui/material';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import TextInput from '../common/form/TextInput';
 
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -94,24 +94,12 @@ const LoginForm = ({ setAuth }) => {
 							helperText={touched.email && errors.email}
 						/>
 
-						<TextField
-							fullWidth
-							size="small"
-							autoComplete="current-password"
-							type={showPassword ? 'text' : 'password'}
+						<TextInput
+							type={'password'}
 							label="Password"
 							{...getFieldProps('password')}
 							error={Boolean(touched.password && errors.password)}
 							helperText={touched.password && errors.password}
-							InputProps={{
-								endAdornment: (
-									<InputAdornment position="end">
-										<IconButton onClick={() => setShowPassword((prev) => !prev)}>
-											{showPassword ? <Icon icon="eva:eye-fill" /> : <Icon icon="eva:eye-off-fill" />}
-										</IconButton>
-									</InputAdornment>
-								)
-							}}
 						/>
 					</Box>
 
@@ -126,7 +114,6 @@ const LoginForm = ({ setAuth }) => {
 								component={NextLink}
 								href="/auth/forgot-password"
 								variant="subtitle2"
-								to="#"
 								underline="hover"
 							>
 								Forgot password?

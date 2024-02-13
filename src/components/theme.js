@@ -4,33 +4,41 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
 	palette: {
+		mode: 'dark',
 		primary: {
-			main: '#000000'
+			// main: '#051937'
+			// main: '#A8EB12'
+			main: '#A8EB12'
 		},
 		secondary: {
 			// main: '#89bfd7'
-			main: '#4290b3'
+			main: '#00B0BC'
 		},
 		tertiary: {
+			// main: '#39d10f'
 			main: '#FF0000'
 		},
 		inverse: {
-			main: '#FFFFFF'
+			main: '#000000'
 		},
 		brown: {
 			main: '#632d00'
 		},
 		cyan: {
-			main: '#019179'
+			main: '#00FFFF'
+		},
+		pink: {
+			main: '#C850C0'
 		},
 		background: {
-			paper: '#FFFFFF',
-			default: '#f2f2f2'
+			paper: 'transparent',
+			default: '#00153B',
+			elevatedPaper: '#000342'
 		},
 		text: {
-			primary: '#424242',
-			secondary: '#757575',
-			disabled: '#dedede'
+			primary: '#F4F4F4',
+			secondary: '#EAEAEA',
+			disabled: '#C2C2C2'
 		}
 	},
 	mixins: {
@@ -63,6 +71,18 @@ const theme = createTheme({
 			'"Segoe UI Emoji"',
 			'"Segoe UI Symbol"'
 		].join(',')
+	},
+	components: {
+		MuiPopover: {
+			styleOverrides: {
+				paper: ({ theme }) => ({
+					backgroundColor: theme.palette.background.elevatedPaper
+				}),
+				label: {
+					padding: 'initial'
+				}
+			}
+		}
 	}
 });
 export default theme;

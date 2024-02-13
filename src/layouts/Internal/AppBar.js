@@ -13,7 +13,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { alpha, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -44,7 +44,7 @@ const ElevationScroll = (props) => {
 			borderBottomWidth: `1px`,
 			...(trigger
 				? {
-						backgroundColor: `${alpha(theme.palette.background.paper, 0.8)} !important`,
+						backgroundColor: `rgba(0, 3, 66, 0.7) !important`,
 						WebkitBackdropFilter: 'blur(5px) !important',
 						backdropFilter: 'blur(5px) !important'
 				  }
@@ -61,6 +61,8 @@ function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 		anchorElNav: null,
 		drawerMenuOpen: false
 	});
+
+	
 	const handleOpenNavMenu = (event) => {
 		setState({ anchorElNav: event.currentTarget });
 	};
