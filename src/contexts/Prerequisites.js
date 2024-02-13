@@ -29,7 +29,7 @@ const PrerequisitesProvider = ({ children }) => {
 	const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
     const [state, setState] = useSetState({
 		openDrawers: {
-			external: isMobile,
+			external: false,
 			internal:  isMobile,
 			calcLeft:  !isMobile,
 			calcRight:  !isMobile,
