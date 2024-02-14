@@ -3,14 +3,33 @@
 'use client';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
+import { GlobalStyles } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, alpha } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useServerInsertedHTML } from 'next/navigation';
 import { useState } from 'react';
 import theme from './theme';
 
+const blurBgStyles = {
+	backgroundColor: (theme) => `${alpha(theme.palette.background.dark, 0.25)} !important`,
+	WebkitBackdropFilter: (theme) => [`blur(${theme.spacing()})`, `blur(${theme.spacing()})`],
+	backdropFilter: (theme) => `blur(${theme.spacing()})`
+};
+// hoist to static to avoid recalculation
+const globalStyles = (
+	<GlobalStyles
+		styles={{
+			'& .MuiPopover-paper': blurBgStyles,
+			'& .MuiAutocomplete-popper': blurBgStyles,
+			'& .MuiDrawer-paper': blurBgStyles,
+			// '& .MuiPopper-root': {
+			// 	'& .MuiTooltip-tooltip': blurBgStyles
+			// }
+		}}
+	/>
+);
 // This implementation is from emotion-js
 // https://github.com/emotion-js/emotion/issues/2928#issuecomment-1319747902
 export default function ThemeRegistry(props) {
@@ -53,6 +72,8 @@ export default function ThemeRegistry(props) {
 			/>
 		);
 	});
+
+	console.log('theme.spacing()', theme.spacing());
 	return (
 		<CacheProvider value={cache}>
 			<ThemeProvider theme={theme}>

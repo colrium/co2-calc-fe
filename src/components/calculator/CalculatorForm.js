@@ -123,7 +123,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 	
 	const [completedSteps, setCompletedStepSteps] = useState([0]);
 
-	const data = rows?.find(row => id=== row.id);
+	const data = state.data;
 	const steps = useMemo(() => contextSteps[name], [name]);
 	const stepName = steps[step]?.name;
 	const validationSchema = useMemo(() => contextValidationSchemas[name], [name]);

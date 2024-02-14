@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 export default function CalculateId() {
 	const router = useRouter();
 	const id = router.query.slug;
-	const [state, setState] = useSetState({loading: true, page: 1, perPage: 50, count: 0, data: []});
+	const [state, setState] = useSetState({loading: false, page: 1, perPage: 50, count: 0, data: []});
 	const fetcher = useFetcher();
 	const fetchResults = (type='company') => {
 			setState({ loading: true});
@@ -20,7 +20,7 @@ export default function CalculateId() {
 		
 	};
 	useEffect(() => {
-		fetchResults();
+		// fetchResults();
 	}, [])
 	return (
 		<Grid container>
@@ -28,7 +28,7 @@ export default function CalculateId() {
 				{state.loading && <Box> 
 				
 				</Box>}
-				{!state.loading && <CalculatorForm id={id} rows={state.data} />}
+				{!state.loading && <CalculatorForm id={id} />}
 			</Grid>
 		</Grid>
 	);

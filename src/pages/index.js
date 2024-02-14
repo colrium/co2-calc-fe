@@ -36,8 +36,8 @@ export default function Home() {
 							<Box className="flex flex-col items-center justify-center w-full h-full">
 								<Image src={'/uhakika2.png'} width={150} height={150} alt="banner" />
 							</Box>
-							<Typography color="background.paper" variant="subtitle2" className="text-center">
-								At EcoCalc, we believe in the power of informed choices to create a more sustainable and
+							<Typography  variant="subtitle2" className="text-center">
+								We believe in the power of informed choices to create a more sustainable and
 								eco-friendly world. Our platform is designed to empower individuals and organizations on
 								their journey towards reducing carbon emissions and fostering a greener future. Explore the
 								possibilities, calculate your carbon footprint, and embark on a path of positive

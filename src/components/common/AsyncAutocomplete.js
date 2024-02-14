@@ -452,9 +452,9 @@ const AsyncAutocomplete = ({
 			renderOption={renderOption}
 			openOnFocus
 			onInputChange={handleOnInputChange}
-			PaperComponent={(paperProps) => (
-				<PaperComponent {...paperProps} multiple={multiple} value={derivedValue} options={state.options} />
-			)}
+			// PaperComponent={(paperProps) => (
+			// 	<PaperComponent {...paperProps} multiple={multiple} value={derivedValue} options={state.options} />
+			// )}
 			{...rest}
 			filterSelectedOptions
 			value={derivedValue}

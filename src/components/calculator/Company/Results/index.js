@@ -56,103 +56,114 @@ export default function Results() {
 
 	const { values: scope1BarData, labels: scope1BarLabels } = useMemo(() => {
 		let data = { labels: [], values: [] };
-		if (activities?.scope1?.constructor === {}.constructor) {
-			data = Object.values(activities?.scope1).reduce(
-				(acc, curr) => {
-					let values = [];
-					const series = [];
-					if (Array.isArray(curr)) {
-						values = curr.map(({ emission, label, ...rest }) => {
-							series.push(label);
-							// 	return ({
-							// 	...rest,
-							// 	value: emission,
-							// 	emission,
-							// 	color: scopes.scope1.color,
-							// 	[label]: emission
-							// });
-							return emission;
-						});
-					}
-					acc.values = acc.values.concat(values);
-					acc.labels = acc.labels.concat(series);
-					return acc;
-				},
-				{ labels: [], values: [] }
-			);
+		if (!!activities?.scope1 && typeof activities?.scope1 === 'object') {
+			const scopeValues = Object.values(activities.scope1);
+			if (Array.isArray(scopeValues)) {
+				data = scopeValues.reduce(
+					(acc, curr) => {
+						let values = [];
+						const series = [];
+						if (Array.isArray(curr)) {
+							values = curr.map(({ emission, label, ...rest }) => {
+								series.push(label);
+								return emission;
+							});
+						}
+						acc.values = acc.values.concat(values);
+						acc.labels = acc.labels.concat(series);
+						return acc;
+					},
+					{ labels: [], values: [] }
+				);
+			}
 		}
 		return data;
 	}, [activities]);
 
 	const { values: scope2BarData, labels: scope2BarLabels } = useMemo(() => {
 		let data = { labels: [], values: [] };
-		if (activities?.scope2?.constructor === {}.constructor) {
-			data = Object.values(activities?.scope2).reduce(
-				(acc, curr) => {
-					let values = [];
-					const series = [];
-					if (Array.isArray(curr)) {
-						values = curr.map(({ emission, label, ...rest }) => {
-							series.push(label);
-							return emission;
-						});
-					}
-					acc.values = acc.values.concat(values);
-					acc.labels = acc.labels.concat(series);
-					return acc;
-				},
-				{ labels: [], values: [] }
-			);
+		if (!!activities?.scope2 && typeof activities?.scope2 === 'object') {
+			const scopeValues = Object.values(activities.scope2);
+			if (Array.isArray(scopeValues)) {
+				data = scopeValues.reduce(
+					(acc, curr) => {
+						let values = [];
+						const series = [];
+						if (Array.isArray(curr)) {
+							values = curr.map(({ emission, label, ...rest }) => {
+								series.push(label);
+								return emission;
+							});
+						}
+						acc.values = acc.values.concat(values);
+						acc.labels = acc.labels.concat(series);
+						return acc;
+					},
+					{ labels: [], values: [] }
+				);
+			}
 		}
 		return data;
 	}, [activities]);
 
 	const { values: scope3usBarData, labels: scope3usBarLabels } = useMemo(() => {
 		let data = { labels: [], values: [] };
-		if (activities?.scope3us?.constructor === {}.constructor) {
-			data = Object.values(activities?.scope3us).reduce(
-				(acc, curr) => {
-					let values = [];
-					const series = [];
-					if (Array.isArray(curr)) {
-						values = curr.map(({ emission, label, ...rest }) => {
-							series.push(label);
-							return emission;
-						});
-					}
-					acc.values = acc.values.concat(values);
-					acc.labels = acc.labels.concat(series);
-					return acc;
-				},
-				{ labels: [], values: [] }
-			);
+		if (!!activities?.scope3us && typeof activities?.scope3us === 'object') {
+			const scopeValues = Object.values(activities.scope3us);
+			if (Array.isArray(scopeValues)) {
+				data = scopeValues.reduce(
+					(acc, curr) => {
+						let values = [];
+						const series = [];
+						if (Array.isArray(curr)) {
+							values = curr.map(({ emission, label, ...rest }) => {
+								series.push(label);
+								return emission;
+							});
+						}
+						acc.values = acc.values.concat(values);
+						acc.labels = acc.labels.concat(series);
+						return acc;
+					},
+					{ labels: [], values: [] }
+				);
+			}
+			
 		}
 		return data;
 	}, [activities]);
 
 	const { values: scope3dsBarData, labels: scope3dsBarLabels } = useMemo(() => {
 		let data = { labels: [], values: [] };
-		if (activities?.scope3ds?.constructor === {}.constructor) {
-			data = Object.values(activities?.scope3ds).reduce(
-				(acc, curr) => {
-					let values = [];
-					const series = [];
-					if (Array.isArray(curr)) {
-						values = curr.map(({ emission, label, ...rest }) => {
-							series.push(label);
-							return emission;
-						});
-					}
-					acc.values = acc.values.concat(values);
-					acc.labels = acc.labels.concat(series);
-					return acc;
-				},
-				{ labels: [], values: [] }
-			);
+		if (!!activities?.scope3ds && typeof activities?.scope3ds === 'object') {
+			const scopeValues = Object.values(activities.scope3ds);
+			if (Array.isArray(scopeValues)) {
+				data = scopeValues.reduce(
+					(acc, curr) => {
+						let values = [];
+						const series = [];
+						if (Array.isArray(curr)) {
+							values = curr.map(({ emission, label, ...rest }) => {
+								series.push(label);
+								return emission;
+							});
+						}
+						acc.values = acc.values.concat(values);
+						acc.labels = acc.labels.concat(series);
+						return acc;
+					},
+					{ labels: [], values: [] }
+				);
+			}
 		}
 		return data;
 	}, [activities]);
 
+	console.log('scope1', scope1BarData, scope1BarLabels);
+	console.log('scope2', scope2BarData, scope2BarLabels);
+	console.log('scope3us', scope3usBarData, scope3usBarLabels);
+	console.log('scope3ds', scope3dsBarData, scope3dsBarLabels);
+	console.log('activities', activities);
 	const pieChartData = [
 		{ ...scopes.scope1, value: scope1 },
 		{ ...scopes.scope2, value: scope2 },
@@ -173,7 +184,9 @@ export default function Results() {
 				</Typography>
 			</Grid>
 			<Grid item xs={12} className="my-8 flex justify-center items-end pb-8">
-				<Typography variant="h3" color="primary">{total.toFixed(4)}</Typography>
+				<Typography variant="h3" color="primary">
+					{total.toFixed(4)}
+				</Typography>
 			</Grid>
 			<Grid item xs={12} md={5} className="p-5">
 				<PieChart
@@ -421,17 +434,19 @@ export default function Results() {
 								</Box>
 							</Grid>
 							<Grid item xs={12}>
-								<ResponsiveChartContainer
-									height={250}
-									xAxis={[{ scaleType: 'band', data: scope1BarLabels }]}
-									series={[{ type: 'bar', data: scope1BarData }]}
-									colors={new Array(scope1BarData.length).fill(scopes.scope1.color)}
-								>
-									<BarPlot />
-									<ChartsXAxis />
-									<ChartsYAxis />
-									<ChartsTooltip />
-								</ResponsiveChartContainer>
+								{scope1BarData.length > 0 && (
+									<ResponsiveChartContainer
+										height={250}
+										xAxis={[{ scaleType: 'band', data: scope1BarLabels }]}
+										series={[{ type: 'bar', data: scope1BarData }]}
+										colors={new Array(scope1BarData.length).fill(scopes.scope1.color)}
+									>
+										<BarPlot />
+										<ChartsXAxis />
+										<ChartsYAxis />
+										<ChartsTooltip />
+									</ResponsiveChartContainer>
+								)}
 							</Grid>
 						</Grid>
 					</CardContent>
@@ -469,17 +484,19 @@ export default function Results() {
 								</Box>
 							</Grid>
 							<Grid item xs={12}>
-								<ResponsiveChartContainer
-									height={250}
-									xAxis={[{ scaleType: 'band', data: scope2BarLabels }]}
-									series={[{ type: 'bar', data: scope2BarData }]}
-									colors={new Array(scope2BarData.length).fill(scopes.scope2.color)}
-								>
-									<BarPlot />
-									<ChartsXAxis />
-									<ChartsYAxis />
-									<ChartsTooltip />
-								</ResponsiveChartContainer>
+								{scope2BarData.length > 0 && (
+									<ResponsiveChartContainer
+										height={250}
+										xAxis={[{ scaleType: 'band', data: scope2BarLabels }]}
+										series={[{ type: 'bar', data: scope2BarData }]}
+										colors={new Array(scope2BarData.length).fill(scopes.scope2.color)}
+									>
+										<BarPlot />
+										<ChartsXAxis />
+										<ChartsYAxis />
+										<ChartsTooltip />
+									</ResponsiveChartContainer>
+								)}
 							</Grid>
 						</Grid>
 					</CardContent>
@@ -517,17 +534,19 @@ export default function Results() {
 								</Box>
 							</Grid>
 							<Grid item xs={12}>
-								<ResponsiveChartContainer
-									height={250}
-									xAxis={[{ scaleType: 'band', data: scope3usBarLabels }]}
-									series={[{ type: 'bar', data: scope3usBarData }]}
-									colors={new Array(scope3usBarData.length).fill(scopes.scope3us.color)}
-								>
-									<BarPlot />
-									<ChartsXAxis />
-									<ChartsYAxis />
-									<ChartsTooltip />
-								</ResponsiveChartContainer>
+								{scope3usBarData.length > 0 && (
+									<ResponsiveChartContainer
+										height={250}
+										xAxis={[{ scaleType: 'band', data: scope3usBarLabels }]}
+										series={[{ type: 'bar', data: scope3usBarData }]}
+										colors={new Array(scope3usBarData.length).fill(scopes.scope3us.color)}
+									>
+										<BarPlot />
+										<ChartsXAxis />
+										<ChartsYAxis />
+										<ChartsTooltip />
+									</ResponsiveChartContainer>
+								)}
 							</Grid>
 						</Grid>
 					</CardContent>
@@ -565,17 +584,19 @@ export default function Results() {
 								</Box>
 							</Grid>
 							<Grid item xs={12}>
-								<ResponsiveChartContainer
-									height={250}
-									xAxis={[{ scaleType: 'band', data: scope3dsBarLabels }]}
-									series={[{ type: 'bar', data: scope3dsBarData }]}
-									colors={new Array(scope3dsBarData.length).fill(scopes.scope3ds.color)}
-								>
-									<BarPlot />
-									<ChartsXAxis />
-									<ChartsYAxis />
-									<ChartsTooltip />
-								</ResponsiveChartContainer>
+								{scope3dsBarData.length > 0 && (
+									<ResponsiveChartContainer
+										height={250}
+										xAxis={[{ scaleType: 'band', data: scope3dsBarLabels }]}
+										series={[{ type: 'bar', data: scope3dsBarData }]}
+										colors={new Array(scope3dsBarData.length).fill(scopes.scope3ds.color)}
+									>
+										<BarPlot />
+										<ChartsXAxis />
+										<ChartsYAxis />
+										<ChartsTooltip />
+									</ResponsiveChartContainer>
+								)}
 							</Grid>
 						</Grid>
 					</CardContent>

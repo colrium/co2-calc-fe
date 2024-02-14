@@ -1,7 +1,22 @@
 /** @format */
 
-import { createTheme } from '@mui/material/styles';
-
+import { alpha, createTheme } from '@mui/material/styles';
+const blurBgStyles = ({ theme }) => ({
+	backgroundColor: `${alpha(theme.palette.background.dark, 0.25)} !important`,
+	WebkitBackdropFilter: [`blur(${theme.spacing()})`, `blur(${theme.spacing()})`],
+	backdropFilter: `blur(${theme.spacing()})`,
+	backgroundImage: `linear-gradient(${alpha(theme.palette.background.main, 0.15)}, ${alpha(
+		theme.palette.background.dark,
+		0.15
+	)})`
+});
+const bgStyles = ({ theme }) => ({
+	backgroundColor: `${theme.palette.background.dark} !important`,
+	backgroundImage: `linear-gradient(${alpha(theme.palette.background.main, 0.15)}, ${alpha(
+		theme.palette.background.dark,
+		0.15
+	)})`
+});
 const theme = createTheme({
 	palette: {
 		mode: 'dark',
@@ -33,6 +48,8 @@ const theme = createTheme({
 		background: {
 			paper: 'transparent',
 			default: '#00153B',
+			main: '#000342',
+			dark: '#000b1f',
 			elevatedPaper: '#000342'
 		},
 		text: {
@@ -73,14 +90,29 @@ const theme = createTheme({
 		].join(',')
 	},
 	components: {
-		MuiPopover: {
+		MuiDrawer: {
 			styleOverrides: {
-				paper: ({ theme }) => ({
-					backgroundColor: theme.palette.background.elevatedPaper
-				}),
-				label: {
-					padding: 'initial'
-				}
+				paper: blurBgStyles
+			}
+		},
+		MuiChartsTooltip: {
+			styleOverrides: {
+				row: bgStyles
+			}
+		},
+		MuiAutocomplete: {
+			styleOverrides: {
+				popper: bgStyles
+			}
+		},
+		MuiMenu: {
+			styleOverrides: {
+				paper: bgStyles
+			}
+		},
+		MuiPopper: {
+			styleOverrides: {
+				root: bgStyles
 			}
 		}
 	}

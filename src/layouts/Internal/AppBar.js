@@ -108,7 +108,8 @@ function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 							onClick={handleOpenUserMenu}
 							sx={{
 								'&.MuiButton-text': {
-									textTransform: 'capitalize'
+									textTransform: 'capitalize',
+									color: theme => theme.palette.text.primary
 								}
 							}}
 						>

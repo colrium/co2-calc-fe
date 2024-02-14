@@ -137,9 +137,8 @@ body {
     /* 15 */
   }
 }
-.MuiPopover-paper, .MuiAutocomplete-popper, .MuiDrawer-paper, .MuiPopper-root .MuiTooltip-tooltip {
-  background-color: rgba(0, 10, 39, 0.7) !important;
-  -webkit-backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
-}
+/* .MuiPopover-paper, .MuiAutocomplete-popper, .MuiDrawer-paper, .MuiPopper-root .MuiTooltip-tooltip {
+  -webkit-backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+} */
