@@ -80,6 +80,7 @@ const AsyncAutocomplete = ({
 	context = {},
 	freeSolo,
 	filterMode = 'client',
+	name,
 	...rest
 }) => {
 	const isMountedRef = React.useRef(false);
@@ -104,7 +105,7 @@ const AsyncAutocomplete = ({
 			}
 			return targetOptions.findIndex((entry) => {
 				for (const [k, v] of Object.entries(entry)) {
-					if (k === 'id' || k === 'label') {
+					if (k === 'id' || k === 'value' || k === 'label') {
 						if (
 							v === option ||
 							(option && option.constructor === {}.constructor && k in option && option[k] === v)
@@ -131,7 +132,8 @@ const AsyncAutocomplete = ({
 				const option = JSON.parse(JSON.stringify(details?.option));
 				let indexOfOption = findIndexOfOption(option);
 				if (indexOfOption === -1) {
-					option.label = option.id;
+					option.label = option.value;
+					option.value = option.value;
 					onFreeSoloValueEffect = onCreateOption;
 					options.unshift(option);
 				}
@@ -204,7 +206,7 @@ const AsyncAutocomplete = ({
 				const isExisting = findIndexOfOption(inputValue, options) !== -1;
 				if (inputValue !== '' && !isExisting) {
 					let freeSoloOption = {
-						id: inputValue,
+						value: inputValue,
 						label: inputValue,
 						freeSoloLabel: `Create "${inputValue}"`
 					};
@@ -232,7 +234,7 @@ const AsyncAutocomplete = ({
 						if (indexOfOption !== -1) {
 							val.push(state.options[indexOfOption]);
 						} else if (freeSolo && !!item) {
-							freeSoloOptions.push({ id: item, label: item });
+							freeSoloOptions.push({ value: item, label: item });
 						}
 					}
 				}
@@ -241,7 +243,7 @@ const AsyncAutocomplete = ({
 				if (indexOfOption !== -1) {
 					val = state.options[indexOfOption];
 				} else if (freeSolo && !!parsedValue) {
-					freeSoloOptions.push({ id: parsedValue, label: parsedValue });
+					freeSoloOptions.push({ value: parsedValue, label: parsedValue });
 				}
 			}
 			if (freeSoloOptions.length > 0) {
@@ -344,6 +346,7 @@ const AsyncAutocomplete = ({
 			};
 			return (
 				<TextField
+					name={name}
 					error={!!error || !!state.error}
 					helperText={state.error || helperText}
 					FormHelperTextProps={{ component: 'span', ...textFieldProps.FormHelperTextProps }}

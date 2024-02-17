@@ -72,8 +72,7 @@ export default function ThemeRegistry(props) {
 			/>
 		);
 	});
-
-	console.log('theme.spacing()', theme.spacing());
+	
 	return (
 		<CacheProvider value={cache}>
 			<ThemeProvider theme={theme}>

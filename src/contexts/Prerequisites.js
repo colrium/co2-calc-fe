@@ -30,11 +30,10 @@ const PrerequisitesProvider = ({ children }) => {
     const [state, setState] = useSetState({
 		openDrawers: {
 			external: false,
-			internal:  isMobile,
-			calcLeft:  !isMobile,
-			calcRight:  !isMobile,
-		},
-		
+			internal: !isMobile,
+			calcLeft: !isMobile,
+			calcRight: !isMobile
+		}
 	});
     const router = useRouter();
 	const tokenType = Cookies.get('tokenType');

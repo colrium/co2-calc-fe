@@ -135,6 +135,7 @@ const RegisterForm = ({ initialValues }) => {
 							fullWidth
 							size="small"
 							type="text"
+							autoComplete="off"
 							label="Last Name"
 							{...getFieldProps('lastname')}
 							error={Boolean(touched.lastname && errors.lastname)}
@@ -145,7 +146,7 @@ const RegisterForm = ({ initialValues }) => {
 						<TextField
 							fullWidth
 							size="small"
-							autoComplete="current-password"
+							autoComplete="off"
 							type={state.showPassword ? 'text' : 'password'}
 							label="Password"
 							{...getFieldProps('password')}
@@ -167,7 +168,7 @@ const RegisterForm = ({ initialValues }) => {
 						<TextField
 							fullWidth
 							size="small"
-							autoComplete="current-password"
+							autoComplete="off"
 							type={state.showConfirmPassword ? 'text' : 'password'}
 							label="Confirm Password"
 							{...getFieldProps('confirmPassword')}

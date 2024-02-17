@@ -5,16 +5,37 @@ const blurBgStyles = ({ theme }) => ({
 	backgroundColor: `${alpha(theme.palette.background.dark, 0.25)} !important`,
 	WebkitBackdropFilter: [`blur(${theme.spacing()})`, `blur(${theme.spacing()})`],
 	backdropFilter: `blur(${theme.spacing()})`,
-	backgroundImage: `linear-gradient(${alpha(theme.palette.background.main, 0.15)}, ${alpha(
+	backgroundImage: `linear-gradient(${alpha(theme.palette.background.main, 0.85)}, ${alpha(
 		theme.palette.background.dark,
-		0.15
+		0.95
 	)})`
 });
 const bgStyles = ({ theme }) => ({
-	backgroundColor: `${theme.palette.background.dark} !important`,
+	backgroundColor: `${theme.palette.background.light} !important`,
 	backgroundImage: `linear-gradient(${alpha(theme.palette.background.main, 0.15)}, ${alpha(
+		theme.palette.background.main,
+		0.25
+	)})`
+});
+const bgGradientStyles = ({ theme }) => ({
+	backgroundColor: `${alpha(theme.palette.background.light, 0.95)} !important`,
+	backgroundImage: `linear-gradient(${alpha(theme.palette.background.light, 0.95)}, ${alpha(
+		theme.palette.background.light,
+		0.95
+	)})`
+});
+const bgDarkStyles = ({ theme }) => ({
+	backgroundColor: `${theme.palette.background.dark} !important`,
+	backgroundImage: `linear-gradient(${alpha(theme.palette.background.dark, 0.15)}, ${alpha(
 		theme.palette.background.dark,
-		0.15
+		0.25
+	)})`
+});
+const bgLightStyles = ({ theme }) => ({
+	backgroundColor: `${theme.palette.background.light} !important`,
+	backgroundImage: `linear-gradient(${alpha(theme.palette.background.light, 0.15)}, ${alpha(
+		theme.palette.background.light,
+		0.25
 	)})`
 });
 const theme = createTheme({
@@ -50,7 +71,7 @@ const theme = createTheme({
 			default: '#00153B',
 			main: '#000342',
 			dark: '#000b1f',
-			elevatedPaper: '#000342'
+			light: '#01066e'
 		},
 		text: {
 			primary: '#F4F4F4',
@@ -113,6 +134,24 @@ const theme = createTheme({
 		MuiPopper: {
 			styleOverrides: {
 				root: bgStyles
+			}
+		},
+		MuiDialog: {
+			styleOverrides: {
+				paper: bgGradientStyles
+			}
+		},
+		MuiBackdrop: {
+			styleOverrides: {
+				root: ({ theme }) => ({
+					backgroundColor: `${alpha(theme.palette.background.dark, 0.1)} !important`,
+					WebkitBackdropFilter: [`blur(${theme.spacing(0.3)})`, `blur(${theme.spacing(0.3)})`],
+					backdropFilter: `blur(${theme.spacing(0.3)})`,
+					backgroundImage: `linear-gradient(${alpha(theme.palette.background.main, 0.015)}, ${alpha(
+						theme.palette.background.dark,
+						0.015
+					)})`
+				})
 			}
 		}
 	}

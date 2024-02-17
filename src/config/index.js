@@ -3,9 +3,11 @@ import {
 	mdiAbacus,
 	mdiAccountFileOutline,
 	mdiAccountMultipleOutline,
+	mdiBullseyeArrow,
 	mdiCalculatorVariantOutline,
 	mdiFactory,
 	mdiFinance,
+	mdiMoleculeCo2,
 	mdiShapeOutline,
 	mdiViewDashboard
 } from '@mdi/js';
@@ -25,16 +27,15 @@ export const authRoutes = [
 export const privateRoutes = [
 	{ pathname: '/dashboard/overview', label: 'Overview', icon: mdiViewDashboard },
 	{ pathname: '/dashboard/calculate', label: 'Calculate', icon: mdiCalculatorVariantOutline },
-	{ pathname: '/dashboard/results', label: 'Results', icon: mdiAccountFileOutline }
+	{ pathname: '/dashboard/goals', label: 'Targets', icon: mdiBullseyeArrow },
+	{ pathname: '/dashboard/domains', label: 'Domains', icon: mdiFactory },
+	{ pathname: '/dashboard/results', label: 'Results', icon: mdiAccountFileOutline },
+	{ pathname: '/dashboard/reports', label: 'Reports', icon: mdiFinance }
 ];
 export const adminRoutes = [
-	// ...privateRoutes,
 	{ pathname: '/dashboard/scopes', label: 'Scopes', icon: mdiShapeOutline },
 	{ pathname: '/dashboard/factors', label: 'Factors', icon: mdiAbacus },
-	{ pathname: '/dashboard/activity-types', label: 'Activity Types', icon: mdiFactory },
-	
-
-	{ pathname: '/dashboard/reports', label: 'Reports', icon: mdiFinance },
+	{ pathname: '/dashboard/activity-types', label: 'Activity Types', icon: mdiMoleculeCo2 },
 	{ pathname: '/dashboard/users', label: 'Users', icon: mdiAccountMultipleOutline }
 ];
 export const scopes = {

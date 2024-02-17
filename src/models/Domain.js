@@ -1,0 +1,55 @@
+import BaseModel from './BaseModel';
+class Domain extends BaseModel {
+	static fields = [
+		{
+			field: 'id',
+			header: 'ID',
+			default: '0'
+		},
+		{
+			field: 'name',
+			header: 'Name',
+			required: true
+		},
+		{
+			field: 'description',
+			header: 'Description',
+			multiline: true,
+			minRows: 4,
+			maxRows: 6
+		},
+		{
+			field: 'industry',
+			header: 'Industry',
+			required: true,
+			inputType: 'select',
+			options: [{ value: 'textile', label: 'Textile' }]
+		},
+		{
+			field: 'email',
+			header: 'Email',
+			required: true,
+            type: 'email'
+		},
+		{
+			field: 'active',
+			header: 'Active',
+			type: 'boolean',
+			required: true
+		}
+	];
+	static title = 'Domain';
+	static subtitle = 'Green house gas emmiting entities';
+    static endpoint = '/api/domains'
+	constructor(config = {}) {
+		super({
+			fields: Domain.fields,
+			title: Domain.title,
+			subtitle: Domain.subtitle,
+			endpoint: Domain.endpoint,
+			...config
+		});
+	}
+}
+const domain = new Domain()
+export default domain;

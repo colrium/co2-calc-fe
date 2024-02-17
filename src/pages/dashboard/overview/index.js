@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { LineChart } from '@mui/x-charts/LineChart';
 var relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
 export default function Overview() {
@@ -116,6 +117,8 @@ export default function Overview() {
 
 	return (
 		<Box className="w-full">
+
+
 			<Box className="py-32 px-8" sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
 				<Typography variant="h4">All company assessments (Scope 1 - 3)</Typography>
 			</Box>
