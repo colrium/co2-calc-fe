@@ -30,7 +30,7 @@ const PrerequisitesProvider = ({ children }) => {
     const [state, setState] = useSetState({
 		openDrawers: {
 			external: false,
-			internal: !isMobile,
+			internal: false,
 			calcLeft: !isMobile,
 			calcRight: !isMobile
 		}

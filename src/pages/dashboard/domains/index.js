@@ -1,6 +1,6 @@
-import domain from "@/models/Domain";
+import Domain from "@/models/Domain";
 
-const CrudBase = domain.CrudBase;
+const CrudBase = new Domain().CrudBase;
 const DomainsPage = () => {
     return(
         <CrudBase />

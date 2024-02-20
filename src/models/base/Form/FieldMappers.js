@@ -3,27 +3,32 @@ import TextInput from "@/components/common/form/TextInput";
 import { useMutationsCount } from "@/hooks";
 import { Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import axios from "axios";
 import { forwardRef, useCallback, useMemo } from "react";
 import { useModelForm } from "./ModelFormContext";
 
-
+const loadLookups = (endpoint) => async () => {
+	return await axios.get(endpoint, {params: {perPage: 1000, page: 1}}).then(res => res.data.dat)
+}
 
 export default class FieldMappers {
 	static text = (config) => forwardRef((props, ref) => <TextInput {...config} {...props} ref={ref} />);
 	static string = (config) => FieldMappers.text(config);
 	static select = (config) => forwardRef((props, ref) => {
+
         const mutationCount = useMutationsCount([props]);
 		const {
 			value: valueProp,
-			options,
+			valueOptions: options,
 			multiple,
 			onBlur,
 			textFieldProps,
-            onChange,
+			onChange,
 			freeSolo,
 			name,
 			...rest
 		} = useMemo(() => ({ ...config, ...props }), [mutationCount]);
+		
         const {formik} = useModelForm()
 		
         const parseValue = ({ value, options, multiple = false, freeSolo=false} = {}) => {
@@ -139,7 +144,7 @@ export default class FieldMappers {
 		forwardRef((props, ref) => {
 			const mutationCount = useMutationsCount([props]);
 			const combinedProps = useMemo(() => ({ ...config, ...props }), [mutationCount]);
-			const { label, required, options, ...rest } = combinedProps;
+			const { label, required, valueOptions: options, ...rest } = combinedProps;
 			return (
 				<FormControl>
 					<FormLabel required={required}>{label}</FormLabel>

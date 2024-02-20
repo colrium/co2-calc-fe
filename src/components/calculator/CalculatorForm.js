@@ -92,7 +92,8 @@ const contextValidationSchemas = {
 	company: companyValidationSchema,
 	product: productValidationSchema
 };
-export default function CalculatorForm({id=null, rows=[]}) {		
+export default function CalculatorForm({activeRecord}) {		
+	const id = activeRecord?.record?.id || 'new'
 	const calculator = useSelector(selectCalculator);
 	const context = {name: 'company', active: -1, ...calculator.context};
 	const { name, step = 0 } = context;
@@ -236,7 +237,28 @@ export default function CalculatorForm({id=null, rows=[]}) {
 					
 			
 		}
-
+		const scope1 =
+			typeof results?.byScope?.scope1 === 'number' && !isNaN(results?.byScope?.scope1) ? results.byScope.scope1 : 0;
+		const scope2 =
+			typeof results?.byScope?.scope2 === 'number' && !isNaN(results?.byScope?.scope2) ? results.byScope.scope2 : 0;
+		const scope3us =
+			typeof results?.byScope?.scope3us === 'number' && !isNaN(results?.byScope?.scope3us)
+				? results.byScope.scope3us
+				: 0;
+		const scope3ds =
+			typeof results?.byScope?.scope3ds === 'number' && !isNaN(results?.byScope?.scope3ds)
+				? results.byScope.scope3ds
+				: 0;
+		const biogenic =
+			typeof results?.byEmissionsType?.biogenic === 'number' && !isNaN(results?.byEmissionsType?.biogenic)
+				? results.byEmissionsType.biogenic
+				: 0;
+		const fossil =
+			typeof results?.byEmissionsType?.fossil === 'number' && !isNaN(results?.byEmissionsType?.fossil)
+				? results.byEmissionsType.fossil
+				: 0;
+		const total = scope1 + scope2 + scope3us + scope3ds;
+		formik.setFieldValue('total', total);
 		formik.setFieldValue('results', results);
 	});
 
@@ -258,7 +280,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 	}, [id]);
 
 	const debouncedPersistValues = debounce(1000, ({ values, active, name, id }) => {
-		axios.put(`/api/results/${id}`, { ...values, type: name, updatedAt: dayjs().toISOString() });
+		axios.patch(`/api/results/${id || activeRecord?.record?.id}`, { ...values, type: name, updatedAt: dayjs().toISOString() });
 		// const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
 		// dispatch(action({ index: active, value: { ...values, lastModified: dayjs().toISOString() } }));
 	});
@@ -267,7 +289,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 		if (id && !deepEqual(state.data, values)) {
 			debouncedPersistValues({ values, active, name, id });
 		}		
-	}, [values]);
+	}, [values.total]);
 
 	useUniqueEffect(() => {
 		calculateEmissions(activities);
@@ -280,6 +302,7 @@ export default function CalculatorForm({id=null, rows=[]}) {
 			<CalculatorProvider
 				value={{
 					...state,
+					activeRecord,
 					steps,
 					step,
 					setActiveStep,
@@ -290,7 +313,6 @@ export default function CalculatorForm({id=null, rows=[]}) {
 					setContext: changeContext,
 					name,
 					stepName,
-					rows,
 					fetchActivityTypes,
 					fetchFactors
 				}}

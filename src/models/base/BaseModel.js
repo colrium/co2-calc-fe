@@ -1,8 +1,9 @@
+import axios from 'axios';
 import { forwardRef } from 'react';
 import * as Yup from 'yup';
-import CrudBase from './base/CrudBase';
-import BaseForm from './base/Form';
-import ModelDataGrid from './base/ModelDataGrid';
+import CrudBase from './CrudBase';
+import BaseForm from './Form';
+import ModelDataGrid from './ModelDataGrid';
 export default class BaseModel {
 	idField = 'id';
 	constructor(config = {}) {
@@ -18,6 +19,13 @@ export default class BaseModel {
 					field.maskedType = field.type;
 					field.type = 'string';
 				}
+				if (!('width' in field)) {
+					field.flex = 1;
+				}
+				if ('options' in field) {
+					field.valueOptions = field.options;
+				}
+				field.headerName = field.headerName || field.header;
 				field.name = field.name || field.field;
 				field.label = field.label || field.header;
 			});
@@ -25,25 +33,36 @@ export default class BaseModel {
 		Object.assign(this, config);
 		this.Form = config?.Form || this.createForm();
 		this.CrudBase = this.createCrudBase();
-		this.DataGrid = this.createDataGrid()
+		this.DataGrid = this.createDataGrid();
+	}
+	getInitialGridColumnVisibilityModel() {
+		const fields = this.fields;
+		return fields.reduce((acc, field) => {
+			let hidden = false;
+			if ('hide' in field) {
+				hidden = Boolean(field.hide);				
+			}
+			acc[field.field] = !hidden;
+			return acc
+		}, {});
 	}
 	getValidationSchema({ activeRecord }) {
-		const validations = {}
+		const validations = {};
 		const fields = this.fields;
 		for (const field of fields) {
 			const { type = 'string', required, label, name, validate, min, max, maskedType, maxLength, minLength } = field;
-			let validationConfig = Yup.string();
+			let validationConfig = Yup.string().nullable(true);
 			if (type === 'number') {
-				validationConfig = Yup.number();
+				validationConfig = Yup.number().nullable(true);
 			}
 			if (type === 'boolean') {
 				validationConfig = Yup.boolean();
 			}
 			if (type === 'date' || type === 'dateTime') {
-				validationConfig = Yup.date();
+				validationConfig = Yup.date().nullable(true);
 			}
 			if (maskedType === 'email') {
-				validationConfig = Yup.string().email(`${label} is not a valid email`);
+				validationConfig = Yup.string().nullable(true).email(`${label} is not a valid email`);
 			}
 
 			if (required) {
@@ -62,12 +81,13 @@ export default class BaseModel {
 				validationConfig = validationConfig.min(`${label} minimum length is ${minLength}`);
 			}
 			if (validate) {
-				if (typeof validate === 'object'){
+				if (typeof validate === 'object') {
 					validationConfig = validate;
-				}
-				else if (typeof validate === 'string') {
+				} else if (typeof validate === 'string') {
 					const [validationName, validateFieldName] = validate.split(':');
-					const validateField = validateFieldName? fields.find((entry = entry.name === validateFieldName)) : undefined;
+					const validateField = validateFieldName
+						? fields.find((entry = entry.name === validateFieldName))
+						: undefined;
 					switch (validationName) {
 						case 'matches':
 							validationConfig = validationConfig.oneOf(
@@ -84,6 +104,19 @@ export default class BaseModel {
 		}
 		return Yup.object(validations);
 	}
+	async list(params = {}) {
+		const endpoint = this.endpoint;
+		return await axios.get(endpoint, { params }).then((res) => {
+			return res.data;
+		});
+	}
+	async load(id, params = {}) {
+		const endpoint = this.endpoint;
+		return await axios.get(`${endpoint}/${id}`, { params }).then((res) => {
+			return res.data;
+		});
+	}
+
 	createDataGrid() {
 		return forwardRef((props, ref) => <ModelDataGrid {...props} model={this} ref={ref} />);
 	}

@@ -1,4 +1,5 @@
 import { useMutationsCount, useSetState } from "@/hooks";
+import axios from "axios";
 import dayjs from "dayjs";
 import { forwardRef, useCallback, useMemo } from "react";
 import FieldMappers from "./FieldMappers";
@@ -17,7 +18,7 @@ const BaseForm = forwardRef(({
 	title,
 	subtitle,
 	loading,
-	onCancel = noop,
+	onCloseForm = noop,
 	cardActionsProps,
 	cardActions
 }, ref) => {
@@ -27,8 +28,23 @@ const BaseForm = forwardRef(({
 	});
 	
 	const handleSubmit = useCallback(
-		(values, formikBag) => {
-			console.log('handleSubmit model', model);
+		async (values, formikBag) => {
+			setState({loading: true})
+			try {
+				if (activeRecord.isNew) {
+					await axios.post(model.endpoint, values);
+				} else {
+					await axios.patch(`${model.endpoint}/${activeRecord?.record?.id}`, values);
+				}
+				if (typeof onCloseForm === 'function') {
+					onCloseForm()
+				}
+			} catch (error) {
+				
+			} finally {
+				setState({ loading: false });
+			}
+			
 		},
 		[onSubmit, model]
 	);
@@ -70,11 +86,13 @@ const BaseForm = forwardRef(({
 			vals = {...defaultValues, ...vals};
 		}
 		delete vals[model.idField]
-		return vals
-	}, [activeRecord?.record])
+		return {...vals, ...activeRecord.record}
+	}, [activeRecord?.record, mutationCount])
+
 	const validationSchema = useMemo(() => model.getValidationSchema({ activeRecord }), [model, activeRecord]);
 	const formik = useFormik({
 		initialValues: initialValues,
+		enableReinitialize: true,
 		onSubmit: handleSubmit,
 		validationSchema: validationSchema
 	});
@@ -92,15 +110,15 @@ const BaseForm = forwardRef(({
 				</Typography></Box>);
 				if (field.lookup) {
 					if (typeof field.lookup === 'string') {
-						fieldConfig.options = activeRecord?.lookups?.[field.lookup] || [];
+						fieldConfig.valueOptions = activeRecord?.lookups?.[field.lookup] || [];
 					}
 					if (!field.inputType) {
 						getComponent = FieldMappers.select;
 					}
 				}
-				if (field.options) {
-					if (typeof field.options === 'string') {
-						fieldConfig.options = activeRecord?.lookups?.[field.options] || [];
+				if (field.valueOptions) {
+					if (typeof field.valueOptions === 'string') {
+						fieldConfig.valueOptions = activeRecord?.lookups?.[field.options] || [];
 					}
 					if (!field.inputType) {
 						getComponent = FieldMappers.radio;
@@ -147,8 +165,8 @@ const BaseForm = forwardRef(({
 							<Button size="small" type="submit" variant="contained" color="success">
 								Save
 							</Button>
-							{typeof onCancel === 'function' && (
-								<Button size="small" type="button" onClick={onCancel} variant="contained" color="error">
+							{typeof onCloseForm === 'function' && (
+								<Button size="small" type="button" onClick={onCloseForm} variant="contained" color="error">
 									Cancel
 								</Button>
 							)}

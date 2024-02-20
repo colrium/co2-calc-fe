@@ -54,6 +54,7 @@ const CrudBase = ({ model, ...rest}) => {
 			.get(`${model.endpoint}/${id || 'new'}`, {params: {lookups: true}})
 			.then((res) => {
 				const { data: record, lookups } = res.data;
+				console.log(record)
 				setState({ lookups, record });
 			})
 			.catch((err) => console.error('error fetching record', err))
@@ -69,20 +70,22 @@ const CrudBase = ({ model, ...rest}) => {
 	return (
 		<Box>
 			<Head>
-				<title>{model.title}</title>
+				<title>{activeRecordId ? singular(model.title) : pluralize(model.title)}</title>
 			</Head>
-			{Boolean(activeRecord)
+			{Boolean(activeRecord?.record)
 				? Boolean(Form) && (
 						<Form
 							loading={state.loading}
 							model={model}
 							title={singular(model.formTitle || model.title)}
 							subtitle={model.formSubtitle || model.subtitle}
-							onCancel={onCloseForm}
+							onCloseForm={onCloseForm}
 							activeRecord={activeRecord}
 						/>
 				  )
-				: Boolean(DataGrid) && <DataGrid title={pluralize(model.formTitle || model.title)} onOpenForm={onOpenForm} />}
+				: Boolean(DataGrid) && (
+						<DataGrid title={pluralize(model.gridTitle || model.title)} onOpenForm={onOpenForm}  />
+				  )}
 		</Box>
 	);
 };

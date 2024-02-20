@@ -28,7 +28,7 @@ function PieCenterLabel({ children }) {
 export default function Results() {
 	const theme = useTheme()
 	const { formik, activityTypes } = useCalculatorForm();
-	const { results, activities } = { ...formik.values };
+	const { results, activities, total } = { ...formik.values };
 
 	const scope1 =
 		typeof results?.byScope?.scope1 === 'number' && !isNaN(results?.byScope?.scope1) ? results.byScope.scope1 : 0;
@@ -46,7 +46,7 @@ export default function Results() {
 		typeof results?.byEmissionsType?.fossil === 'number' && !isNaN(results?.byEmissionsType?.fossil)
 			? results.byEmissionsType.fossil
 			: 0;
-	const total = scope1 + scope2 + scope3us + scope3ds;
+	
 	const scope1Percentage = total > 0 ? ((scope1 / total) * 100).toFixed(2) : 0;
 	const scope2Percentage = total > 0 ? ((scope2 / total) * 100).toFixed(2) : 0;
 	const scope3usPercentage = total > 0 ? ((scope3us / total) * 100).toFixed(2) : 0;
@@ -158,12 +158,6 @@ export default function Results() {
 		}
 		return data;
 	}, [activities]);
-
-	console.log('scope1', scope1BarData, scope1BarLabels);
-	console.log('scope2', scope2BarData, scope2BarLabels);
-	console.log('scope3us', scope3usBarData, scope3usBarLabels);
-	console.log('scope3ds', scope3dsBarData, scope3dsBarLabels);
-	console.log('activities', activities);
 	const pieChartData = [
 		{ ...scopes.scope1, value: scope1 },
 		{ ...scopes.scope2, value: scope2 },
@@ -188,7 +182,7 @@ export default function Results() {
 					{total.toFixed(4)}
 				</Typography>
 			</Grid>
-			<Grid item xs={12} md={5} className="p-5">
+			<Grid item xs={12} md={5} className="p-5 flex justify-center items-center">
 				<PieChart
 					series={[
 						{
@@ -380,7 +374,7 @@ export default function Results() {
 				</Box>
 			</Grid>
 
-			<Grid item xs={12} md={5} className="p-5">
+			<Grid item xs={12} md={5} className="p-5 flex justify-center items-center">
 				<PieChart
 					series={[
 						{

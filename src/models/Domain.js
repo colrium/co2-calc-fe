@@ -1,5 +1,5 @@
-import BaseModel from './BaseModel';
-class Domain extends BaseModel {
+import BaseModel from './base/BaseModel';
+export default class Domain extends BaseModel {
 	static fields = [
 		{
 			field: 'id',
@@ -23,7 +23,7 @@ class Domain extends BaseModel {
 			header: 'Industry',
 			required: true,
 			inputType: 'select',
-			options: [{ value: 'textile', label: 'Textile' }]
+			lookup: 'Industry'
 		},
 		{
 			field: 'email',
@@ -51,5 +51,3 @@ class Domain extends BaseModel {
 		});
 	}
 }
-const domain = new Domain()
-export default domain;

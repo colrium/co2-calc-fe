@@ -11,7 +11,7 @@ const blurBgStyles = ({ theme }) => ({
 	)})`
 });
 const bgStyles = ({ theme }) => ({
-	backgroundColor: `${theme.palette.background.light} !important`,
+	backgroundColor: `${theme.palette.background.dark} !important`,
 	backgroundImage: `linear-gradient(${alpha(theme.palette.background.main, 0.15)}, ${alpha(
 		theme.palette.background.main,
 		0.25
@@ -141,19 +141,26 @@ const theme = createTheme({
 				paper: bgGradientStyles
 			}
 		},
-		MuiBackdrop: {
-			styleOverrides: {
-				root: ({ theme }) => ({
-					backgroundColor: `${alpha(theme.palette.background.dark, 0.1)} !important`,
-					WebkitBackdropFilter: [`blur(${theme.spacing(0.3)})`, `blur(${theme.spacing(0.3)})`],
-					backdropFilter: `blur(${theme.spacing(0.3)})`,
-					backgroundImage: `linear-gradient(${alpha(theme.palette.background.main, 0.015)}, ${alpha(
-						theme.palette.background.dark,
-						0.015
-					)})`
-				})
-			}
-		}
+		// MuiBackdrop: {
+		// 	styleOverrides: {
+		// 		root: ({ theme }) => ({
+		// 			backgroundColor: `${alpha(theme.palette.background.dark, 0.1)} !important`,
+		// 			WebkitBackdropFilter: [`blur(2px)`, `blur(2px})`],
+		// 			backdropFilter: `blur(2px)`,
+		// 			backgroundImage: `linear-gradient(${alpha(theme.palette.background.main, 0.015)}, ${alpha(
+		// 				theme.palette.background.dark,
+		// 				0.015
+		// 			)})`
+		// 		})
+		// 	}
+		// },
+		// MuiCardHeader: {
+		// 	styleOverrides: {
+		// 		root: ({ theme }) => ({
+		// 			backgroundColor: `${alpha(theme.palette.background.dark, 0.5)} !important`
+		// 		})
+		// 	}
+		// }
 	}
 });
 export default theme;
