@@ -264,11 +264,11 @@ export default function CalculatorForm({activeRecord}) {
 
 	
 
-	useUniqueEffect(() => {
+	/* useUniqueEffect(() => {
 		if (data) {
 			formik.setValues({ activities: {}, ...data });
 		}
-	}, [name, active, year]);
+	}, [name, active, year]); */
 
 	useUniqueEffect(() => {
 		if (id) {

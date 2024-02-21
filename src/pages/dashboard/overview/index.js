@@ -19,7 +19,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { LineChart } from '@mui/x-charts/LineChart';
 var relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
 export default function Overview() {
@@ -84,7 +83,7 @@ export default function Overview() {
 			const result = state[type].data.find(entry => entry.id === id);
 			if (result) {
 				dispatch(setCalculatorContext({ active: result.id, name: type, step: 0 }));
-				router.push(`/dashboard/calculate/${result.id}`);
+				router.push(`/dashboard/results?id=${result.id}`);
 			}
 			else {
 				setState({ loading: true });
@@ -95,7 +94,7 @@ export default function Overview() {
 							[type]: { ...prevState[type], data: [...prevState[type]?.data, result] }
 						}));
 						dispatch(setCalculatorContext({ active: result.id, name: type, step: 0 }));
-						router.push(`/dashboard/calculate/${result.id}`);
+						router.push(`/dashboard/results?id=${result.id}`);
 					})
 					.catch((err) => console.error(`/factors`, err))
 					.finally(() => setState({ loading: false }));
@@ -165,7 +164,7 @@ export default function Overview() {
 										endIcon={<ArrowForwardIcon />}
 										component={Link}
 										// onClick={handleOnGoToAssessment('company', i)}
-										href={`/dashboard/calculate/${assessment?.id}`}
+										href={`/dashboard/results?id=${assessment?.id}`}
 									>
 										View Assessment
 									</Button>
