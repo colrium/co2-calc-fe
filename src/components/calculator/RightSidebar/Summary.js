@@ -44,13 +44,13 @@ export default function Summary() {
 			? results.byEmissionsType.fossil
 			: 0;
 	const total = (scope1 + scope2 + scope3us + scope3ds);
-	// total = total > 0? total.toFixed(2) : 0;
-	const scope1Percentage = total > 0 ? ((scope1 / total) * 100).toFixed(2) : 0;
-	const scope2Percentage = total > 0 ? ((scope2 / total) * 100).toFixed(2) : 0;
-	const scope3usPercentage = total > 0 ? ((scope3us / total) * 100).toFixed(2) : 0;
-	const scope3dsPercentage = total > 0 ? ((scope3ds / total) * 100).toFixed(2) : 0;
-	const biogenicPercentage = total > 0 ? ((biogenic / total) * 100).toFixed(2) : 0;
-	const fossilPercentage = total > 0 ? ((fossil / total) * 100).toFixed(2) : 0;
+	// total = total > 0? total?.toFixed(2) : 0;
+	const scope1Percentage = total > 0 ? ((scope1 / total) * 100)?.toFixed(2) : 0;
+	const scope2Percentage = total > 0 ? ((scope2 / total) * 100)?.toFixed(2) : 0;
+	const scope3usPercentage = total > 0 ? ((scope3us / total) * 100)?.toFixed(2) : 0;
+	const scope3dsPercentage = total > 0 ? ((scope3ds / total) * 100)?.toFixed(2) : 0;
+	const biogenicPercentage = total > 0 ? ((biogenic / total) * 100)?.toFixed(2) : 0;
+	const fossilPercentage = total > 0 ? ((fossil / total) * 100)?.toFixed(2) : 0;
 
 	
 
@@ -65,7 +65,7 @@ export default function Summary() {
 					</Typography>
 				</Box>
 
-				<ScalingText color="secondary" className="w-full">{total.toFixed(2)}</ScalingText>
+				<ScalingText color="secondary" className="w-full">{total?.toFixed(2)}</ScalingText>
 			</Box>
 			<Divider />
 			<Box className="flex flex-row items-center py-4 gap-4">
@@ -82,7 +82,7 @@ export default function Summary() {
 						Scope 1
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope1 > 0 ? scope1.toFixed(2) : '--.--'}
+						{scope1 > 0 ? scope1?.toFixed(2) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -99,7 +99,7 @@ export default function Summary() {
 						Scope 2
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope2 > 0 ? scope2.toFixed(2) : '--.--'}
+						{scope2 > 0 ? scope2?.toFixed(2) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -121,7 +121,7 @@ export default function Summary() {
 						Scope 3 Upstream
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope3us > 0 ? scope3us.toFixed(2) : '--.--'}
+						{scope3us > 0 ? scope3us?.toFixed(2) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -143,7 +143,7 @@ export default function Summary() {
 						Scope 3 Downstream
 					</Typography>
 					<Typography color="textSecondary" variant="subtitle2">
-						{scope3ds > 0 ? scope3ds.toFixed(2) : '--.--'}
+						{scope3ds > 0 ? scope3ds?.toFixed(2) : '--.--'}
 					</Typography>
 				</Box>
 				<Box className="flex flex-row items-center gap-4">
@@ -174,7 +174,7 @@ export default function Summary() {
 							Biogenic
 						</Typography>
 						<Typography color="textSecondary" variant="subtitle2">
-							{biogenic > 0 ? biogenic.toFixed(2) : '--.--'}
+							{biogenic > 0 ? biogenic?.toFixed(2) : '--.--'}
 						</Typography>
 					</Box>
 					<Box className="flex flex-row items-center gap-4">
@@ -195,7 +195,7 @@ export default function Summary() {
 							Fossil
 						</Typography>
 						<Typography color="textSecondary" variant="subtitle2">
-							{fossil > 0 ? fossil.toFixed(2) : '--.--'}
+							{fossil > 0 ? fossil?.toFixed(2) : '--.--'}
 						</Typography>
 					</Box>
 					<Box className="flex flex-row items-center gap-4">

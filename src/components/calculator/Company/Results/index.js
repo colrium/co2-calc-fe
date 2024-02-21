@@ -47,12 +47,12 @@ export default function Results() {
 			? results.byEmissionsType.fossil
 			: 0;
 	
-	const scope1Percentage = total > 0 ? ((scope1 / total) * 100).toFixed(2) : 0;
-	const scope2Percentage = total > 0 ? ((scope2 / total) * 100).toFixed(2) : 0;
-	const scope3usPercentage = total > 0 ? ((scope3us / total) * 100).toFixed(2) : 0;
-	const scope3dsPercentage = total > 0 ? ((scope3ds / total) * 100).toFixed(2) : 0;
-	const biogenicPercentage = total > 0 ? ((biogenic / total) * 100).toFixed(2) : 0;
-	const fossilPercentage = total > 0 ? ((fossil / total) * 100).toFixed(2) : 0;
+	const scope1Percentage = total > 0 ? ((scope1 / total) * 100)?.toFixed(2) : 0;
+	const scope2Percentage = total > 0 ? ((scope2 / total) * 100)?.toFixed(2) : 0;
+	const scope3usPercentage = total > 0 ? ((scope3us / total) * 100)?.toFixed(2) : 0;
+	const scope3dsPercentage = total > 0 ? ((scope3ds / total) * 100)?.toFixed(2) : 0;
+	const biogenicPercentage = total > 0 ? ((biogenic / total) * 100)?.toFixed(2) : 0;
+	const fossilPercentage = total > 0 ? ((fossil / total) * 100)?.toFixed(2) : 0;
 
 	const { values: scope1BarData, labels: scope1BarLabels } = useMemo(() => {
 		let data = { labels: [], values: [] };
@@ -179,7 +179,7 @@ export default function Results() {
 			</Grid>
 			<Grid item xs={12} className="my-8 flex justify-center items-end pb-8">
 				<Typography variant="h3" color="primary">
-					{total.toFixed(4)}
+					{total?.toFixed(4)}
 				</Typography>
 			</Grid>
 			<Grid item xs={12} md={5} className="p-5 flex justify-center items-center">
