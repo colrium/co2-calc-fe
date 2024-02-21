@@ -3,7 +3,6 @@
 import { usePrerequisites } from '@/contexts/Prerequisites';
 import { useDidUpdate, useFetcher, useSetState, useUniqueEffect } from '@/hooks';
 import { selectCalculator, setCalculatorContext, updateCompanyAssessment, updateProductAssessment } from '@/store/calculatorSlice';
-import { deepEqual } from '@/util';
 import { Box, Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -129,6 +128,7 @@ export default function CalculatorForm({activeRecord}) {
 	const stepName = steps[step]?.name;
 	const validationSchema = useMemo(() => contextValidationSchemas[name], [name]);
 	const formik = useFormik({
+		enableReinitialization: true,
 		initialValues: {
 			year: dayjs().year(),
 			activities: { scope1: {}, scope2: {}, scope3us: {}, scope3ds: {} },
@@ -144,7 +144,7 @@ export default function CalculatorForm({activeRecord}) {
 					fossil: 0
 				}
 			},
-
+			...activeRecord?.record,
 			...data
 		},
 		validationSchema: validationSchema
@@ -262,7 +262,7 @@ export default function CalculatorForm({activeRecord}) {
 		formik.setFieldValue('results', results);
 	});
 
-	
+	console.log('activeRecord', activeRecord);
 
 	/* useUniqueEffect(() => {
 		if (data) {
@@ -271,27 +271,24 @@ export default function CalculatorForm({activeRecord}) {
 	}, [name, active, year]); */
 
 	useUniqueEffect(() => {
-		if (id) {
-			axios.get(`/api/results/${id}`).then(({data}) => {
-				setState({data})
-				formik.setValues({ activities: {}, ...data });
-			})			
+		if (activeRecord?.record) {
+			formik.setValues({ activities: {}, ...activeRecord?.record });
 		}
-	}, [id]);
+	}, [activeRecord]); 
 
 	const debouncedPersistValues = debounce(1000, ({ values, active, name, id }) => {
-		axios.patch(`/api/results/${id || activeRecord?.record?.id}`, { ...values, type: name, updatedAt: dayjs().toISOString() });
+		axios.put(`/api/results/${id || activeRecord?.record?.id}`, { ...values, type: name, updatedAt: dayjs().toISOString() });
 		// const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
 		// dispatch(action({ index: active, value: { ...values, lastModified: dayjs().toISOString() } }));
 	});
 	
 	useDidUpdate(() => {
-		if (id && !deepEqual(state.data, values)) {
+		if (id) {
 			debouncedPersistValues({ values, active, name, id });
 		}		
-	}, [values.total]);
+	}, [values]);
 
-	useUniqueEffect(() => {
+	useDidUpdate(() => {
 		calculateEmissions(activities);
 	}, [activities]);
 

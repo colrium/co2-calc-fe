@@ -24,7 +24,7 @@ export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 export default function Summary() {
 	const { formik } = useCalculatorForm();
 	const {
-		results, activities
+		results, activities, total
 	} = { ...formik.values };
 
 	
@@ -43,7 +43,7 @@ export default function Summary() {
 		typeof results?.byEmissionsType?.fossil === 'number' && !isNaN(results?.byEmissionsType?.fossil)
 			? results.byEmissionsType.fossil
 			: 0;
-	const total = (scope1 + scope2 + scope3us + scope3ds);
+	// const total = (scope1 + scope2 + scope3us + scope3ds);
 	// total = total > 0? total?.toFixed(2) : 0;
 	const scope1Percentage = total > 0 ? ((scope1 / total) * 100)?.toFixed(2) : 0;
 	const scope2Percentage = total > 0 ? ((scope2 / total) * 100)?.toFixed(2) : 0;
