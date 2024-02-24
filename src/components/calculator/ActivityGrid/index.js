@@ -1,6 +1,7 @@
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { Box, TextField } from '@mui/material';
 import { DataGrid, GridActionsCellItem, useGridApiContext } from '@mui/x-data-grid';
+import dayjs from 'dayjs';
 import { useCallback } from 'react';
 import { useCalculatorForm } from '../CalculatorProvider';
 
@@ -40,7 +41,7 @@ export default function ActivityGrid({ rows, name, scope }) {
 				newRow.emissionFactor > 0 ? newRow.emissionFactor : newRow.emissionsType === 'biogenic' ? 0.1 : 0.8;
 			const amount = newRow.amount > 0? newRow.amount : 0;
 			const emission = amount * emissionFactor;
-			activities[scope][name][activityIndex] = { ...newRow, amount, emissionFactor, emission };
+			activities[scope][name][activityIndex] = { name, amount, unit: newRow.unit, description: newRow.description, emissionFactor, emission, year: newRow.year || dayjs().year() };
 			formik.setFieldValue('activities', activities);
 		}
 		return newRow;

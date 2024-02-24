@@ -10,6 +10,8 @@ export default class BaseModel {
 		this.init(config);
 	}
 	init(config = {}) {
+		const columns = [];
+		const inputFields = [];
 		if (Array.isArray(config.fields)) {
 			config.fields.forEach((field) => {
 				if (!field.type) {
@@ -28,16 +30,25 @@ export default class BaseModel {
 				field.headerName = field.headerName || field.header;
 				field.name = field.name || field.field;
 				field.label = field.label || field.header;
+				if (!field.excludeOnGrid) {
+					columns.push(field)
+				}
+				if (!field.excludeOnForm) {
+					inputFields.push(field);
+				}
 			});
+		
 		}
 		Object.assign(this, config);
+		this.columns = columns;
+		this.inputFields = inputFields; 
 		this.Form = config?.Form || this.createForm();
 		this.CrudBase = this.createCrudBase();
 		this.DataGrid = this.createDataGrid();
 	}
 	getInitialGridColumnVisibilityModel() {
-		const fields = this.fields;
-		return fields.reduce((acc, field) => {
+		const columns = this.columns || [];
+		return columns.reduce((acc, field) => {
 			let hidden = false;
 			if ('hide' in field) {
 				hidden = Boolean(field.hide);				

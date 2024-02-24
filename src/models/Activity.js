@@ -30,7 +30,10 @@ export default class Activity extends BaseModel {
 			field: 'emissionFactor',
 			header: 'Emission Factor',
 			required: true,
-			type: 'number'
+			type: 'number',
+			valueGetter: (params) => {
+				return params.row.custom ? params.row.emissionFactor : null;
+			}
 		},
 		{
 			field: 'unit',
@@ -40,14 +43,12 @@ export default class Activity extends BaseModel {
 		{
 			field: 'yearFrom',
 			header: 'From',
-			type: 'number',
-		
+			type: 'number'
 		},
 		{
 			field: 'yearTo',
 			header: 'To',
-			type: 'number',
-			
+			type: 'number'
 		}
 	];
 	static title = 'Activity';

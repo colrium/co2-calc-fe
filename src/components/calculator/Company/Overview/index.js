@@ -1,14 +1,41 @@
 /** @format */
 
+import AsyncAutocomplete from '@/components/common/AsyncAutocomplete';
+import FieldMappers from '@/models/base/Form/FieldMappers';
 import { Box, TextField, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useCalculatorForm } from '../../CalculatorProvider';
+
+const Select = FieldMappers.select;
 export default function Overview() {
 	const { formik, activeRecord } = useCalculatorForm();
 	const domains = useMemo(() => (activeRecord.lookups?.Domain || []), [activeRecord.lookups]);
+	const parseDomainValue = ({ value, options}) => {
+		let val = null;
+		if (typeof value !== 'undefined') {
+			let option = options.find((opt) => opt.value === value);
+			
+			if (option) {
+				val = option;
+			}
+		}
+		return val;
+	};
+	const domainValueFormatter = useCallback(
+		(value) => {
+			let val = value?.value ?? null;
+			return val;
+		},
+		[]
+	);
+	const domain = useMemo(
+		() => parseDomainValue({ options: domains, value: formik.values?.domainId }),
+		[domains, formik.values?.domainId]
+	);
+	console.log('formik.values?.domainId', formik.values?.domainId);
 	return (
 		<Box className="flex p-4 flex-col">
 			<Box className="my-2 flex flex-col gap-4">
@@ -60,19 +87,26 @@ export default function Overview() {
 					onChange={(newValue) => formik.setFieldValue('year', newValue.year())}
 					error={formik.touched.year && Boolean(formik.errors.year)}
 					helperText={formik.touched.year && formik.errors.year}
+					required
+					slotProps={{
+						textField: {
+							size: 'small'
+						}
+					}}
 				/>
-				
-				{/* <TextField
-					label="Year"
-					name="year"
-					type="number"
-					id="year"
-					value={formik.values?.year}
-					onChange={formik.handleChange}
-					onBlur={formik.handleBlur}
-					error={formik.touched.year && Boolean(formik.errors.year)}
-					helperText={formik.touched.year && formik.errors.year}
-				/> */}
+
+				<Box className="h4 mb-8" />
+				<AsyncAutocomplete
+					label={'Domain'}
+					className="w-full"
+					size="small"
+					valueFormatter={domainValueFormatter}
+					value={domain}
+					options={domains}
+					onChange={(e, newValue) => formik.setFieldValue('domainId', newValue)}
+					error={formik.touched.domainId && Boolean(formik.errors.domainId)}
+					helperText={formik.touched.domainId && formik.errors.domainId}
+				/>
 			</Box>
 
 			<Box className="my-1">

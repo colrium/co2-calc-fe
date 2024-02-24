@@ -9,6 +9,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { debounce } from 'throttle-debounce';
@@ -91,7 +92,7 @@ const contextValidationSchemas = {
 	company: companyValidationSchema,
 	product: productValidationSchema
 };
-export default function CalculatorForm({activeRecord}) {		
+export default function CalculatorForm({activeRecord, model, onCloseForm}) {		
 	const id = activeRecord?.record?.id || 'new'
 	const calculator = useSelector(selectCalculator);
 	const context = {name: 'company', active: -1, ...calculator.context};
@@ -102,7 +103,7 @@ export default function CalculatorForm({activeRecord}) {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
 	const { drawerVariant, openDrawers, toggleDrawer } = usePrerequisites();
-	
+	const router = useRouter();
 	// let active = idIndex > -1? idIndex: context.active
 	let active = context.active;
 	const [state, setState] = useSetState({
@@ -123,14 +124,33 @@ export default function CalculatorForm({activeRecord}) {
 	
 	const [completedSteps, setCompletedStepSteps] = useState([0]);
 
-	const data = state.data;
 	const steps = useMemo(() => contextSteps[name], [name]);
 	const stepName = steps[step]?.name;
 	const validationSchema = useMemo(() => contextValidationSchemas[name], [name]);
-	const formik = useFormik({
-		enableReinitialization: true,
-		initialValues: {
+	const handleOnSubmit = useCallback(
+		async (values) => {
+			const verb = activeRecord.isNew ? 'post' : 'patch';
+			const url = activeRecord.isNew ? model.endpoint : `${model.endpoint}/${id || activeRecord?.record?.id}`;
+			console.log('values', JSON.stringify(values));
+			try {
+				const res = await axios[verb](url, {
+					...values,
+					type: name
+				});
+				console.log('res', res);
+				if (typeof onCloseForm === 'function') {
+					onCloseForm();
+				}
+			} catch (error) {
+				console.error('Error saving calculation', error);
+			}
+		},
+		[id, name, onCloseForm]
+	);
+	const initialValues = useMemo(
+		() => ({
 			year: dayjs().year(),
+			name: 'New Calculation',
 			activities: { scope1: {}, scope2: {}, scope3us: {}, scope3ds: {} },
 			results: {
 				byScope: {
@@ -144,9 +164,15 @@ export default function CalculatorForm({activeRecord}) {
 					fossil: 0
 				}
 			},
-			...activeRecord?.record,
-			...data
-		},
+			type: context.name,
+			...activeRecord?.record
+		}),
+		[id, context.name]
+	);
+	const formik = useFormik({
+		onSubmit: handleOnSubmit,
+		enableReinitialization: true,
+		initialValues: initialValues,
 		validationSchema: validationSchema
 	});
 	const { lastModified, ...values } = formik.values || {};
@@ -262,7 +288,6 @@ export default function CalculatorForm({activeRecord}) {
 		formik.setFieldValue('results', results);
 	});
 
-	console.log('activeRecord', activeRecord);
 
 	/* useUniqueEffect(() => {
 		if (data) {
@@ -277,16 +302,32 @@ export default function CalculatorForm({activeRecord}) {
 	}, [activeRecord]); 
 
 	const debouncedPersistValues = debounce(1000, ({ values, active, name, id }) => {
-		axios.put(`/api/results/${id || activeRecord?.record?.id}`, { ...values, type: name, updatedAt: dayjs().toISOString() });
+		if (activeRecord.isNew) {
+			axios.post(`${model.endpoint}`, {
+				...values,
+				name: values.name || 'New Calculation',
+				type: name,
+				updatedAt: dayjs().toISOString()
+			}).then((res) => {
+				const data = res.data;
+				console.log('res', res)
+				router.push(`/dashboard/calculations?id=${data.id}`);
+			});
+		}
+		else{
+			axios.patch(`${model.endpoint}/${id || activeRecord?.record?.id}`, {
+				...values,
+				name: values.name || 'New Calculation',
+				type: name,
+				updatedAt: dayjs().toISOString()
+			});
+		}
+		
 		// const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
 		// dispatch(action({ index: active, value: { ...values, lastModified: dayjs().toISOString() } }));
 	});
 	
-	useDidUpdate(() => {
-		if (id) {
-			debouncedPersistValues({ values, active, name, id });
-		}		
-	}, [values]);
+	
 
 	useDidUpdate(() => {
 		calculateEmissions(activities);

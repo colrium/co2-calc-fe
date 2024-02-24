@@ -1,4 +1,5 @@
 /** @format */
+import Overview from '@/components/calculator/Overview';
 import { useSetState } from '@/hooks';
 import { selectAuth } from '@/store/authSlice';
 import { addCompanyAssessment, addProductAssessment, setCalculatorContext } from '@/store/calculatorSlice';
@@ -21,7 +22,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 var relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
-export default function Overview() {
+export default function OverviewPage() {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const [state, setState] = useSetState({
@@ -49,7 +50,7 @@ export default function Overview() {
 
 	const fetchResults = (type='company') => {
 			setState({ loading: true});
-			axios.get(`/api/results?type=${type}`)
+			axios.get(`/api/calculations?type=${type}`)
 				.then(({data: results}) => {
 					const {data} = results;
 					
@@ -57,7 +58,7 @@ export default function Overview() {
 						[type]: results
 					}));
 				})
-				.catch((err) => console.error(`/api/results?type=${type}`, err))
+				.catch((err) => console.error(`/api/calculations?type=${type}`, err))
 				.finally(() => setState({ loading: false }));
 		
 	};
@@ -83,18 +84,23 @@ export default function Overview() {
 			const result = state[type].data.find(entry => entry.id === id);
 			if (result) {
 				dispatch(setCalculatorContext({ active: result.id, name: type, step: 0 }));
-				router.push(`/dashboard/results?id=${result.id}`);
+				router.push(`/dashboard/calculations?id=${result.id}`);
 			}
 			else {
 				setState({ loading: true });
-				axios.post(`/api/results`, { name: 'New Assessment', description: 'New Assessment', year: dayjs().year(), userId: user.id }
-				)
-					.then(({data: result}) => {
+				axios
+					.post(`/api/calculations`, {
+						name: 'New Assessment',
+						description: 'New Assessment',
+						year: dayjs().year(),
+						userId: user.id
+					})
+					.then(({ data: result }) => {
 						setState((prevState) => ({
 							[type]: { ...prevState[type], data: [...prevState[type]?.data, result] }
 						}));
 						dispatch(setCalculatorContext({ active: result.id, name: type, step: 0 }));
-						router.push(`/dashboard/results?id=${result.id}`);
+						router.push(`/dashboard/calculations?id=${result.id}`);
 					})
 					.catch((err) => console.error(`/factors`, err))
 					.finally(() => setState({ loading: false }));
@@ -116,8 +122,9 @@ export default function Overview() {
 
 	return (
 		<Box className="w-full">
-
-
+		<Box>
+			<Overview />
+		</Box>
 			<Box className="py-32 px-8" sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
 				<Typography variant="h4">All company assessments (Scope 1 - 3)</Typography>
 			</Box>
@@ -164,7 +171,7 @@ export default function Overview() {
 										endIcon={<ArrowForwardIcon />}
 										component={Link}
 										// onClick={handleOnGoToAssessment('company', i)}
-										href={`/dashboard/results?id=${assessment?.id}`}
+										href={`/dashboard/calculations?id=${assessment?.id}`}
 									>
 										View Assessment
 									</Button>

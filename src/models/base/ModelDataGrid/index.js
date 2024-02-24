@@ -97,7 +97,7 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title}, ref) => {
 	const fetchData = useCallback(() => {
 		setState({ loading: true, rows: []});
 		model
-			.list(query)
+			.list({...query, lookup: 1})
 			.then(({ data: rows, pages, perPage, count: rowCount }) => {
 				setState({ rows, pages, rowCount });
 			})
@@ -144,7 +144,7 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title}, ref) => {
 										pageSizeOptions={[10, 25, 50, 100]}
 										rows={state.rows}
 										onRowDoubleClick={onRowDoubleClick}
-										columns={model.fields}
+										columns={model.columns}
 										paginationModel={state.paginationModel}
 										onPaginationModelChange={(paginationModel) => setState({ paginationModel })}
 										slots={slots}

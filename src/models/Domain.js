@@ -19,17 +19,22 @@ export default class Domain extends BaseModel {
 			maxRows: 6
 		},
 		{
-			field: 'industry',
+			field: 'industryId',
 			header: 'Industry',
-			required: true,
+			excludeOnGrid: true,
 			inputType: 'select',
 			lookup: 'Industry'
+		},
+		{
+			field: 'industry',
+			header: 'Industry',
+			excludeOnForm: true,
 		},
 		{
 			field: 'email',
 			header: 'Email',
 			required: true,
-            type: 'email'
+			type: 'email'
 		},
 		{
 			field: 'active',
@@ -40,7 +45,7 @@ export default class Domain extends BaseModel {
 	];
 	static title = 'Domain';
 	static subtitle = 'Green house gas emmiting entities';
-    static endpoint = '/api/domains'
+	static endpoint = '/api/domains';
 	constructor(config = {}) {
 		super({
 			fields: Domain.fields,

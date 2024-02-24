@@ -4,6 +4,7 @@ import { addCompanyAssessment, addProductAssessment, selectCalculator, setCalcul
 import { mdiBackburger } from '@mdi/js';
 import Icon from '@mdi/react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import SaveIcon from '@mui/icons-material/Save';
 import { Chip } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -25,7 +26,6 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCalculatorForm } from '../CalculatorProvider';
 import validationSchema from '../Company/validationSchema';
-
 const contextTitles = {
 	company: 'New company assessment (Scope 1 - 3)',
 	product: 'New product assessment (LCA)'
@@ -173,7 +173,15 @@ export default function FormHeader() {
 						{formik.values?.name && <Chip label={formik.values?.name} />}
 						{formik.values?.year && <Chip label={formik.values?.year} />}
 					</Box>
-
+					<IconButton
+						aria-label="save"
+						aria-controls="save-appbar"
+						className="mx-4"
+						onClick={formik.handleSubmit}
+						color="inherit"
+					>
+						<SaveIcon />
+					</IconButton>
 					<Box className="flex gap-4">
 						<IconButton
 							aria-label="account of current user"

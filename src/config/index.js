@@ -1,9 +1,9 @@
 import theme from '@/components/theme';
 import {
 	mdiAbacus,
-	mdiAccountFileOutline,
 	mdiAccountMultipleOutline,
 	mdiBullseyeArrow,
+	mdiCalculatorVariantOutline,
 	mdiFactory,
 	mdiFinance,
 	mdiMoleculeCo2,
@@ -24,11 +24,10 @@ export const authRoutes = [
 
 export const privateRoutes = [
 	{ pathname: '/dashboard/overview', label: 'Overview', icon: mdiViewDashboard },
-	{ pathname: '/dashboard/results', label: 'Results', icon: mdiAccountFileOutline },
+	{ pathname: '/dashboard/calculations', label: 'Calculations', icon: mdiCalculatorVariantOutline },
 	// { pathname: '/dashboard/calculate', label: 'Calculate', icon: mdiCalculatorVariantOutline },
 	{ pathname: '/dashboard/targets', label: 'Targets', icon: mdiBullseyeArrow },
 	{ pathname: '/dashboard/domains', label: 'Domains', icon: mdiFactory },
-	{ pathname: '/dashboard/results', label: 'Results', icon: mdiAccountFileOutline },
 	{ pathname: '/dashboard/reports', label: 'Reports', icon: mdiFinance }
 ];
 export const adminRoutes = [
