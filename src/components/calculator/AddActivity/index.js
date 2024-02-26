@@ -12,17 +12,17 @@ import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useCalculatorForm } from '../CalculatorProvider';
 export default function AddActivity({ name, label, scope }) {
-	const { formik, factors, fetchFactors } = useCalculatorForm();
+	const { formik, activities, fetchFactors } = useCalculatorForm();
 	const {user} = useSelector(selectAuth)
 	const [state, setState] = useSetState({
 		loading: true,
 		options: [],
 		selections: []
 	});
-	const loading = factors?.loading === name;
+	const loading = activities?.loading === name;
 	const open = Boolean(state.anchorEl);
-	const activities = formik.values?.activities?.[scope]?.[name] || [];
-	const existingActivities = activities.map((activity) => activity.name);
+	const formActivities = formik.values?.activities?.[scope]?.[name] || [];
+	const existingActivities = formActivities.map((activity) => activity.name);
 	const mutationCount = useMutationsCount([activities, state.selections]);
 	const handleOnAddActivity = useCallback(() => {
 		let formikActivities = JSON.parse(JSON.stringify(formik.values?.activities || {}));
@@ -42,26 +42,28 @@ export default function AddActivity({ name, label, scope }) {
 	}, [mutationCount]);
 
 	const handleOnChange = (e, selections) => {
-		selections = selections.map((selection) => ({ ...selection, amount: 0, description: '' }));
+		selections = selections.map(
+			({ id, activityType, name, emissionType, unit, description, emissionFactor, emission, year }) => ({
+				id,
+				activityType,
+				name,
+				emissionType: emissionType || 'biogenic',
+				unit,
+				description: description || '',
+				emissionFactor: emissionFactor ?? 1.8,
+				emission: 0,
+				year: year,
+				amount: 0,
+				description: ''
+			})
+		);
 		setState({ selections });
-	};
-	const fetchData = () => {
-		if (name) {
-			axios.get(`/api/factors/${name}`).then(({ data: {data: factors} }) => {
-					factors = factors.map((factor) => ({ ...factor, label: factor.name, value: factor.id }));
-					setState({ factors });
-				})
-				.catch((err) => console.error(`/api/factors/${name}`, err))
-				.finally(() => setState({ loading: false }));
-		} else {
-			setState({ loading: false });
-		}
 	};
 	const handleOnCreateOption = ({ option }) => {
 		const { id, label } = option;
 		const payload = {
 			name: label,
-			emissionsType: 'biogenic',
+			emissionType: 'biogenic',
 			emissionFactor: 0.1,
 			unit: 't',
 			categoryId: 'custom',
@@ -75,7 +77,7 @@ export default function AddActivity({ name, label, scope }) {
 			unit: null
 		};
 		axios
-			.post(`/api/factors`, payload)
+			.post(`/api/activities`, payload)
 			.then(({ data: factor }) => {
 				if (factor?.id) {
 					factor = { ...factor, label: factor.name, value: factor.id };
@@ -86,7 +88,7 @@ export default function AddActivity({ name, label, scope }) {
 				}
 				
 			})
-			.catch((err) => console.error(`/api/factors`, err))
+			.catch((err) => console.error(`/api/activities`, err))
 			.finally(() => setState({ loading: false }));
 	};
 	useUniqueEffect(() => fetchFactors(name), [name]);
@@ -101,7 +103,7 @@ export default function AddActivity({ name, label, scope }) {
 				label={`Activity's`}
 				placeholder={'Select or create Activity'}
 				getOptionDisabled={(option) => existingActivities.includes(option.name)}
-				options={factors[name] || []}
+				options={activities[name] || []}
 				value={state.selections}
 				onChange={handleOnChange}
 				onCreateOption={handleOnCreateOption}

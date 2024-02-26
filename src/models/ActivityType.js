@@ -5,7 +5,6 @@ export default class ActivityType extends BaseModel {
 		{
 			field: 'id',
 			header: 'ID',
-			default: '0',
 			hide: true
 		},
 		{

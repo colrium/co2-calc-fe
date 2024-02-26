@@ -1,7 +1,7 @@
 import { useSetState, useUniqueEffect } from '@/hooks';
 import { useCallback, useMemo } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import axios from 'axios';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -11,7 +11,8 @@ const CrudBase = ({ model, ...rest}) => {
 	const [state, setState] = useSetState({
 		loading: false,
         lookups: {},
-        record: null
+        record: null,
+		deleteId: false,
 	});
     const router = useRouter();
     const {query} = router;
@@ -40,6 +41,8 @@ const CrudBase = ({ model, ...rest}) => {
         router.push(`${router.pathname}?id=${id || 'new'}`);
     }, [activeRecordId, query]);
 
+
+	
     const onCloseForm = useCallback(() => {
 		if (query.returnTo) {
 			router.push(decodeURIComponent(query.returnTo));
@@ -47,6 +50,24 @@ const CrudBase = ({ model, ...rest}) => {
 			router.push(router.pathname);
 		}
 	}, [activeRecordId, query]);
+
+	const confirmDeleteRecord = useCallback(
+		(id = null) => {
+			setState({ confirmDelete: id });
+		},
+		[activeRecordId, query]
+	);
+
+	const deleteRecord = useCallback(
+		(id = null) => () => {
+			setState({ loading: true, lookups: {}, record: null });
+			axios
+				.delet(`${model.endpoint}/${id}`)
+				.catch((err) => console.error('error fetching record', err))
+				.finally(() => setState({ loading: false }));
+		},
+		[]
+	);
 
     const fetchRecord = useCallback((id) => {
 		setState({ loading: true, lookups: {}, record: null });
@@ -81,11 +102,27 @@ const CrudBase = ({ model, ...rest}) => {
 							subtitle={model.formSubtitle || model.subtitle}
 							onCloseForm={onCloseForm}
 							activeRecord={activeRecord}
+							onDelete={confirmDeleteRecord}
 						/>
 				  )
 				: Boolean(DataGrid) && (
-						<DataGrid title={pluralize(model.gridTitle || model.title)} onOpenForm={onOpenForm}  />
+						<DataGrid
+							title={pluralize(model.gridTitle || model.title)}
+							onOpenForm={onOpenForm}
+							onDelete={confirmDeleteRecord}
+						/>
 				  )}
+
+			<Dialog sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }} maxWidth="xs" open={!!state.deleteId}>
+				<DialogTitle>Confirm Delete</DialogTitle>
+				<DialogContent dividers>{`Delete record with id: ${state.deleteId}`}</DialogContent>
+				<DialogActions>
+					<Button autoFocus onClick={() => setState({ deleteId: null })}>
+						Cancel
+					</Button>
+					<Button onClick={deleteRecord(state.deleteId)}>Delete</Button>
+				</DialogActions>
+			</Dialog>
 		</Box>
 	);
 };

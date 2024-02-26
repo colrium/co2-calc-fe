@@ -30,7 +30,7 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 	}
 }));
 
-const CustomNoRowsOverlay = () => {
+export const NoRowsOverlay = ({message='No Rows'}) => {
 	return (
 		<StyledGridOverlay>
 			<svg style={{ flexShrink: 0 }} width="140" height="100" viewBox="0 0 184 152" aria-hidden focusable="false">
@@ -60,14 +60,14 @@ const CustomNoRowsOverlay = () => {
 					</g>
 				</g>
 			</svg>
-			<Box sx={{ mt: 1 }}>No Rows</Box>
+			<Box sx={{ mt: 1 }}>{message}</Box>
 		</StyledGridOverlay>
 	);
 }
 
 const dataGridSx = { '--DataGrid-overlayHeight': '200px' }
 const slots = {
-	noRowsOverlay: CustomNoRowsOverlay,
+	noRowsOverlay: NoRowsOverlay,
 	loadingOverlay: LinearProgress,
 	toolbar: GridToolbar
 };
@@ -152,6 +152,10 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title}, ref) => {
 										loading={state.loading}
 										sx={dataGridSx}
 										paginationMode="server"
+										columnVisibilityModel={state.columnVisibilityModel}
+										onColumnVisibilityModelChange={(columnVisibilityModel) =>
+											setState({ columnVisibilityModel })
+										}
 										initialState={{
 											columns: {
 												columnVisibilityModel: initialColumnVisibilityModel

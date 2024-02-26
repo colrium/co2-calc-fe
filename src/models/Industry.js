@@ -4,7 +4,7 @@ export default class Industry extends BaseModel {
 		{
 			field: 'id',
 			header: 'ID',
-			default: '0'
+			hide: true
 		},
 		{
 			field: 'name',
@@ -19,9 +19,10 @@ export default class Industry extends BaseModel {
 			maxRows: 6
 		},
 		{
-			field: 'averageEmission',
-			header: 'Average Emission',
-			type: 'number'
+			field: 'annualAvgEmission',
+			header: 'Annual Average Emission (tCO2e)',
+			type: 'number',
+			default: 0
 		}
 	];
 	static title = 'Industry';

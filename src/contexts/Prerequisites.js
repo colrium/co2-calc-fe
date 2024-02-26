@@ -134,8 +134,8 @@ const PrerequisitesProvider = ({ children }) => {
         if (router.pathname?.startsWith('/dashboard') && !loggedinRef.current) {
             router.push('/auth/login')
 		}
-		else if (loggedinRef.current && !router.pathname?.startsWith('/dashboard')) {
-			// router.push('/dashboard/overview');
+		if (loggedinRef.current && router.pathname === '/dashboard/calculations' && router.query && 'id' && router.query) {
+			setState((prev) => ({ openDrawers: { ...prev.openDrawers, internal: false, calcLeft: true } }));
 		}
     }, [router.pathname]);
 

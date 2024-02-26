@@ -92,10 +92,10 @@ const contextValidationSchemas = {
 	company: companyValidationSchema,
 	product: productValidationSchema
 };
-export default function CalculatorForm({activeRecord, model, onCloseForm}) {		
-	const id = activeRecord?.record?.id || 'new'
+export default function CalculatorForm({ activeRecord, model, onCloseForm, onDelete }) {
+	const id = activeRecord?.record?.id || 'new';
 	const calculator = useSelector(selectCalculator);
-	const context = {name: 'company', active: -1, ...calculator.context};
+	const context = { name: 'company', active: -1, ...calculator.context };
 	const { name, step = 0 } = context;
 	const fetcher = useFetcher();
 	const dispatch = useDispatch();
@@ -114,14 +114,14 @@ export default function CalculatorForm({activeRecord, model, onCloseForm}) {
 			scope3us: [],
 			scope3ds: []
 		},
-		factors: {
+		activities: {
 			loading: false
 		},
 		leftDrawerOpen: !isMobile,
 		rightDrawerOpen: !isMobile,
 		data: {}
 	});
-	
+
 	const [completedSteps, setCompletedStepSteps] = useState([0]);
 
 	const steps = useMemo(() => contextSteps[name], [name]);
@@ -131,13 +131,11 @@ export default function CalculatorForm({activeRecord, model, onCloseForm}) {
 		async (values) => {
 			const verb = activeRecord.isNew ? 'post' : 'patch';
 			const url = activeRecord.isNew ? model.endpoint : `${model.endpoint}/${id || activeRecord?.record?.id}`;
-			console.log('values', JSON.stringify(values));
 			try {
 				const res = await axios[verb](url, {
 					...values,
 					type: name
 				});
-				console.log('res', res);
 				if (typeof onCloseForm === 'function') {
 					onCloseForm();
 				}
@@ -175,10 +173,10 @@ export default function CalculatorForm({activeRecord, model, onCloseForm}) {
 		initialValues: initialValues,
 		validationSchema: validationSchema
 	});
-	const { lastModified, ...values } = formik.values || {};
-	const {activities, year} = values
+	const { lastModified, activities: formActivities, ...values } = formik.values || {};
+
 	const changeContext = (name, active) => {
-		dispatch(setCalculatorContext({name, active}));
+		dispatch(setCalculatorContext({ name, active }));
 		formik.resetForm();
 	};
 
@@ -189,7 +187,9 @@ export default function CalculatorForm({activeRecord, model, onCloseForm}) {
 	const fetchActivityTypes = (scope) => {
 		if (scope) {
 			setState((prevState) => ({ activityTypes: { ...prevState.activityTypes, loading: scope } }));
-			axios.get(`/api/activity-types?scope=${scope}`).then(({ data: {data} }) =>
+			axios
+				.get(`/api/activity-types?scope=${scope}`)
+				.then(({ data: { data } }) =>
 					setState((prevState) => ({
 						activityTypes: {
 							...prevState.activityTypes,
@@ -200,27 +200,26 @@ export default function CalculatorForm({activeRecord, model, onCloseForm}) {
 				.catch((err) => console.error(`/api/activity-types/${scope}`, err))
 				.finally(() => setState((prevState) => ({ activityTypes: { ...prevState.activityTypes, loading: false } })));
 		}
-		
 	};
 	const fetchFactors = (activityType) => {
 		if (activityType) {
-			setState((prevState) => ({ factors: { ...prevState.factors, loading: activityType } }));
+			setState((prevState) => ({ activities: { ...prevState.activities, loading: activityType } }));
 			axios
-				.get(`/api/factors?sections={"$in": ["${activityType}"]}`)
+				.get(`/api/activities?sections={"$in": ["${activityType}"]}`)
 				.then(({ data: { data } }) => {
 					data = Array.isArray(data) ? data : [];
 					data = data.map((factor) => ({ ...factor, label: factor.name, value: factor.id }));
 					setState((prevState) => ({
-						factors: { ...prevState.factors, [activityType]: data }
+						activities: { ...prevState.activities, [activityType]: data }
 					}));
 				})
-				.catch((err) => console.error(`/api/factors?sections={"$in": ["${activityType}"]}`, err))
-				.finally(() => setState((prevState) => ({ factors: { ...prevState.factors, loading: false } })));
+				.catch((err) => console.error(`/api/activities?sections={"$in": ["${activityType}"]}`, err))
+				.finally(() => setState((prevState) => ({ activities: { ...prevState.activities, loading: false } })));
 		}
 	};
 
-	
-	const persistValues = useCallback((values) => {
+	const persistValues = useCallback(
+		(values) => {
 			const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
 			dispatch(action({ index: active, value: { ...values, lastModified: dayjs().toISOString() } }));
 		},
@@ -248,20 +247,23 @@ export default function CalculatorForm({activeRecord, model, onCloseForm}) {
 						for (let i = 0; i < entries?.length; i++) {
 							const activity = entries[i];
 							const amount = activity.amount || 0;
-							const emissionFactor = activity.emissionFactor > 0? activity.emissionFactor : activity.emissionsType === 'biogenic'? 0.1 : 0.8;
+							const emissionFactor =
+								activity.emissionFactor > 0
+									? activity.emissionFactor
+									: activity.emissionType === 'biogenic'
+									? 0.1
+									: 0.8;
 
-							const emissionsType = activity.emissionsType;
-							const emissions = (emissionFactor * amount);
+							const emissionType = activity.emissionType;
+							const emissions = emissionFactor * amount;
 							results.byScope[scope] += emissions;
-							if (emissionsType) {
-								results.byEmissionsType[emissionsType] += emissions;
+							if (emissionType) {
+								results.byEmissionsType[emissionType] += emissions;
 							}
 						}
 					}
 				}
 			}
-					
-			
 		}
 		const scope1 =
 			typeof results?.byScope?.scope1 === 'number' && !isNaN(results?.byScope?.scope1) ? results.byScope.scope1 : 0;
@@ -288,7 +290,6 @@ export default function CalculatorForm({activeRecord, model, onCloseForm}) {
 		formik.setFieldValue('results', results);
 	});
 
-
 	/* useUniqueEffect(() => {
 		if (data) {
 			formik.setValues({ activities: {}, ...data });
@@ -299,22 +300,23 @@ export default function CalculatorForm({activeRecord, model, onCloseForm}) {
 		if (activeRecord?.record) {
 			formik.setValues({ activities: {}, ...activeRecord?.record });
 		}
-	}, [activeRecord]); 
+	}, [activeRecord]);
 
 	const debouncedPersistValues = debounce(1000, ({ values, active, name, id }) => {
 		if (activeRecord.isNew) {
-			axios.post(`${model.endpoint}`, {
-				...values,
-				name: values.name || 'New Calculation',
-				type: name,
-				updatedAt: dayjs().toISOString()
-			}).then((res) => {
-				const data = res.data;
-				console.log('res', res)
-				router.push(`/dashboard/calculations?id=${data.id}`);
-			});
-		}
-		else{
+			axios
+				.post(`${model.endpoint}`, {
+					...values,
+					name: values.name || 'New Calculation',
+					type: name,
+					updatedAt: dayjs().toISOString()
+				})
+				.then((res) => {
+					const data = res.data;
+					console.log('res', res);
+					router.push(`/dashboard/calculations?id=${data.id}`);
+				});
+		} else {
 			axios.patch(`${model.endpoint}/${id || activeRecord?.record?.id}`, {
 				...values,
 				name: values.name || 'New Calculation',
@@ -322,16 +324,11 @@ export default function CalculatorForm({activeRecord, model, onCloseForm}) {
 				updatedAt: dayjs().toISOString()
 			});
 		}
-		
-		// const action = name === 'product' ? updateProductAssessment : updateCompanyAssessment;
-		// dispatch(action({ index: active, value: { ...values, lastModified: dayjs().toISOString() } }));
 	});
-	
-	
 
 	useDidUpdate(() => {
-		calculateEmissions(activities);
-	}, [activities]);
+		calculateEmissions(formActivities);
+	}, [formActivities]);
 
 	const Component = steps[step]?.Component;
 
@@ -352,7 +349,8 @@ export default function CalculatorForm({activeRecord, model, onCloseForm}) {
 					name,
 					stepName,
 					fetchActivityTypes,
-					fetchFactors
+					fetchFactors,
+					onDelete
 				}}
 			>
 				<Box

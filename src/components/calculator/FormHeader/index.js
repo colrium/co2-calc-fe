@@ -1,6 +1,5 @@
 import { usePrerequisites } from '@/contexts/Prerequisites';
-import { useSetState } from '@/hooks';
-import { addCompanyAssessment, addProductAssessment, selectCalculator, setCalculatorContext } from '@/store/calculatorSlice';
+import { selectCalculator } from '@/store/calculatorSlice';
 import { mdiBackburger } from '@mdi/js';
 import Icon from '@mdi/react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -33,17 +32,14 @@ const contextTitles = {
 export default function FormHeader() {
 	const dispatch = useDispatch();
 	const calculator = useSelector(selectCalculator);
-	const { context } = calculator;
+	const {context} = {...calculator};
+	const { formik } = useCalculatorForm();
 	const contextDataExists = calculator[context.name]?.length > 0
-	const [popupOpen, setPopupOpen] = React.useState(!contextDataExists);	
+	const [popupOpen, setPopupOpen] = React.useState(!formik.values?.name || !formik.values?.year);	
 	const [anchorEl, setAnchorEl] = React.useState(null);
-	const { formik, setContext } = useCalculatorForm();
+	
 	const [popupContext, setPopupContext] = React.useState(context.name);
-	const [formValues, setFormValues] = useSetState({
-		year: dayjs().year(formik.values?.year || dayjs().year()),
-		name: '',
-		description: ''
-	});
+	
 
 	
 	const { toggleDrawer, openDrawers } = usePrerequisites();
@@ -73,30 +69,18 @@ export default function FormHeader() {
 		setPopupOpen(false);
 	};
 
-	const handleOnSubmit = (event) => {
-		event.preventDefault();
-		const formData = new FormData(event.currentTarget);
-		const formJson = Object.fromEntries(formData.entries());
-		const name = formJson.name;
-		const data = calculator[popupContext];
-		const action = popupContext === 'product' ? addProductAssessment : addCompanyAssessment;
-		dispatch(setCalculatorContext({ active: data.length ?? 0, name: popupContext }));
-		dispatch(action(formJson));		
-		handleClosePopup();
-	};
 
 	const contextFormik = useFormik({
 		initialValues: {
-			name: '',
-			description: '',
+			name: formik.values?.name,
+			description: formik.values?.description,
 			year: dayjs().year(formik.values?.year || dayjs().year())
 		},
 		validationSchema: validationSchema,
 		onSubmit: (values) => {
-			const data = calculator[popupContext];
-			const action = popupContext === 'product' ? addProductAssessment : addCompanyAssessment;
-			dispatch(setCalculatorContext({ active: data.length ?? 0, name: popupContext }));
-			dispatch(action(values));
+			for (const [key, value] of Object.entries(values)) {
+				formik.setFieldValue(key, value)
+			}
 			handleClosePopup();
 		}
 	});
@@ -112,38 +96,42 @@ export default function FormHeader() {
 				}}
 			>
 				<DialogTitle>
-					<Chip label={contextTitles[popupContext]} />
+					<Chip label={contextTitles[name]} />
 				</DialogTitle>
 				<DialogContent>
-					<Box className="flex gap-8">
-						<TextField
-							autoFocus
-							required
-							margin="dense"
-							id="name"
-							name="name"
-							label="Name"
-							type="text"
-							value={contextFormik.values?.name}
-							onChange={contextFormik.handleChange}
-							onBlur={contextFormik.handleBlur}
-							error={contextFormik.touched.name && Boolean(contextFormik.errors.name)}
-							helperText={contextFormik.touched.name && contextFormik.errors.name}
-						/>
-						<TextField
-							multiline
-							rows={3}
-							margin="dense"
-							id="description"
-							name="description"
-							label="Description"
-							value={contextFormik.values?.description}
-							onChange={contextFormik.handleChange}
-							onBlur={contextFormik.handleBlur}
-							error={contextFormik.touched.description && Boolean(contextFormik.errors.description)}
-							helperText={contextFormik.touched.description && contextFormik.errors.description}
-						/>
-					</Box>
+					<TextField
+						autoFocus
+						required
+						margin="dense"
+						id="name"
+						name="name"
+						label="Name"
+						size="small"
+						type="text"
+						value={contextFormik.values?.name}
+						onChange={contextFormik.handleChange}
+						onBlur={contextFormik.handleBlur}
+						error={contextFormik.touched.name && Boolean(contextFormik.errors.name)}
+						helperText={contextFormik.touched.name && contextFormik.errors.name}
+						fullWidth
+					/>
+					<Box className="h-4" />
+					<TextField
+						multiline
+						rows={3}
+						margin="dense"
+						size="small"
+						id="description"
+						name="description"
+						label="Description"
+						value={contextFormik.values?.description}
+						onChange={contextFormik.handleChange}
+						onBlur={contextFormik.handleBlur}
+						error={contextFormik.touched.description && Boolean(contextFormik.errors.description)}
+						helperText={contextFormik.touched.description && contextFormik.errors.description}
+						fullWidth
+					/>
+					<Box className="h-4" />
 					<DatePicker
 						label={'Year'}
 						openTo="year"
@@ -154,6 +142,13 @@ export default function FormHeader() {
 						onChange={(newValue) => contextFormik.setFieldValue('year', newValue.year())}
 						error={contextFormik.touched.year && Boolean(contextFormik.errors.year)}
 						helperText={contextFormik.touched.year && contextFormik.errors.year}
+						slotProps={{
+							textField: {
+								size: 'small',
+								margin: 'dense',
+								fullWidth: true
+							}
+						}}
 					/>
 					{/* <TextField required margin="dense" id="year" name="year" label="Year" type="number" /> */}
 				</DialogContent>

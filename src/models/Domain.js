@@ -4,7 +4,7 @@ export default class Domain extends BaseModel {
 		{
 			field: 'id',
 			header: 'ID',
-			default: '0'
+			hide: true
 		},
 		{
 			field: 'name',

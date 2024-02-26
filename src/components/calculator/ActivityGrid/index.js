@@ -38,10 +38,21 @@ export default function ActivityGrid({ rows, name, scope }) {
 		const activityIndex = activities[scope][name].findIndex((activity) => activity.id === newRow.id);
 		if (activityIndex > -1) {
 			const emissionFactor =
-				newRow.emissionFactor > 0 ? newRow.emissionFactor : newRow.emissionsType === 'biogenic' ? 0.1 : 0.8;
+				newRow.emissionFactor > 0 ? newRow.emissionFactor : newRow.emissionType === 'biogenic' ? 0.1 : 0.8;
 			const amount = newRow.amount > 0? newRow.amount : 0;
 			const emission = amount * emissionFactor;
-			activities[scope][name][activityIndex] = { name, amount, unit: newRow.unit, description: newRow.description, emissionFactor, emission, year: newRow.year || dayjs().year() };
+			activities[scope][name][activityIndex] = {
+				...newRow,
+				activityType: name,
+				name: newRow.name,
+				emissionType: newRow.emissionType || 'biogenic',
+				amount,
+				unit: newRow.unit,
+				description: newRow.description,
+				emissionFactor,
+				emission,
+				year: newRow.year || dayjs().year()
+			};
 			formik.setFieldValue('activities', activities);
 		}
 		return newRow;

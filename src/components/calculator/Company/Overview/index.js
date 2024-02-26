@@ -11,7 +11,7 @@ import { useCalculatorForm } from '../../CalculatorProvider';
 
 const Select = FieldMappers.select;
 export default function Overview() {
-	const { formik, activeRecord } = useCalculatorForm();
+	const { formik, activeRecord, onDelete } = useCalculatorForm();
 	const domains = useMemo(() => (activeRecord.lookups?.Domain || []), [activeRecord.lookups]);
 	const parseDomainValue = ({ value, options}) => {
 		let val = null;
@@ -46,7 +46,7 @@ export default function Overview() {
 				<Box className="mb-8">
 					<Typography variant="h6">Basic Information</Typography>
 				</Box>
-				<Box className="h4 mb-8" />
+				<Box className="h-8" />
 
 				<TextField
 					label="Name"
@@ -60,7 +60,7 @@ export default function Overview() {
 					error={formik.touched.name && Boolean(formik.errors.name)}
 					helperText={formik.touched.name && formik.errors.name}
 				/>
-				<Box className="h4 mb-8" />
+				<Box className="h-8" />
 				<TextField
 					label="Description"
 					name="description"
@@ -76,7 +76,7 @@ export default function Overview() {
 					error={formik.touched.description && Boolean(formik.errors.description)}
 					helperText={formik.touched.description && formik.errors.description}
 				/>
-				<Box className="h4 mb-8" />
+				<Box className="h-8" />
 				<DatePicker
 					label={'Year'}
 					openTo="year"
@@ -95,7 +95,7 @@ export default function Overview() {
 					}}
 				/>
 
-				<Box className="h4 mb-8" />
+				<Box className="h-8" />
 				<AsyncAutocomplete
 					label={'Domain'}
 					className="w-full"
@@ -108,36 +108,11 @@ export default function Overview() {
 					helperText={formik.touched.domainId && formik.errors.domainId}
 				/>
 			</Box>
-
+			<Box className="h-8" />
 			<Box className="my-1">
-				<Typography variant="subtitle1" component="div">
-					Assessments
-				</Typography>
-				{/* <AssessmentsGrid rows={assessments} /> */}
-				<Button size="small" color="error">
+				<Button size="small" variant="contained" color="error" onClick={() => onDelete(activeRecord?.record?.id)} disabled={activeRecord.isNew}>
 					Delete assessment
 				</Button>
-				{/* <Card
-					elevation={0}
-					className="p-0"
-					slotProps={{
-						paper: {
-							className: 'p-0'
-						}
-					}}
-				>
-					<CardContent className="p-0">
-						<Typography variant="subtitle1" component="div">
-							Assessments
-						</Typography>
-						<AssessmentsGrid rows={assessments} />
-					</CardContent>
-					<CardActions>
-						<Button size="small" color="error">
-							Delete assessment
-						</Button>
-					</CardActions>
-				</Card> */}
 			</Box>
 		</Box>
 	);

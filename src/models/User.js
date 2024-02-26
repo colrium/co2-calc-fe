@@ -4,7 +4,6 @@ export default class User extends BaseModel {
 		{
 			field: 'id',
 			header: 'ID',
-			default: '0',
 			hide: true
 		},
 		{

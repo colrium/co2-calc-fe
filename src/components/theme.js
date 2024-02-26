@@ -138,9 +138,9 @@ const theme = createTheme({
 		},
 		MuiDialog: {
 			styleOverrides: {
-				paper: bgGradientStyles
+				paper: blurBgStyles
 			}
-		},
+		}
 		// MuiBackdrop: {
 		// 	styleOverrides: {
 		// 		root: ({ theme }) => ({

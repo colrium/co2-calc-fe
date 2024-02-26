@@ -50,7 +50,7 @@ export default function OverviewPage() {
 
 	const fetchResults = (type='company') => {
 			setState({ loading: true});
-			axios.get(`/api/calculations?type=${type}`)
+			axios.get(`/api/calculations?type=${type}`, {params: {perPage: 5}})
 				.then(({data: results}) => {
 					const {data} = results;
 					
@@ -102,7 +102,7 @@ export default function OverviewPage() {
 						dispatch(setCalculatorContext({ active: result.id, name: type, step: 0 }));
 						router.push(`/dashboard/calculations?id=${result.id}`);
 					})
-					.catch((err) => console.error(`/factors`, err))
+					.catch((err) => console.error(`/calculations`, err))
 					.finally(() => setState({ loading: false }));
 			}
 			
@@ -122,16 +122,13 @@ export default function OverviewPage() {
 
 	return (
 		<Box className="w-full">
-		<Box>
-			<Overview />
-		</Box>
-			<Box className="py-32 px-8" sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
-				<Typography variant="h4">All company assessments (Scope 1 - 3)</Typography>
+			<Box className="py-12 px-8" sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
+				<Typography variant="h4">Company assessments (Scope 1 - 3)</Typography>
 			</Box>
 			<Box className="flex gap-8 px-8 py-8 flex-wrap">
 				{state.company?.data?.length > 0 &&
 					state.company.data.map((assessment, i) => (
-						<Card sx={{ maxWidth: 400 }} className="flex flex-col" key={`company-${i}`}>
+						<Card sx={{ width: 240 }} className="flex flex-col" key={`company-${i}`}>
 							<CardHeader
 								avatar={
 									<Avatar
@@ -221,8 +218,10 @@ export default function OverviewPage() {
 					</CardActions>
 				</Card>
 			</Box>
-
-			<Box className="w-full">
+			<Box>
+				<Overview />
+			</Box>
+			{/* <Box className="w-full">
 				<Box className="py-12 mt-6 px-8">
 					<Typography variant="h4">All products</Typography>
 				</Box>
@@ -306,9 +305,7 @@ export default function OverviewPage() {
 						</CardActions>
 					</Card>
 				</Box>
-			</Box>
-
-			<Box className="w-full">{JSON.stringify(state.overview)}</Box>
+			</Box> */}
 		</Box>
 	);
 }

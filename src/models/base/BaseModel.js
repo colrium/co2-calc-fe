@@ -50,9 +50,10 @@ export default class BaseModel {
 		const columns = this.columns || [];
 		return columns.reduce((acc, field) => {
 			let hidden = false;
-			if ('hide' in field) {
+			if ('hide' in field ) {
 				hidden = Boolean(field.hide);				
 			}
+			
 			acc[field.field] = !hidden;
 			return acc
 		}, {});
