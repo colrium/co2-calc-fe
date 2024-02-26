@@ -4,15 +4,13 @@ import { emissionTypes, scopes } from '@/config';
 import { useSetState } from '@/hooks';
 import { NoRowsOverlay } from '@/models/base/ModelDataGrid';
 import { Box, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { BarPlot, ChartsTooltip, ChartsXAxis, ChartsYAxis, PieChart, ResponsiveChartContainer } from '@mui/x-charts';
 import { LinePlot, MarkPlot } from '@mui/x-charts/LineChart';
 import { useDrawingArea } from '@mui/x-charts/hooks';
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 const StyledText = styled('text')(({ theme }) => ({
 	fill: theme.palette.text.primary,
 	textAnchor: 'middle',
@@ -29,8 +27,7 @@ function PieCenterLabel({ children }) {
 	);
 }
 export default function Overview({ name, options = [] }) {
-	const router = useRouter();
-	const dispatch = useDispatch();
+	const theme = useTheme();
 	const [state, setState] = useSetState({
 		loading: true,
 		yearly: { labels: [], values: [] },
@@ -187,10 +184,10 @@ export default function Overview({ name, options = [] }) {
 								height={420}
 								series={[{ type: 'line', data: state.yearly.values, connectNulls: true }]}
 								xAxis={[{ scaleType: 'point', data: state.yearly.labels }]}
-								disableAxisListener
+								
 							>
 								<LinePlot />
-								<MarkPlot />
+								<MarkPlot tooltip={{ trigger: 'item' }} />
 								<ChartsXAxis label="Year" />
 								<ChartsYAxis label="tCO2e" />
 								<ChartsTooltip />
@@ -209,7 +206,7 @@ export default function Overview({ name, options = [] }) {
 					<CardHeader title={'Scope Totals'} />
 					<CardContent>
 						{Object.keys(state.scopes.pie)?.length > 0 && (
-							<Box height={420} className="flex items-center justify-center flex-col">
+							<Box height={420} className="flex w-full items-center justify-center">
 								<PieChart
 									series={[
 										{
@@ -220,12 +217,10 @@ export default function Overview({ name, options = [] }) {
 											cornerRadius: 5
 										}
 									]}
-									margin={{ right: 150 }}
+									// width={300}
+									// height={300}
 									slotProps={{
 										legend: {
-											direction: 'column',
-											position: { vertical: 'middle', horizontal: 'right' },
-											padding: 0,
 											hidden: true
 										}
 									}}
@@ -258,7 +253,8 @@ export default function Overview({ name, options = [] }) {
 											cornerRadius: 5
 										}
 									]}
-									margin={{ right: 150 }}
+									// width={300}
+									// height={300}
 									slotProps={{
 										legend: {
 											direction: 'column',
@@ -289,9 +285,8 @@ export default function Overview({ name, options = [] }) {
 								height={420}
 								series={[{ type: 'bar', data: state.activityTypes.values, connectNulls: true }]}
 								xAxis={[{ scaleType: 'band', data: state.activityTypes.labels }]}
-								disableAxisListener
 							>
-								<BarPlot />
+								<BarPlot color={theme.palette.primary.main} />
 								<ChartsXAxis label="Activity type" />
 								<ChartsYAxis label="tCO2e" />
 								<ChartsTooltip />
@@ -314,9 +309,8 @@ export default function Overview({ name, options = [] }) {
 								height={420}
 								series={[{ type: 'bar', data: state.activities.values, connectNulls: true }]}
 								xAxis={[{ scaleType: 'band', data: state.activities.labels }]}
-								disableAxisListener
 							>
-								<BarPlot />
+								<BarPlot color={theme.palette.secondary.main} tooltip={{ trigger: 'item' }} />
 								<ChartsXAxis label="Activity" />
 								<ChartsYAxis label="tCO2e" />
 								<ChartsTooltip />
@@ -337,11 +331,11 @@ export default function Overview({ name, options = [] }) {
 						{state.domains.values?.length > 0 && (
 							<ResponsiveChartContainer
 								height={420}
-								series={[{ type: 'bar', data: state.domains.values, connectNulls: true }]}
+								series={[{ type: 'bar', data: state.domains.values }]}
 								xAxis={[{ scaleType: 'band', data: state.domains.labels }]}
-								disableAxisListener
+								
 							>
-								<BarPlot />
+								<BarPlot color={theme.palette.tertiary.main} />
 								<ChartsXAxis label="Domain" />
 								<ChartsYAxis label="tCO2e" />
 								<ChartsTooltip />
