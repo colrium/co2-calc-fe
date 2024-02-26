@@ -50,7 +50,7 @@ export default function OverviewPage() {
 
 	const fetchResults = (type='company') => {
 			setState({ loading: true});
-			axios.get(`/api/calculations?type=${type}`, {params: {perPage: 5}})
+			axios.get(`/api/calculations?type=${type}`, {params: {perPage: 3, page: 1}})
 				.then(({data: results}) => {
 					const {data} = results;
 					

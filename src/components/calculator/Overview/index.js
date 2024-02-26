@@ -225,7 +225,8 @@ export default function Overview({ name, options = [] }) {
 										legend: {
 											direction: 'column',
 											position: { vertical: 'middle', horizontal: 'right' },
-											padding: 0
+											padding: 0,
+											hidden: true
 										}
 									}}
 								>
@@ -262,7 +263,8 @@ export default function Overview({ name, options = [] }) {
 										legend: {
 											direction: 'column',
 											position: { vertical: 'middle', horizontal: 'right' },
-											padding: 0
+											padding: 0,
+											hidden: true
 										}
 									}}
 								>
