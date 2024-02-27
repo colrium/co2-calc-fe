@@ -64,8 +64,8 @@ export default function Results() {
 						let values = [];
 						const series = [];
 						if (Array.isArray(curr)) {
-							values = curr.map(({ emission, label, ...rest }) => {
-								series.push(label);
+							values = curr.map(({ emission, name, ...rest }) => {
+								series.push(name);
 								return emission;
 							});
 						}
@@ -90,8 +90,8 @@ export default function Results() {
 						let values = [];
 						const series = [];
 						if (Array.isArray(curr)) {
-							values = curr.map(({ emission, label, ...rest }) => {
-								series.push(label);
+							values = curr.map(({ emission, name, ...rest }) => {
+								series.push(name);
 								return emission;
 							});
 						}
@@ -116,8 +116,8 @@ export default function Results() {
 						let values = [];
 						const series = [];
 						if (Array.isArray(curr)) {
-							values = curr.map(({ emission, label, ...rest }) => {
-								series.push(label);
+							values = curr.map(({ emission, name, ...rest }) => {
+								series.push(name);
 								return emission;
 							});
 						}
@@ -436,7 +436,7 @@ export default function Results() {
 										colors={new Array(scope1BarData.length).fill(scopes.scope1.color)}
 									>
 										<BarPlot />
-										<ChartsXAxis />
+										<ChartsXAxis label='Activities' />
 										<ChartsYAxis />
 										<ChartsTooltip />
 									</ResponsiveChartContainer>

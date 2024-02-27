@@ -375,9 +375,23 @@ export default function CalculatorForm({ activeRecord, model, onCloseForm, onDel
 						steps={steps}
 						step={step}
 					/>
-					<Box>
+					<Box >
 						<FormHeader ref={headerRef} />
 						<Component />
+						{/* <Box className="py-4 flex item-center justify-center gap-4">
+							<Button startIcon={<SaveIcon />} onClick={formik.handleSubmit} variant="contained" type="submit">
+								Save
+							</Button>
+							<Button
+								startIcon={<CloseIcon />}
+								variant="contained"
+								type="button"
+								onClick={onCloseForm}
+								color="error"
+							>
+								Cancel
+							</Button>
+						</Box> */}
 					</Box>
 					<RightSidebar
 						open={openDrawers.calcRight}

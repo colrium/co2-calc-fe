@@ -6,14 +6,15 @@ import { addCompanyAssessment, addProductAssessment, setCalculatorContext } from
 import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, IconButton, Skeleton, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import IconButton from '@mui/material/IconButton';
+import Fab from '@mui/material/Fab';
 import { red } from '@mui/material/colors';
+import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import Link from 'next/link';
@@ -21,7 +22,10 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 var relativeTime = require('dayjs/plugin/relativeTime');
+var utc = require('dayjs/plugin/utc');
 dayjs.extend(relativeTime);
+dayjs.extend(utc);
+
 export default function OverviewPage() {
 	const router = useRouter();
 	const dispatch = useDispatch();
@@ -47,6 +51,7 @@ export default function OverviewPage() {
 		}
 	});
     const {loggedin, user} = useSelector(selectAuth);
+	const theme = useTheme();
 
 	const fetchResults = (type='company') => {
 			setState({ loading: true});
@@ -123,14 +128,18 @@ export default function OverviewPage() {
 	return (
 		<Box className="w-full">
 			<Box className="py-12 px-8" sx={{ backgroundColor: (theme) => theme.palette.background.paper }}>
-				<Typography variant="h4">Recent Company assessments (Scope 1 - 3)</Typography>
+				<Typography variant="subtitle1">Recent Company assessments (Scope 1 - 3)</Typography>
 			</Box>
-			<Box className="flex gap-8 px-8 py-8 flex-wrap">
-				{state.company?.data?.length > 0 &&
+			<Box className="flex flex-col lg:flex-row gap-8 px-8 py-8 flex-wrap relative">
+				{state.loading && <Skeleton variant="rounded" className="flex-1 " height={240} />}
+				{state.loading && <Skeleton variant="rounded" className="flex-1 " height={240} />}
+				{state.loading && <Skeleton variant="rounded" className="flex-1 " height={240} />}
+				{!state.loading &&
+					state.company?.data?.length > 0 &&
 					state.company.data.map((assessment, i) => (
-						<Card 
-							// sx={{ width: 240 }} 
-							className="flex flex-col flex-1" 
+						<Card
+							// sx={{ width: 240 }}
+							className="flex flex-col flex-1"
 							key={`company-${i}`}
 						>
 							<CardHeader
@@ -157,12 +166,14 @@ export default function OverviewPage() {
 								subheader={assessment?.year}
 							/>
 							<CardContent className="flex-1 flex-col">
-							<Typography variant="h3" color="primary">{assessment.total?.toFixed(1)}</Typography>
+								<Typography variant="h3" color="primary">
+									{assessment.total?.toFixed(1)}
+								</Typography>
 								<Typography className="flex-1">
 									{assessment?.description || 'No description added yet'}
 								</Typography>
 								<Typography variant="body2" color="text.disabled" className="pt-4">
-									{dayjs().toNow(dayjs(assessment?.lastModified))}
+									{dayjs.utc(assessment?.updatedAt).toNow(dayjs())} ago
 								</Typography>
 							</CardContent>
 							<CardActions disableSpacing>
@@ -190,7 +201,7 @@ export default function OverviewPage() {
 							</CardActions>
 						</Card>
 					))}
-				<Card sx={{ maxWidth: 345 }} variant="outlined" className="flex flex-col">
+				<Card variant="outlined" className="hidden md:flex flex-col flex-1">
 					<CardHeader
 						avatar={
 							<Avatar
@@ -199,10 +210,10 @@ export default function OverviewPage() {
 									width: 24,
 									height: 24,
 									fontSize: 12,
-									color: (theme) => theme.palette.background.paper
+									color: (theme) => theme.palette.background.main
 								}}
 							>
-								NA
+								<AddIcon fontSize="inherit" />
 							</Avatar>
 						}
 						title={'Add a new assessment'}
@@ -213,7 +224,7 @@ export default function OverviewPage() {
 					</CardContent>
 					<CardActions disableSpacing>
 						<Button
-							color="secondary"
+							color="teal"
 							onClick={handleOnGoToAssessment('company', -1)}
 							aria-label="Add Assessment"
 							endIcon={<AddIcon />}
@@ -222,6 +233,21 @@ export default function OverviewPage() {
 						</Button>
 					</CardActions>
 				</Card>
+				<Fab
+					onClick={handleOnGoToAssessment('company', -1)}
+					color="tertiary"
+					aria-label="Add a new Assessment"
+					className="inline-block md:hidden bottom-16 right-14"
+					sx={{
+						position: 'fixed !important',
+						color: 'text.primary',
+						[theme.breakpoints.up('md')]: {
+							display: 'none'
+						}
+					}}
+				>
+					<AddIcon />
+				</Fab>
 			</Box>
 			<Box>
 				<Overview />

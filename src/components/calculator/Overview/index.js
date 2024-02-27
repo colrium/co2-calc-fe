@@ -114,10 +114,10 @@ export default function Overview({ name, options = [] }) {
 	return (
 		<Grid container>
 			<Grid item xs={12} className="flex p-8">
-				<Typography variant="h4">Overview</Typography>
+				<Typography variant="subtitle1">Overview</Typography>
 			</Grid>
 			<Grid item xs={12} className="flex p-8">
-				<Box className={'flex  gap-4 w-full'}>
+				<Box className={'flex flex-col md:flex-row gap-4 w-full'}>
 					<Box className="flex-1">
 						<Card className="flex flex-col w-full h-40" variant="outlined">
 							<CardHeader title={'Total Emissions'} />
@@ -184,7 +184,6 @@ export default function Overview({ name, options = [] }) {
 								height={420}
 								series={[{ type: 'line', data: state.yearly.values, connectNulls: true }]}
 								xAxis={[{ scaleType: 'point', data: state.yearly.labels }]}
-								
 							>
 								<LinePlot />
 								<MarkPlot tooltip={{ trigger: 'item' }} />
@@ -204,21 +203,20 @@ export default function Overview({ name, options = [] }) {
 			<Grid item xs={12} md={6} className="flex items-center p-8">
 				<Card className="w-full">
 					<CardHeader title={'Scope Totals'} />
-					<CardContent>
+					<CardContent className="flex w-full items-center justify-center">
 						{Object.keys(state.scopes.pie)?.length > 0 && (
-							<Box height={420} className="flex w-full items-center justify-center">
+							<Box width={'auto'} height={420}>
 								<PieChart
 									series={[
 										{
 											data: state.scopes.pie,
-											innerRadius: 100,
-											outerRadius: 150,
+											innerRadius: 120,
+											// outerRadius: 100,
 											paddingAngle: 5,
 											cornerRadius: 5
 										}
 									]}
-									// width={300}
-									// height={300}
+									margin={{ right: 5, left: 5 }}
 									slotProps={{
 										legend: {
 											hidden: true
@@ -240,31 +238,27 @@ export default function Overview({ name, options = [] }) {
 			<Grid item xs={12} md={6} className="flex items-center p-8">
 				<Card className="w-full">
 					<CardHeader title={'Emission Type'} />
-					<CardContent>
+					<CardContent className="flex w-full items-center justify-center">
 						{Object.keys(state.emissionType)?.length > 0 && (
-							<Box height={420} className="flex items-center justify-center flex-col">
+							<Box width={'auto'} height={420}>
 								<PieChart
 									series={[
 										{
 											data: state.emissionType,
-											innerRadius: 100,
-											outerRadius: 150,
+											innerRadius: 120,
+											// outerRadius: 100,
 											paddingAngle: 5,
 											cornerRadius: 5
 										}
 									]}
-									// width={300}
-									// height={300}
+									margin={{ right: 5, left: 5 }}
 									slotProps={{
 										legend: {
-											direction: 'column',
-											position: { vertical: 'middle', horizontal: 'right' },
-											padding: 0,
 											hidden: true
 										}
 									}}
 								>
-									<PieCenterLabel>Type</PieCenterLabel>
+									<PieCenterLabel>By Scope</PieCenterLabel>
 								</PieChart>
 							</Box>
 						)}
@@ -333,7 +327,6 @@ export default function Overview({ name, options = [] }) {
 								height={420}
 								series={[{ type: 'bar', data: state.domains.values }]}
 								xAxis={[{ scaleType: 'band', data: state.domains.labels }]}
-								
 							>
 								<BarPlot color={theme.palette.tertiary.main} />
 								<ChartsXAxis label="Domain" />

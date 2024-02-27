@@ -166,8 +166,8 @@ export default function FormHeader() {
 						<Icon path={mdiBackburger} rotate={leftDrawerOpen ? 0 : 180} size={1} />
 					</IconButton>
 					<Box className="flex gap-2 flex-1">
-						{formik.values?.name && <Chip label={formik.values?.name} />}
-						{formik.values?.year && <Chip label={formik.values?.year} />}
+						{formik.values?.name && <Chip className="hidden md:inline-flex" label={formik.values?.name} />}
+						{formik.values?.year && <Chip className="hidden md:inline-flex" label={formik.values?.year} />}
 					</Box>
 					<IconButton
 						aria-label="save"
@@ -178,7 +178,7 @@ export default function FormHeader() {
 					>
 						<SaveIcon />
 					</IconButton>
-					<IconButton className="mx-8" type="button" onClick={onCloseForm} color="error">
+					<IconButton className="mx-8 hidden md:inline-flex" type="button" onClick={onCloseForm} color="error">
 						<CloseIcon />
 					</IconButton>
 					<Box className="flex gap-4">
