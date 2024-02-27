@@ -350,6 +350,7 @@ export default function CalculatorForm({ activeRecord, model, onCloseForm, onDel
 					stepName,
 					fetchActivityTypes,
 					fetchFactors,
+					onCloseForm,
 					onDelete
 				}}
 			>

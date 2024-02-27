@@ -152,7 +152,7 @@ export default function Overview({ name, options = [] }) {
 						>
 							<CardHeader title={'Activities'} />
 							<CardContent className="flex flex-col items-center justify-center">
-								<Typography variant="h3" textAlign={'center'} color="brown.main">
+								<Typography variant="h3" textAlign={'center'} color="teal.main">
 									{state.activityCount}
 								</Typography>
 							</CardContent>
@@ -167,7 +167,7 @@ export default function Overview({ name, options = [] }) {
 						>
 							<CardHeader title={'Domains'} />
 							<CardContent className="flex flex-col items-center justify-center">
-								<Typography variant="h3" textAlign={'center'} color="cyan.main">
+								<Typography variant="h3" textAlign={'center'} color="orange.main">
 									{state.domainCount}
 								</Typography>
 							</CardContent>

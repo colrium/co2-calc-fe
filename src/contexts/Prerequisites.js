@@ -131,13 +131,18 @@ const PrerequisitesProvider = ({ children }) => {
 	}, []);
 
     useUniqueEffect(() => {
-        if (router.pathname?.startsWith('/dashboard') && !loggedinRef.current) {
-            router.push('/auth/login')
+		if (router.pathname?.startsWith('/dashboard') && !loggedinRef.current) {
+			router.push('/auth/login');
 		}
-		if (loggedinRef.current && router.pathname === '/dashboard/calculations' && router.query && 'id' && router.query) {
-			setState((prev) => ({ openDrawers: { ...prev.openDrawers, internal: false, calcLeft: true } }));
+		if (loggedinRef.current && router.pathname === '/dashboard/calculations') {
+			if (router.query && 'id' in router.query) {
+				setState((prev) => ({ openDrawers: { ...prev.openDrawers, internal: false, calcLeft: true } }));
+			}
+			else {
+				setState((prev) => ({ openDrawers: { ...prev.openDrawers, internal: true, calcLeft: false } }));
+			}
 		}
-    }, [router.pathname]);
+	}, [router.pathname, router.query]);
 
 	useUniqueEffect(() => {
 		if (!loggedin) {

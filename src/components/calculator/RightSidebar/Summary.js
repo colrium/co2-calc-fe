@@ -1,12 +1,14 @@
 import ScalingText from '@/components/common/ScalingText';
 import { emissionTypes } from '@/config';
+import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
+import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useCalculatorForm } from '../CalculatorProvider';
-
 
 export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 	height: 10,
@@ -22,7 +24,7 @@ export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 export default function Summary() {
-	const { formik } = useCalculatorForm();
+	const { formik, onCloseForm } = useCalculatorForm();
 	const {
 		results, activities, total
 	} = { ...formik.values };
@@ -65,7 +67,9 @@ export default function Summary() {
 					</Typography>
 				</Box>
 
-				<ScalingText color="secondary" className="w-full">{total?.toFixed(2)}</ScalingText>
+				<ScalingText color="secondary" className="w-full">
+					{total?.toFixed(2)}
+				</ScalingText>
 			</Box>
 			<Divider />
 			<Box className="flex flex-row items-center py-4 gap-4">
@@ -215,6 +219,14 @@ export default function Summary() {
 			<Typography color="textSecondary" variant="body2">
 				Values above will update as you add activity data.
 			</Typography>
+			<Box className="py-4 flex item-center justify-center gap-4">
+				<Button startIcon={<SaveIcon />} onClick={formik.handleSubmit} variant="contained" type="submit">
+					Save
+				</Button>
+				<Button startIcon={<CloseIcon />} variant="contained" type="button" onClick={onCloseForm} color="error">
+					Cancel
+				</Button>
+			</Box>
 		</Box>
 	);
 }

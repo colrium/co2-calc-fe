@@ -60,6 +60,15 @@ const theme = createTheme({
 		brown: {
 			main: '#632d00'
 		},
+		orange: {
+			main: '#d99802'
+		},
+		blue: {
+			main: '#0295d9'
+		},
+		teal: {
+			main: '#02d987'
+		},
 		cyan: {
 			main: '#00FFFF'
 		},

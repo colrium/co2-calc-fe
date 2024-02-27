@@ -2,6 +2,7 @@ import { usePrerequisites } from '@/contexts/Prerequisites';
 import { selectCalculator } from '@/store/calculatorSlice';
 import { mdiBackburger } from '@mdi/js';
 import Icon from '@mdi/react';
+import CloseIcon from '@mui/icons-material/Close';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SaveIcon from '@mui/icons-material/Save';
 import { Chip } from '@mui/material';
@@ -33,7 +34,7 @@ export default function FormHeader() {
 	const dispatch = useDispatch();
 	const calculator = useSelector(selectCalculator);
 	const {context} = {...calculator};
-	const { formik } = useCalculatorForm();
+	const { formik, onCloseForm } = useCalculatorForm();
 	const contextDataExists = calculator[context.name]?.length > 0
 	const [popupOpen, setPopupOpen] = React.useState(!formik.values?.name || !formik.values?.year);	
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -177,6 +178,9 @@ export default function FormHeader() {
 					>
 						<SaveIcon />
 					</IconButton>
+					<IconButton className="mx-8" type="button" onClick={onCloseForm} color="error">
+						<CloseIcon />
+					</IconButton>
 					<Box className="flex gap-4">
 						<IconButton
 							aria-label="account of current user"
@@ -190,6 +194,7 @@ export default function FormHeader() {
 						<IconButton onClick={() => toggleDrawer('calcRight')} color="secondary">
 							<Icon path={mdiBackburger} rotate={rightDrawerOpen ? 180 : 0} size={1} />
 						</IconButton>
+
 						<Menu
 							id="menu-appbar"
 							anchorEl={anchorEl}
