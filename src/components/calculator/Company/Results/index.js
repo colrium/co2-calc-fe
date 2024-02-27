@@ -143,8 +143,8 @@ export default function Results() {
 						let values = [];
 						const series = [];
 						if (Array.isArray(curr)) {
-							values = curr.map(({ emission, label, ...rest }) => {
-								series.push(label);
+							values = curr.map(({ emission, name, ...rest }) => {
+								series.push(name);
 								return emission;
 							});
 						}
