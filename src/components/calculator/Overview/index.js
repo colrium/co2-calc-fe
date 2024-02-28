@@ -205,7 +205,7 @@ export default function Overview({ name, options = [] }) {
 					<CardHeader title={'Scope Totals'} />
 					<CardContent className="flex w-full items-center justify-center">
 						{Object.keys(state.scopes.pie)?.length > 0 && (
-							<Box width={'auto'} height={420}>
+							<Box width={300} height={420}>
 								<PieChart
 									series={[
 										{
@@ -240,7 +240,7 @@ export default function Overview({ name, options = [] }) {
 					<CardHeader title={'Emission Type'} />
 					<CardContent className="flex w-full items-center justify-center">
 						{Object.keys(state.emissionType)?.length > 0 && (
-							<Box width={'auto'} height={420}>
+							<Box width={300} height={420}>
 								<PieChart
 									series={[
 										{
