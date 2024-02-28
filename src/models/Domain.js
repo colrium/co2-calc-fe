@@ -23,7 +23,7 @@ export default class Domain extends BaseModel {
 			header: 'Industry',
 			excludeOnGrid: true,
 			inputType: 'select',
-			lookup: 'Industry'
+			lookup: 'Industries'
 		},
 		{
 			field: 'industry',

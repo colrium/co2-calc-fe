@@ -12,7 +12,7 @@ import { useCalculatorForm } from '../../CalculatorProvider';
 const Select = FieldMappers.select;
 export default function Overview() {
 	const { formik, activeRecord, onDelete } = useCalculatorForm();
-	const domains = useMemo(() => (activeRecord.lookups?.Domain || []), [activeRecord.lookups]);
+	const domains = useMemo(() => (activeRecord.lookups?.Domains || []), [activeRecord.lookups]);
 	const parseDomainValue = ({ value, options}) => {
 		let val = null;
 		if (typeof value !== 'undefined') {
@@ -35,7 +35,6 @@ export default function Overview() {
 		() => parseDomainValue({ options: domains, value: formik.values?.domainId }),
 		[domains, formik.values?.domainId]
 	);
-	console.log('formik.values?.domainId', formik.values?.domainId);
 	return (
 		<Box className="flex p-4 flex-col">
 			<Box className="my-2 flex flex-col gap-4">

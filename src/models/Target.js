@@ -23,7 +23,7 @@ export default class Target extends BaseModel {
 			field: 'domain',
 			header: 'Domain',
 			required: true,
-			lookup: 'Domain'
+			lookup: 'Domains'
 		}
 	];
 	static title = 'Target';
