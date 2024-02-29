@@ -18,8 +18,6 @@ export default class ActivityType extends BaseModel {
 			header: 'Scope',
 			required: true,
 			width: 120,
-			inputType: 'select',
-			multiple: true,
 			options: Object.values(scopes).map(({ name: value, label }) => ({ value, label }))
 		},
 		{
