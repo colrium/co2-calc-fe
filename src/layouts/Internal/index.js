@@ -21,7 +21,13 @@ export default function InternalLayout({children}) {
 					onOpen={() => toggleDrawer('internal', true)}
 					onClose={() => toggleDrawer('internal', false)}
 				/>
-				<Box className={`flex flex-col min-h-screen flex-1`} sx={{ marginLeft: !isMobile && openDrawers.internal? `${theme.mixins.drawerWidth}px` : 0 }}>
+				<Box
+					className={`flex flex-col min-h-screen flex-1`}
+					sx={{
+						marginLeft: !isMobile && openDrawers.internal ? `${theme.mixins.drawerWidth}px` : 0,
+						
+					}}
+				>
 					<AppBar drawerOpen={openDrawers.internal} onToggleDrawer={() => toggleDrawer('internal')} />
 
 					<Box sx={{ marginTop: 8 }}>{children}</Box>

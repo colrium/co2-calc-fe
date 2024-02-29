@@ -109,7 +109,7 @@ export default function Overview() {
 			</Box>
 			<Box className="h-8" />
 			<Box className="my-1">
-				<Button size="small" variant="contained" color="error" onClick={() => onDelete(activeRecord?.record?.id)} disabled={activeRecord.isNew}>
+				<Button size="small" variant="contained" color="error" onClick={() => onDelete({id: activeRecord?.record?.id, name: formik.values.name })} disabled={activeRecord.isNew}>
 					Delete assessment
 				</Button>
 			</Box>

@@ -1,9 +1,10 @@
 import { useSetState, useUniqueEffect } from '@/hooks';
 import { useCallback, useMemo } from 'react';
 
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import axios from 'axios';
 import Head from 'next/head';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import pluralize, { singular } from 'pluralize';
 
@@ -15,8 +16,10 @@ const CrudBase = ({ model, ...rest}) => {
 		deleteId: false,
 	});
     const router = useRouter();
+	const searchParams = useSearchParams();
     const {query} = router;
-    const activeRecordId = query?.id?? undefined;
+    const activeRecordId = searchParams.get("id");
+	
 	const Form = useMemo(() => model.Form, [model]);
     const DataGrid = useMemo(() => model.DataGrid, [model]);
     const activeRecord = useMemo(() => {
@@ -43,30 +46,40 @@ const CrudBase = ({ model, ...rest}) => {
 
 
 	
-    const onCloseForm = useCallback(() => {
-		if (query.returnTo) {
-			router.push(decodeURIComponent(query.returnTo));
-		} else {
-			router.push(router.pathname);
-		}
+    const onCloseForm = useCallback((replace=false) => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.delete('id');
+		const uri = query.returnTo? decodeURIComponent(query.returnTo) : `${router.pathname}${params.size > 0 ? '?' : ''}${params.toString()}`;		
+		
+		const action = replace ? router.replace : router.push;
+		action(uri);
 	}, [activeRecordId, query]);
 
-	const confirmDeleteRecord = useCallback(
-		(id = null) => {
-			setState({ confirmDelete: id });
+	
+	const handleDeleteRecord = useCallback(
+		({ id = null, confirm = true, name = null, callback=null } = {}) => {
+			if (id) {
+				if (confirm) {
+					setState({ confirmDeleteId: id, confirmDeleteName: name || id, confirmDeleteCb: callback });
+				} else {
+					setState({ loading: true, lookups: {}, record: null });
+					axios
+						.delete(`${model.endpoint}/${id}`)
+						.then((res) => {
+							setState({ confirmDeleteId: null, confirmDeleteName: null, confirmDeleteCb: null });
+							if (activeRecordId === id) {
+								onCloseForm(true);
+							}
+							if (typeof callback === 'function') {
+								callback();
+							}
+						})
+						.catch((err) => console.error('error fetching record', err))
+						.finally(() => setState({ loading: false }));
+				}
+			}
 		},
 		[activeRecordId, query]
-	);
-
-	const deleteRecord = useCallback(
-		(id = null) => () => {
-			setState({ loading: true, lookups: {}, record: null });
-			axios
-				.delet(`${model.endpoint}/${id}`)
-				.catch((err) => console.error('error fetching record', err))
-				.finally(() => setState({ loading: false }));
-		},
-		[]
 	);
 
     const fetchRecord = useCallback((id) => {
@@ -75,7 +88,6 @@ const CrudBase = ({ model, ...rest}) => {
 			.get(`${model.endpoint}/${id || 'new'}`, {params: {lookups: true}})
 			.then((res) => {
 				const { data: record, lookups } = res.data;
-				console.log(record)
 				setState({ lookups, record });
 			})
 			.catch((err) => console.error('error fetching record', err))
@@ -93,7 +105,7 @@ const CrudBase = ({ model, ...rest}) => {
 			<Head>
 				<title>{activeRecordId ? singular(model.title) : pluralize(model.title)}</title>
 			</Head>
-			{Boolean(activeRecord?.record)
+			{Boolean(activeRecordId)
 				? Boolean(Form) && (
 						<Form
 							loading={state.loading}
@@ -102,25 +114,52 @@ const CrudBase = ({ model, ...rest}) => {
 							subtitle={model.formSubtitle || model.subtitle}
 							onCloseForm={onCloseForm}
 							activeRecord={activeRecord}
-							onDelete={confirmDeleteRecord}
+							onDelete={handleDeleteRecord}
 						/>
 				  )
 				: Boolean(DataGrid) && (
 						<DataGrid
 							title={pluralize(model.gridTitle || model.title)}
 							onOpenForm={onOpenForm}
-							onDelete={confirmDeleteRecord}
+							onDelete={handleDeleteRecord}
 						/>
 				  )}
 
-			<Dialog sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }} maxWidth="xs" open={!!state.deleteId}>
-				<DialogTitle>Confirm Delete</DialogTitle>
-				<DialogContent dividers>{`Delete record with id: ${state.deleteId}`}</DialogContent>
+			<Dialog
+				sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
+				maxWidth="xs"
+				open={!!state.confirmDeleteId}
+			>
+				<DialogTitle color={'warning'}>Delete</DialogTitle>
+				<DialogContent dividers>
+					<Typography variant="body2" className="w-full text-center">
+						Confirm Delete record:
+					</Typography>
+					<Typography variant="subtitle1" className="w-full text-center">
+						{state.confirmDeleteName}
+					</Typography>
+					<Typography variant="body2" color={'orange.main'} className="w-full text-center">
+						This Action is irreversible
+					</Typography>
+				</DialogContent>
 				<DialogActions>
-					<Button autoFocus onClick={() => setState({ deleteId: null })}>
+					<Button
+						autoFocus
+						size="small"
+						variant="contained"
+						color="background"
+						onClick={() => setState({ confirmDeleteId: null })}
+					>
 						Cancel
 					</Button>
-					<Button onClick={deleteRecord(state.deleteId)}>Delete</Button>
+					<Button
+						variant="contained"
+						color="error"
+						size="small"
+						onClick={() => handleDeleteRecord({ id: state.confirmDeleteId, confirm: false, callback: state.confirmDeleteCb}, )}
+					>
+						Delete
+					</Button>
 				</DialogActions>
 			</Dialog>
 		</Box>

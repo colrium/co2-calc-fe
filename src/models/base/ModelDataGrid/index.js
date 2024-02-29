@@ -1,9 +1,12 @@
 import { useMutationsCount, useSetState, useUniqueEffect } from "@/hooks";
 import AddIcon from '@mui/icons-material/Add';
-import { styled } from '@mui/material/styles';
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { alpha, styled } from '@mui/material/styles';
+import { DataGrid, GridActionsCellItem, GridToolbar } from "@mui/x-data-grid";
 import pluralize from "pluralize";
 import { forwardRef, useCallback, useMemo } from "react";
+import ModelGridContextProvider from "./Contex";
 const { Grid, CardActions, CardContent, CardHeader, Card, Button, Box, Typography, Fab, LinearProgress } = require('@mui/material');
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
@@ -71,7 +74,7 @@ const slots = {
 	loadingOverlay: LinearProgress,
 	toolbar: GridToolbar
 };
-const ModelDataGrid = forwardRef(({model, onOpenForm, title}, ref) => {
+const ModelDataGrid = forwardRef(({model, onOpenForm, title, onDelete, loading: parentLoading}, ref) => {
 	const initialColumnVisibilityModel = useMemo(() =>model.getInitialGridColumnVisibilityModel(), [model])
     const [state, setState] = useSetState({
 		loading: false,
@@ -110,8 +113,33 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title}, ref) => {
 
 	useUniqueEffect(fetchData, [loadCount]);
 
+	const columns = useMemo(
+		() => [
+			...model.columns,
+			{
+				field: 'actions',
+				type: 'actions',
+				width: 80,
+				getActions: ({id}) => {					
+					return [
+						<GridActionsCellItem icon={<EditIcon />} onClick={() => onOpenForm(id)} label="Edit" showInMenu />,
+						<GridActionsCellItem
+							icon={<DeleteIcon />}
+							color={'error'}
+							onClick={async () => {
+								 onDelete({ id, callback: fetchData });
+							}}
+							label="Delete"
+							showInMenu
+						/>
+					];}
+			}
+		],
+		[model]
+	);
+
     return (
-		<Box>
+		<ModelGridContextProvider value={{ onDelete }}>
 			<Grid padding={3} container>
 				<Grid item xs={12}>
 					<Card>
@@ -144,12 +172,42 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title}, ref) => {
 										pageSizeOptions={[10, 25, 50, 100]}
 										rows={state.rows}
 										onRowDoubleClick={onRowDoubleClick}
-										columns={model.columns}
+										columns={columns}
 										paginationModel={state.paginationModel}
 										onPaginationModelChange={(paginationModel) => setState({ paginationModel })}
 										slots={slots}
+										slotProps={{
+											panel: {
+												sx: {
+													'& .MuiPaper-root': {
+														backgroundColor: (theme) =>
+															`${theme.palette.background.dark} !important`,
+														backgroundImage: (theme) =>
+															`linear-gradient(${alpha(
+																theme.palette.background.dark,
+																1
+															)}, ${alpha(theme.palette.background.dark, 1)})`,
+														'& select': {
+															backgroundColor: (theme) =>
+																`${theme.palette.background.dark} !important`
+														}
+													}
+												}
+											},
+											menuList: {
+												sx: {
+													backgroundColor: (theme) =>
+														`${theme.palette.background.dark} !important`,
+													backgroundImage: (theme) =>
+														`linear-gradient(${alpha(
+															theme.palette.background.main,
+															0.15
+														)}, ${alpha(theme.palette.background.dark, 0.25)})`
+												}
+											}
+										}}
 										disableRowSelectionOnClick
-										loading={state.loading}
+										loading={state.loading || parentLoading}
 										sx={dataGridSx}
 										paginationMode="server"
 										columnVisibilityModel={state.columnVisibilityModel}
@@ -169,7 +227,7 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title}, ref) => {
 					</Card>
 				</Grid>
 			</Grid>
-		</Box>
+		</ModelGridContextProvider>
 	);
 })
 

@@ -140,9 +140,12 @@ const theme = createTheme({
 				paper: bgStyles
 			}
 		},
+		MuiDataGrid: {
+			panelContent: bgStyles
+		},
 		MuiPopper: {
 			styleOverrides: {
-				root: bgStyles
+				'& .MuiPaper-root': bgStyles
 			}
 		},
 		MuiDialog: {

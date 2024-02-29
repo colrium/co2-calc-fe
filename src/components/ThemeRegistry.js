@@ -3,7 +3,6 @@
 'use client';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
-import { GlobalStyles } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, alpha } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -19,14 +18,11 @@ const blurBgStyles = {
 };
 // hoist to static to avoid recalculation
 const globalStyles = (
-	<GlobalStyles
+	<CssBaseline
 		styles={{
-			'& .MuiPopover-paper': blurBgStyles,
-			'& .MuiAutocomplete-popper': blurBgStyles,
-			'& .MuiDrawer-paper': blurBgStyles,
-			// '& .MuiPopper-root': {
-			// 	'& .MuiTooltip-tooltip': blurBgStyles
-			// }
+			'& .MuiDataGrid-paper': {
+				backgroundColor: (theme) => theme.palette.background.main
+			}
 		}}
 	/>
 );
@@ -76,7 +72,8 @@ export default function ThemeRegistry(props) {
 	return (
 		<CacheProvider value={cache}>
 			<ThemeProvider theme={theme}>
-				<CssBaseline />
+				{/* <CssBaseline /> */}
+				{globalStyles}
 				<LocalizationProvider dateAdapter={AdapterDayjs}>{children}</LocalizationProvider>
 			</ThemeProvider>
 		</CacheProvider>

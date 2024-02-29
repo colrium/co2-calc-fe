@@ -2,13 +2,14 @@ import { useMutationsCount, useSetState } from "@/hooks";
 import axios from "axios";
 import dayjs from "dayjs";
 import { forwardRef, useCallback, useMemo } from "react";
-import FieldMappers from "./FieldMappers";
 import ModelFormProvider from './ModelFormContext';
 
-const { Grid, CardActions, CardContent, CardHeader, Card, Button, Box, Typography } = require('@mui/material');
+const { Grid, CardActions, CardContent, CardHeader, Card, Button, Box, Typography, CircularProgress, Skeleton } = require('@mui/material');
 const { useFormik } = require("formik");
 
 const noop = () => {}
+const get = () => {};
+
 
 const BaseForm = forwardRef(({
 	activeRecord,
@@ -96,7 +97,7 @@ const BaseForm = forwardRef(({
 		onSubmit: handleSubmit,
 		validationSchema: validationSchema
 	});
-	const fields = useMemo(() => {
+	/* const fields = useMemo(() => {
 		let arr = []
 		if (Array.isArray(model.fields)) {
 			arr = model.fields.filter(entry => entry.field !== model.idField && !entry.excludeOnForm).map((field) => {
@@ -131,28 +132,40 @@ const BaseForm = forwardRef(({
 			});
 		}
 		return arr
-	}, [mutationCount]);
+	}, [mutationCount]); */
+	const fields = useMemo(() => model.evalInputComponents({ activeRecord }), [mutationCount]);
 	const { errors, touched, values, isSubmitting, getFieldProps, isValid } = formik;
 	return (
 		<ModelFormProvider value={{ ...state, formik, model, activeRecord, validationSchema, submit: formik.handleSubmit }}>
-			<Grid padding={3} container autoComplete="off" noValidate {...formProps} component={'form'} onSubmit={formik.handleSubmit}>
+			<Grid
+				padding={3}
+				container
+				autoComplete="off"
+				noValidate
+				{...formProps}
+				component={'form'}
+				onSubmit={formik.handleSubmit}
+			>
 				<Grid item xs={12}>
 					<Card>
 						<CardHeader title={title} subheader={subtitle} />
 						<CardContent>
 							<Grid container columnGap={1} rowGap={3}>
-								{fields.map(({ wrapperProps, name, Component, helperText, ...fieldProps }, i) => (
-									<Grid item xs={12} {...wrapperProps} key={`input-${i}`}>
-									
-										<Component
-											{...fieldProps}
-											{...getFieldProps(name)}
-											error={Boolean(touched[name] && errors[name])}
-											helperText={(touched[name] && errors[name]) || helperText}
-											name={name}
-										/>
-									</Grid>
-								))}
+								{!loading &&
+									fields.map(({ wrapperProps, name, Component, helperText, ...fieldProps }, i) => (
+										<Grid item xs={12} {...wrapperProps} key={`input-${i}`}>
+											<Component
+												{...fieldProps}
+												{...getFieldProps(name)}
+												error={Boolean(touched[name] && errors[name])}
+												helperText={(touched[name] && errors[name]) || helperText}
+												name={name}
+											/>
+										</Grid>
+									))}
+								{loading && <Grid item xs={12} className="p-16 gap-8 flex justify-center items-center">
+									<CircularProgress size={20}  className="my-8" />
+								</Grid>}
 							</Grid>
 							{/* <Box className="my-8">
 								<Typography variant="h5" gutterBottom>

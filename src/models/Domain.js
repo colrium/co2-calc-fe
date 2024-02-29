@@ -16,7 +16,8 @@ export default class Domain extends BaseModel {
 			header: 'Description',
 			multiline: true,
 			minRows: 4,
-			maxRows: 6
+			maxRows: 6,
+			hide: true
 		},
 		{
 			field: 'industryId',
@@ -25,10 +26,23 @@ export default class Domain extends BaseModel {
 			inputType: 'select',
 			lookup: 'Industries'
 		},
+
 		{
 			field: 'industry',
 			header: 'Industry',
-			excludeOnForm: true,
+			excludeOnForm: true
+		},
+		{
+			field: 'userId',
+			header: 'User',
+			excludeOnGrid: true,
+			inputType: 'select',
+			lookup: 'Users'
+		},
+		{
+			field: 'user',
+			header: 'User',
+			excludeOnForm: true
 		},
 		{
 			field: 'email',

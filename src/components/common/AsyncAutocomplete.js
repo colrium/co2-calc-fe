@@ -346,19 +346,20 @@ const AsyncAutocomplete = ({
 			};
 			return (
 				<TextField
-					name={name}
+					// name={name}
 					error={!!error || !!state.error}
 					helperText={state.error || helperText}
 					FormHelperTextProps={{ component: 'span', ...textFieldProps.FormHelperTextProps }}
 					required={required}
 					{...textFieldProps}
 					{...params}
+					value={params?.value || null}
 					label={label}
 					variant={variant}
 					inputProps={{
-						autoComplete: 'new-password',
+						autocomplete: 'new-password',
 						form: {
-							autoComplete: 'off'
+							autocomplete: 'off'
 						},
 						...textFieldProps?.inputProps,
 						...params.inputProps,

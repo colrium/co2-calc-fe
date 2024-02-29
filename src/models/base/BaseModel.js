@@ -3,6 +3,7 @@ import { forwardRef } from 'react';
 import * as Yup from 'yup';
 import CrudBase from './CrudBase';
 import BaseForm from './Form';
+import FieldMappers from './Form/FieldMappers';
 import ModelDataGrid from './ModelDataGrid';
 export default class BaseModel {
 	idField = 'id';
@@ -31,17 +32,16 @@ export default class BaseModel {
 				field.name = field.name || field.field;
 				field.label = field.label || field.header;
 				if (!field.excludeOnGrid) {
-					columns.push(field)
+					columns.push(field);
 				}
 				if (!field.excludeOnForm) {
 					inputFields.push(field);
 				}
 			});
-		
 		}
 		Object.assign(this, config);
 		this.columns = columns;
-		this.inputFields = inputFields; 
+		this.inputFields = inputFields;
 		this.Form = config?.Form || this.createForm();
 		this.CrudBase = this.createCrudBase();
 		this.DataGrid = this.createDataGrid();
@@ -50,12 +50,12 @@ export default class BaseModel {
 		const columns = this.columns || [];
 		return columns.reduce((acc, field) => {
 			let hidden = false;
-			if ('hide' in field ) {
-				hidden = Boolean(field.hide);				
+			if ('hide' in field) {
+				hidden = Boolean(field.hide);
 			}
-			
+
 			acc[field.field] = !hidden;
-			return acc
+			return acc;
 		}, {});
 	}
 	getValidationSchema({ activeRecord }) {
@@ -128,7 +128,52 @@ export default class BaseModel {
 			return res.data;
 		});
 	}
-
+	evalInputComponents({ activeRecord, include=[], exclude=[] }) {
+		let arr = [];
+		const model = this;
+		if (Array.isArray(model.fields)) {
+			arr = model.fields
+				.filter((entry) => {
+					let includeField = entry.name !== model.idField && !entry.excludeOnForm;
+					if (Array.isArray(include) && include.length) {
+						includeField = include.includes(entry.name);
+					}
+					if (includeField && Array.isArray(exclude) && exclude.length) {
+						includeField = !exclude.includes(entry.name);
+					}
+					return includeField;
+				})
+				.map((field) => {
+					let fieldConfig = {
+						name: field.field,
+						label: field.header
+					};
+					const inputType = field.inputType || field.type;
+					let getComponent = inputType in FieldMappers ? FieldMappers[inputType] : FieldMappers.invalid;
+					if (field.lookup) {
+						if (typeof field.lookup === 'string') {
+							fieldConfig.valueOptions = activeRecord?.lookups?.[field.lookup] || [];
+						}
+						if (!field.inputType) {
+							getComponent = FieldMappers.select;
+						}
+					}
+					if (field.valueOptions) {
+						if (typeof field.valueOptions === 'string') {
+							fieldConfig.valueOptions = activeRecord?.lookups?.[field.options] || [];
+						}
+						if (!field.inputType) {
+							getComponent = FieldMappers.radio;
+						}
+					}
+					if (field.secure) {
+						getComponent = FieldMappers.password;
+					}
+					return { ...field, ...fieldConfig, Component: getComponent(fieldConfig) };
+				});
+		}
+		return arr;
+	}
 	createDataGrid() {
 		return forwardRef((props, ref) => <ModelDataGrid {...props} model={this} ref={ref} />);
 	}
