@@ -1,9 +1,11 @@
 import { useMutationsCount, useSetState } from "@/hooks";
+import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
+import { LoadingButton } from "@mui/lab";
 import axios from "axios";
 import dayjs from "dayjs";
 import { forwardRef, useCallback, useMemo } from "react";
 import ModelFormProvider from './ModelFormContext';
-
 const { Grid, CardActions, CardContent, CardHeader, Card, Button, Box, Typography, CircularProgress, Skeleton } = require('@mui/material');
 const { useFormik } = require("formik");
 
@@ -31,6 +33,13 @@ const BaseForm = forwardRef(({
 	const handleSubmit = useCallback(
 		async (values, formikBag) => {
 			setState({loading: true})
+			if (typeof model.customizeSaveData === 'function') {
+				const customizedValues = await model.customizeSaveData({ values, activeRecord, formikBag });
+				values = {
+					...values,
+					...customizedValues
+				};
+			}
 			try {
 				if (activeRecord.isNew) {
 					await axios.post(model.endpoint, values);
@@ -97,42 +106,6 @@ const BaseForm = forwardRef(({
 		onSubmit: handleSubmit,
 		validationSchema: validationSchema
 	});
-	/* const fields = useMemo(() => {
-		let arr = []
-		if (Array.isArray(model.fields)) {
-			arr = model.fields.filter(entry => entry.field !== model.idField && !entry.excludeOnForm).map((field) => {
-				let fieldConfig = {
-					name: field.field,
-					label: field.header,
-				}
-				const inputType = field.inputType || field.type
-				let getComponent = inputType in FieldMappers? FieldMappers[inputType] : ({name}) => () => (<Box><Typography color="error">
-					{`Invalid Field Mapper for ${name} field`}
-				</Typography></Box>);
-				if (field.lookup) {
-					if (typeof field.lookup === 'string') {
-						fieldConfig.valueOptions = activeRecord?.lookups?.[field.lookup] || [];
-					}
-					if (!field.inputType) {
-						getComponent = FieldMappers.select;
-					}
-				}
-				if (field.valueOptions) {
-					if (typeof field.valueOptions === 'string') {
-						fieldConfig.valueOptions = activeRecord?.lookups?.[field.options] || [];
-					}
-					if (!field.inputType) {
-						getComponent = FieldMappers.radio;
-					}
-				}
-				if (field.secure) {
-					getComponent = FieldMappers.password;
-				}
-				return { ...field, ...fieldConfig, Component: getComponent(fieldConfig) };
-			});
-		}
-		return arr
-	}, [mutationCount]); */
 	const fields = useMemo(() => model.evalInputComponents({ activeRecord }), [mutationCount]);
 	const { errors, touched, values, isSubmitting, getFieldProps, isValid } = formik;
 	return (
@@ -163,28 +136,48 @@ const BaseForm = forwardRef(({
 											/>
 										</Grid>
 									))}
-								{loading && <Grid item xs={12} className="p-16 gap-8 flex justify-center items-center">
-									<CircularProgress size={20}  className="my-8" />
-								</Grid>}
+								{loading && (
+									<Grid item xs={12} className="p-16 gap-8 flex justify-center items-center">
+										<CircularProgress size={20} className="my-8" />
+									</Grid>
+								)}
 							</Grid>
-							{/* <Box className="my-8">
-								<Typography variant="h5" gutterBottom>
-									Values
-								</Typography>
-								<Typography>{JSON.stringify(values)}</Typography>
-							</Box> */}
 						</CardContent>
-						<CardActions className={`py-4`} {...cardActionsProps}>
-							<Button size="small" type="submit" variant="contained" color="success">
-								Save
-							</Button>
-							{typeof onCloseForm === 'function' && (
-								<Button size="small" type="button" onClick={onCloseForm} variant="contained" color="error">
-									Cancel
-								</Button>
-							)}
-							{cardActions}
-						</CardActions>
+						{!loading ? (
+							<CardActions className={`py-4`} {...cardActionsProps}>
+								<LoadingButton
+									loadingPosition="start"
+									startIcon={<SaveIcon />}
+									loading={state.loading}
+									disabled={state.loading}
+									size="small"
+									type="submit"
+									variant="contained"
+									color="success"
+								>
+									Save
+								</LoadingButton>
+								{typeof onCloseForm === 'function' && (
+									<Button
+										size="small"
+										type="button"
+										disabled={state.loading}
+										onClick={onCloseForm}
+										variant="contained"
+										color="error"
+										startIcon={<CloseIcon fontSize="inherit"/>}
+									>
+										Cancel
+									</Button>
+								)}
+								{cardActions}
+							</CardActions>
+						) : (
+							<CardActions className={`py-4`} {...cardActionsProps}>
+								<Skeleton variant="rounded" width={64} height={48} />
+								<Skeleton variant="rounded" width={64} height={48} />
+							</CardActions>
+						)}
 					</Card>
 				</Grid>
 			</Grid>

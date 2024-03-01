@@ -152,6 +152,16 @@ const theme = createTheme({
 			styleOverrides: {
 				paper: blurBgStyles
 			}
+		},
+		MuiPickersPopper: {
+			styleOverrides: {
+				paper: blurBgStyles
+			}
+		},
+		MuiDataGrid: {
+			styleOverrides: {
+				menu: bgDarkStyles
+			}
 		}
 		// MuiBackdrop: {
 		// 	styleOverrides: {

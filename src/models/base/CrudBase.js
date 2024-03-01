@@ -46,14 +46,19 @@ const CrudBase = ({ model, ...rest}) => {
 
 
 	
-    const onCloseForm = useCallback((replace=false) => {
-		const params = new URLSearchParams(searchParams.toString());
-		params.delete('id');
-		const uri = query.returnTo? decodeURIComponent(query.returnTo) : `${router.pathname}${params.size > 0 ? '?' : ''}${params.toString()}`;		
-		
-		const action = replace ? router.replace : router.push;
-		action(uri);
-	}, [activeRecordId, query]);
+    const onCloseForm = useCallback(
+		(replace = false) => {
+			const params = new URLSearchParams(searchParams.toString());
+			params.delete('id');
+			const uri = query.returnTo
+				? decodeURIComponent(query.returnTo)
+				: `${router.pathname}${params.size > 0 ? '?' : ''}${params.toString()}`;
+
+			const action = replace ? router.replace : router.push;
+			action(uri);
+		},
+		[activeRecordId, query, searchParams]
+	);
 
 	
 	const handleDeleteRecord = useCallback(

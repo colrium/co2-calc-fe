@@ -160,14 +160,21 @@ export default class FieldMappers {
 		forwardRef((props, ref) => {
 			const mutationCount = useMutationsCount([props]);
 			const combinedProps = useMemo(() => ({ ...config, ...props }), [mutationCount]);
-			const { label, required, valueOptions: options, ...rest } = combinedProps;
+			const { label, required, valueOptions: options, value: formValue, ...rest } = combinedProps;
+			
+			const value = useMemo(() => formValue? formValue : Array.isArray(options) && options.length && options[0].value? options[0].value : null, [formValue, options]);
 			return (
 				<FormControl>
 					<FormLabel required={required}>{label}</FormLabel>
-					<RadioGroup {...rest} ref={ref}>
+					<RadioGroup {...rest} value={value} ref={ref}>
 						{Array.isArray(options) &&
-							options.map(({ value, label }, i) => (
-								<FormControlLabel value={value} control={<Radio />} label={label} key={`option-${i}`} />
+							options.map(({ value: optionValue, label }, i) => (
+								<FormControlLabel
+									value={optionValue}
+									control={<Radio />}
+									label={label}
+									key={`option-${i}`}
+								/>
 							))}
 					</RadioGroup>
 				</FormControl>

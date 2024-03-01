@@ -8,7 +8,7 @@ export default class ActivityType extends BaseModel {
 			hide: true
 		},
 		{
-			field: 'name',
+			field: 'label',
 			header: 'Name',
 			width: 240,
 			required: true

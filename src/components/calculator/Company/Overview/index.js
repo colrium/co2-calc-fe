@@ -1,7 +1,6 @@
 /** @format */
 
 import AsyncAutocomplete from '@/components/common/AsyncAutocomplete';
-import FieldMappers from '@/models/base/Form/FieldMappers';
 import { Box, TextField, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -9,7 +8,7 @@ import dayjs from 'dayjs';
 import { useCallback, useMemo } from 'react';
 import { useCalculatorForm } from '../../CalculatorProvider';
 
-const Select = FieldMappers.select;
+
 export default function Overview() {
 	const { formik, activeRecord, onDelete } = useCalculatorForm();
 	const domains = useMemo(() => (activeRecord.lookups?.Domains || []), [activeRecord.lookups]);
@@ -93,7 +92,6 @@ export default function Overview() {
 						}
 					}}
 				/>
-
 				<Box className="h-8" />
 				<AsyncAutocomplete
 					label={'Domain'}
@@ -107,9 +105,15 @@ export default function Overview() {
 					helperText={formik.touched.domainId && formik.errors.domainId}
 				/>
 			</Box>
-			<Box className="h-8" />
+			<Box className="h-20" />
 			<Box className="my-1">
-				<Button size="small" variant="contained" color="error" onClick={() => onDelete({id: activeRecord?.record?.id, name: formik.values.name })} disabled={activeRecord.isNew}>
+				<Button
+					size="small"
+					variant="contained"
+					color="error"
+					onClick={() => onDelete({ id: activeRecord?.record?.id, name: formik.values.name })}
+					disabled={activeRecord.isNew}
+				>
 					Delete assessment
 				</Button>
 			</Box>
