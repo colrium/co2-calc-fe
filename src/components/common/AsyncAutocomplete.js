@@ -86,13 +86,13 @@ const AsyncAutocomplete = ({
 	const isMountedRef = React.useRef(false);
 	const initialValueRef = React.useRef(value);
 	const keywordRef = React.useRef({ value: '', reason: null });
+	const freeSoloOptionsRef = React.useRef([]);
 	const [state, setState] = useSetState({
 		loading: false,
 		page: 1,
 		pages: 1,
 		keyword: null,
 		options: [],
-		freeSoloOptions: [],
 		value: multiple ? [] : undefined,
 		error: null
 	});
@@ -111,24 +111,26 @@ const AsyncAutocomplete = ({
 							(option && option.constructor === {}.constructor && k in option && option[k] === v)
 						) {
 							return true;
+							break;
 						}
 					}
 				}
 				return false;
 			});
 		},
-		[state.options, state.freeSoloOptions]
+		[state.options]
 	);
 
 	const applyOnFreeSoloValueEffect = React.useCallback(
 		async (newValue, reason, details) => {
 			let onFreeSoloValueEffect = null;
 			let options = [];
+			let newOption = JSON.parse(JSON.stringify(details?.option));
 			try {
 				options = JSON.parse(JSON.stringify(state.options));
 			} catch (error) {}
 
-			if (freeSolo && reason === 'selectOption' && !!newValue) {
+			if (newOption.freeSoloLabel && reason === 'selectOption' && !!newValue) {
 				const option = JSON.parse(JSON.stringify(details?.option));
 				let indexOfOption = findIndexOfOption(option);
 				if (indexOfOption === -1) {
@@ -137,30 +139,51 @@ const AsyncAutocomplete = ({
 					onFreeSoloValueEffect = onCreateOption;
 					options.unshift(option);
 				}
-				if (typeof onFreeSoloValueEffect === 'function') {
-					setState({ loading: true });
-					Promise.all([onFreeSoloValueEffect({ option, options, deps: optionsArgs })]).finally(() =>
-						setState({ loading: false })
-					);
+				if (indexOfOption === -1 && typeof onFreeSoloValueEffect === 'function') {
+					freeSoloOptionsRef.current = options;
+					setState((prev) => ({ loading: true }));
+
+					await Promise.all([onFreeSoloValueEffect({ option, options, deps: optionsArgs })])
+						.then((res) => {
+							if (typeof res[0] === 'object') {
+								if (indexOfOption === -1) {
+									indexOfOption = 0;
+								}
+								newOption = res[0];
+								options[indexOfOption] = newOption;
+							}
+							setState({ options, loading: false });
+							return newOption;
+						})
+						.catch(() => {
+							setState({ loading: false });
+							return newOption;
+						});
+				} else {
+					freeSoloOptionsRef.current = options;
 				}
 			}
+			return multiple ? [...value, newOption] : newOption; 
+
 		},
 		[freeSolo, multiple, onCreateOption, onRemoveOption, state.options?.length, optionsArgs]
 	);
 
 	const handleOnChange = React.useCallback(
-		(event, newValue, reason, details) => {
+		async (event, newValue, reason, details) => {
+			
 			if (freeSolo) {
 				try {
-					applyOnFreeSoloValueEffect(newValue, reason, details);
+					newValue = await applyOnFreeSoloValueEffect(newValue, reason, details);
 				} catch (error) {
 					console.error('Apply FreeSolo Value Effect error', error);
 				}
 			}
+			newValue = typeof valueFormatter === 'function' ? valueFormatter(newValue, context) : newValue;
 			if (typeof onChange === 'function') {
 				onChange(
 					event,
-					typeof valueFormatter === 'function' ? valueFormatter(newValue, context) : newValue,
+					newValue,
 					reason,
 					details,
 					optionsArgs
@@ -219,40 +242,7 @@ const AsyncAutocomplete = ({
 		[filterOptions, freeSolo, state.options]
 	);
 
-	const derivedValue = React.useMemo(() => {
-		let val = multiple ? [] : null; //Either empty array or null as this should be used as a controlled input
-		let parsedValue = typeof valueParser === 'function' ? valueParser(value, options) : value;
-		let freeSoloOptions = [];
-		if (state.options?.length > 0) {
-			if (multiple) {
-				if (!Array.isArray(parsedValue) && value !== undefined) {
-					parsedValue = [parsedValue];
-				}
-				if (Array.isArray(parsedValue)) {
-					for (const item of parsedValue) {
-						const indexOfOption = findIndexOfOption(item);
-						if (indexOfOption !== -1) {
-							val.push(state.options[indexOfOption]);
-						} else if (freeSolo && !!item) {
-							freeSoloOptions.push({ value: item, label: item });
-						}
-					}
-				}
-			} else {
-				const indexOfOption = findIndexOfOption(parsedValue);
-				if (indexOfOption !== -1) {
-					val = state.options[indexOfOption];
-				} else if (freeSolo && !!parsedValue) {
-					freeSoloOptions.push({ value: parsedValue, label: parsedValue });
-				}
-			}
-			if (freeSoloOptions.length > 0) {
-				setState((prevState) => ({ options: freeSoloOptions.concat(prevState.options) }));
-			}
-		}
-
-		return val;
-	}, [value, state.options?.length, multiple, valueParser]);
+	
 
 	const deriveOptions = React.useCallback(
 		({ append = false, prepend = false, deriverArgs = {}, deriver = [] } = {}) => {
@@ -304,6 +294,47 @@ const AsyncAutocomplete = ({
 		},
 		[context, state.page]
 	);
+
+	const derivedValue = React.useMemo(() => {
+		let val = multiple ? [] : null; //Either empty array or null as this should be used as a controlled input
+		let parsedValue = typeof valueParser === 'function' ? valueParser(value, options) : value;
+		let freeSoloOptions = freeSoloOptionsRef.current || [];
+		if (state.options?.length > 0) {
+			if (multiple) {
+				if (!Array.isArray(parsedValue) && value !== undefined) {
+					parsedValue = [parsedValue];
+				}
+				if (Array.isArray(parsedValue)) {
+					for (const item of parsedValue) {
+						const indexOfOption = findIndexOfOption(item);
+						if (indexOfOption !== -1) {
+							val.push(state.options[indexOfOption]);
+						} else if (freeSolo && item) {
+							if (typeof item === 'object') {
+								freeSoloOptions.push(item);
+							} else {
+								freeSoloOptions.push({ value: item, label: item });
+							}
+						}
+					}
+				}
+			} else {
+				const indexOfOption = findIndexOfOption(parsedValue);
+				if (indexOfOption !== -1) {
+					val = state.options[indexOfOption];
+				} else if (freeSolo && !!parsedValue) {
+					freeSoloOptions.push({ value: parsedValue, label: parsedValue });
+				}
+			}
+			freeSoloOptionsRef.current = freeSoloOptions;
+			/* if (freeSoloOptions.length > 0) {
+				
+				// setState((prevState) => ({ options: freeSoloOptions.concat(prevState.options) }));
+			} */
+		}
+
+		return val;
+	}, [value, multiple, valueParser, state.options]);
 
 	const handleOnRefresh = React.useCallback(
 		(event) => {
@@ -409,11 +440,13 @@ const AsyncAutocomplete = ({
 		return equal;
 	};
 
-	const renderOption = (params, option) => (
-		<li {...params} key={`key-${params.id}`}>
-			{option.freeSoloLabel || option.label}
-		</li>
-	);
+	const renderOption = (params, option) => {
+		return (
+			<li {...params} key={`key-${params.id}`}>
+				{option.freeSoloLabel || option.label}
+			</li>
+		);
+	};
 
 	const handleServerFilterChange = React.useCallback(
 		debounce(1000, () => {
@@ -444,6 +477,13 @@ const AsyncAutocomplete = ({
 		deriveOptions(opts);
 	}, [optionsArgs, options]);
 
+	useUniqueEffect(() => {
+		
+	}, [value]);
+
+	
+console.log('derivedValue', derivedValue);
+console.log('value', value);
 	return (
 		<Autocomplete
 			renderInput={renderInput}

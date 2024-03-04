@@ -13,7 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Link from 'next/link';
 import * as React from 'react';
@@ -72,7 +72,7 @@ const ElevationScroll = (props) => {
 			borderBottomWidth: `1px`,
 			...(trigger
 				? {
-						backgroundColor: `rgba(0, 3, 66, 0.7) !important`,
+						backgroundColor: `${alpha(theme.palette.background.main, 0.7)} !important`,
 						WebkitBackdropFilter: 'blur(5px) !important',
 						backdropFilter: 'blur(5px) !important'
 				  }

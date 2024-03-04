@@ -1,5 +1,5 @@
 import ThemeRegistry from '@/components/ThemeRegistry';
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
@@ -26,9 +26,9 @@ export default function ExternalLayout({ children }) {
 					onOpen={() => toggleDrawer('external', true)}
 					onClose={() => toggleDrawer('external', false)}
 				/>
-				<Container disableGutters maxWidth="xl" sx={{ marginTop: 8 }}>
+				<Box  sx={{ marginTop: 8 }}>
 					{children}
-				</Container>
+				</Box>
 			</Box>
 		</ThemeRegistry>
 	);

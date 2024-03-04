@@ -9,6 +9,7 @@ import {
 	mdiMoleculeCo2,
 	mdiViewDashboard
 } from '@mdi/js';
+
 export const publicRoutes = [
 	{ pathname: '/', label: 'Home' },
 	{ pathname: '/how-it-works', label: 'How it works' },
@@ -44,7 +45,7 @@ export const scopes = {
 	scope3ds: { name: 'scope3ds', label: 'Scope 3 Downstream', color: theme.palette.tertiary.main, colorName: 'tertiary' }
 };
 export const emissionTypes = {
-	biogenic: { name: 'biogenic', label: 'Biogenic', color: theme.palette.cyan.main, colorName: 'cyan' },
+	biogenic: { name: 'biogenic', label: 'Biogenic', color: theme.palette.orange.main, colorName: 'orange' },
 	fossil: { name: 'fossil', label: 'Fossil', color: theme.palette.pink.main, colorName: 'pink' }
 };
 export const title = 'Carbon Footprint Calculator';

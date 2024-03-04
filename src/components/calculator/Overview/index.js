@@ -258,7 +258,7 @@ export default function Overview({ name, options = [] }) {
 										}
 									}}
 								>
-									<PieCenterLabel>By Scope</PieCenterLabel>
+									<PieCenterLabel>By Type</PieCenterLabel>
 								</PieChart>
 							</Box>
 						)}

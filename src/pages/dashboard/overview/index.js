@@ -166,7 +166,7 @@ export default function OverviewPage() {
 								subheader={assessment?.year}
 							/>
 							<CardContent className="flex-1 flex-col">
-								<Typography variant="h3" color="primary">
+								<Typography variant="h3" color="secondary">
 									{assessment.total?.toFixed(1)}
 								</Typography>
 								<Typography className="flex-1">
@@ -179,7 +179,7 @@ export default function OverviewPage() {
 							<CardActions disableSpacing>
 								{assessment && 'id' in assessment ? (
 									<Button
-										color="secondary"
+										color="primary"
 										aria-label="View Assessment"
 										endIcon={<ArrowForwardIcon />}
 										component={Link}
@@ -190,7 +190,7 @@ export default function OverviewPage() {
 									</Button>
 								) : (
 									<Button
-										color="secondary"
+										color="primary"
 										aria-label="View Assessment"
 										endIcon={<ArrowForwardIcon />}
 										onClick={handleOnGoToAssessment('company', i)}

@@ -1,35 +1,48 @@
 /** @format */
 
 'use client';
+import { selectAuth } from '@/store/authSlice';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider, alpha } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useServerInsertedHTML } from 'next/navigation';
-import { useState } from 'react';
-import theme from './theme';
+import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import lightTheme from './theme';
+import darkTheme from './theme-dark';
 
-const blurBgStyles = {
-	backgroundColor: (theme) => `${alpha(theme.palette.background.dark, 0.25)} !important`,
-	WebkitBackdropFilter: (theme) => [`blur(${theme.spacing()})`, `blur(${theme.spacing()})`],
-	backdropFilter: (theme) => `blur(${theme.spacing()})`
-};
 // hoist to static to avoid recalculation
-const globalStyles = (
-	<CssBaseline
-		styles={{
-			'& .MuiDataGrid-paper': {
-				backgroundColor: (theme) => theme.palette.background.main
-			}
-		}}
-	/>
-);
+
 // This implementation is from emotion-js
 // https://github.com/emotion-js/emotion/issues/2928#issuecomment-1319747902
 export default function ThemeRegistry(props) {
 	const { options, children } = props;
+	const { themeMode } = useSelector(selectAuth);
+	const theme = themeMode === 'light' ? lightTheme : darkTheme;
+	const globalStyles = useMemo(
+		() => (
+			<CssBaseline
+				styles={{
+					body: {
+						backgroundImage: `linear-gradient(to bottom, ${theme.palette.background.main}, ${theme.palette.background.dark})`
+					},
+					'& .MuiListItemIcon-root': {
+						color: theme.palette.text.secondary,
+						'& svg': {
+							fill: `${theme.palette.text.secondary} !important`
+						}
+					},
+					'& .MuiDataGrid-paper': {
+						backgroundColor: (theme) => theme.palette.background.main
+					}
+				}}
+			/>
+		),
+		[themeMode, theme]
+	);
 	const [{ cache, flush }] = useState(() => {
 		const cache = createCache(options);
 		cache.compat = true;
@@ -72,7 +85,15 @@ export default function ThemeRegistry(props) {
 	return (
 		<CacheProvider value={cache}>
 			<ThemeProvider theme={theme}>
-				{/* <CssBaseline /> */}
+				<style global jsx>{`
+					body {
+						background-image: linear-gradient(
+							to bottom,
+							${theme.palette.background.main},
+							${theme.palette.background.dark}
+						);
+					}
+				`}</style>
 				{globalStyles}
 				<LocalizationProvider dateAdapter={AdapterDayjs}>{children}</LocalizationProvider>
 			</ThemeProvider>

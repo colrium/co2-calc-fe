@@ -64,8 +64,8 @@ export default function MainDrawer({ open, onClose, onOpen }) {
 					{privateRoutes.map(({ label, pathname, icon }, index) => (
 						<ListItem key={`route-${index}`} disablePadding>
 							<ListItemButton component={Link} href={pathname} selected={pathname === router.pathname}>
-								<ListItemIcon>
-									<Icon path={icon} size={1} />
+								<ListItemIcon color="inherit">
+									<Icon color={theme.palette.text.secondary} path={icon} size={1} />
 								</ListItemIcon>
 								<ListItemText primary={label} />
 							</ListItemButton>
@@ -79,7 +79,7 @@ export default function MainDrawer({ open, onClose, onOpen }) {
 							<ListItem key={`admin-route-${index}`} disablePadding>
 								<ListItemButton component={Link} href={pathname} selected={pathname === router.pathname}>
 									<ListItemIcon>
-										<Icon path={icon} size={1} />
+										<Icon color={theme.palette.text.secondary} path={icon} size={1} />
 									</ListItemIcon>
 									<ListItemText primary={label} />
 								</ListItemButton>

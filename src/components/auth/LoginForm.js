@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 import { setAuthToken, setAuthUser, setLoggedIn } from '@/store/authSlice';
 import { LoadingButton } from '@mui/lab';
-import { Box, Checkbox, FormControlLabel, Link, Stack, TextField } from '@mui/material';
+import { Box, Link, Stack, TextField } from '@mui/material';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
@@ -105,10 +105,11 @@ const LoginForm = ({ setAuth }) => {
 
 					<Box component={motion.div} initial={{ opacity: 0, y: 20 }} animate={animate}>
 						<Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-							<FormControlLabel
+							{/* <FormControlLabel
 								control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
 								label="Remember me"
-							/>
+							/> */}
+							<Box/>
 
 							<Link
 								component={NextLink}

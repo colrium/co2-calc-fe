@@ -81,16 +81,16 @@ export default class BaseModel {
 				validationConfig = validationConfig.required(`${label} is required`);
 			}
 			if (min) {
-				validationConfig = validationConfig.min(`${label} minimum is ${min}`);
+				validationConfig = validationConfig.min(min, `${label} must be at least  ${min} characters`);
 			}
 			if (max) {
-				validationConfig = validationConfig.max(`${label} maximum is ${max}`);
+				validationConfig = validationConfig.max(max, `${label} must be at most ${max} characters`);
 			}
 			if (maxLength) {
-				validationConfig = validationConfig.max(`${label} maximum legth is ${maxLength}`);
+				validationConfig = validationConfig.max(maxLength, `${label} must be at most ${max} characters`);
 			}
 			if (minLength) {
-				validationConfig = validationConfig.min(`${label} minimum length is ${minLength}`);
+				validationConfig = validationConfig.min(minLength, `${label} must be at least  ${min} characters`);
 			}
 			if (validate) {
 				if (typeof validate === 'object') {
@@ -98,12 +98,12 @@ export default class BaseModel {
 				} else if (typeof validate === 'string') {
 					const [validationName, validateFieldName] = validate.split(':');
 					const validateField = validateFieldName
-						? fields.find((entry = entry.name === validateFieldName))
+						? fields.find((entry => entry.name === validateFieldName))
 						: undefined;
 					switch (validationName) {
-						case 'matches':
+						case 'match':
 							validationConfig = validationConfig.oneOf(
-								[Yup.ref('validateFieldName'), null, undefined],
+								[Yup.ref(validateFieldName), null, undefined],
 								`${label} should match ${validateField?.label || validateFieldName}`
 							);
 							break;

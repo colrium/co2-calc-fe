@@ -220,10 +220,24 @@ export default function Summary() {
 				Values above will update as you add activity data.
 			</Typography>
 			<Box className="py-4 flex item-center justify-center gap-4">
-				<Button startIcon={<SaveIcon />} onClick={formik.handleSubmit} variant="contained" type="submit">
+				<Button
+					startIcon={<SaveIcon />}
+					onClick={formik.handleSubmit}
+					size="small"
+					variant="contained"
+					color="success"
+					type="button"
+				>
 					Save
 				</Button>
-				<Button startIcon={<CloseIcon />} variant="contained" type="button" onClick={onCloseForm} color="error">
+				<Button
+					startIcon={<CloseIcon />}
+					variant="contained"
+					type="button"
+					size="small"
+					onClick={onCloseForm}
+					color="error"
+				>
 					Cancel
 				</Button>
 			</Box>

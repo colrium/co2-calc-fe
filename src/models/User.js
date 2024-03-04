@@ -41,7 +41,7 @@ export default class User extends BaseModel {
 			excludeOnGrid: true
 		},
 		{
-			field: 'password',
+			field: 'confirmPassword',
 			header: 'Confirm Password',
 			secure: true,
 			excludeOnGrid: true,

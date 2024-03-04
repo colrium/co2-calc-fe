@@ -43,10 +43,25 @@ export default function AddActivity({ name, label, scope }) {
 
 	const handleOnChange = (e, selections) => {
 		selections = selections.map(
-			({ id, activityType, name, emissionType, unit, description, emissionFactor, emission, year }) => ({
+			({
 				id,
 				activityType,
 				name,
+				emissionType,
+				unit,
+				description,
+				emissionFactor,
+				emission,
+				year,
+				value,
+				label: label,
+				...rest
+			}) => ({
+				id: id || value,
+				activityType,
+				name: name || value,
+				label: name || label,
+				value: id || value || label,
 				emissionType: emissionType || 'biogenic',
 				unit,
 				description: description || '',
@@ -54,12 +69,13 @@ export default function AddActivity({ name, label, scope }) {
 				emission: 0,
 				year: year,
 				amount: 0,
-				description: ''
+				description: '',
+				...rest
 			})
 		);
 		setState({ selections });
 	};
-	const handleOnCreateOption = ({ option }) => {
+	const handleOnCreateOption = async ({ option }) => {
 		const { id, label } = option;
 		const payload = {
 			name: label,
@@ -74,17 +90,14 @@ export default function AddActivity({ name, label, scope }) {
 			sections: [name],
 			custom: true,
 			userId: user?.id ?? null,
-			unit: null
+			unit: 't'
 		};
-		axios
+		return await axios
 			.post(`/api/activities`, payload)
 			.then(({ data: factor }) => {
 				if (factor?.id) {
-					factor = { ...factor, label: factor.name, value: factor.id };
-					setState((prevState) => ({
-						options: [factor].concat(Array.isArray(prevState.options) ? prevState.options : []),
-						selections: [factor].concat(Array.isArray(prevState.selections) ? prevState.selections : [])
-					}));
+					return { ...factor, label: factor.name, value: factor.id };
+					
 				}
 				
 			})

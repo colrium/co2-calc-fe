@@ -8,12 +8,12 @@ import InternalLayout from './Internal';
 
 
 export default function RootLayout({ children }) {
-	const { loggedin, token } = useSelector(storeState => storeState.auth);
+	const { loggedin, token, themeMode } = useSelector(storeState => storeState.auth);
 
 	
 	const Layout = loggedin ? InternalLayout : ExternalLayout;
 	return (
-		<ThemeRegistry options={{ key: 'mui-theme' }}>
+		<ThemeRegistry options={{ key: 'mui-theme', mode: themeMode }}>
 			<NotificationsProvider>
 				<PrerequisitesProvider>
 					<PageLoadingWidget />

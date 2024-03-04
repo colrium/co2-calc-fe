@@ -16,8 +16,11 @@ export default function Login() {
 				<LoginForm />
 			</Box>
 			<Box className="my-2">
+				<Typography>
+					Don't have an account yet?
+				</Typography>
 				<Button component={Link} href="/auth/register">
-					Signup
+					Create Account
 				</Button>
 			</Box>
 		</Box>

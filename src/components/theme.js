@@ -18,8 +18,8 @@ const bgStyles = ({ theme }) => ({
 	)})`
 });
 const bgGradientStyles = ({ theme }) => ({
-	backgroundColor: `${alpha(theme.palette.background.light, 0.95)} !important`,
-	backgroundImage: `linear-gradient(${alpha(theme.palette.background.light, 0.95)}, ${alpha(
+	backgroundColor: `${alpha(theme.palette.background.dark, 0.95)} !important`,
+	backgroundImage: `linear-gradient(${alpha(theme.palette.background.dark, 0.95)}, ${alpha(
 		theme.palette.background.light,
 		0.95
 	)})`
@@ -31,6 +31,7 @@ const bgDarkStyles = ({ theme }) => ({
 		0.25
 	)})`
 });
+
 const bgLightStyles = ({ theme }) => ({
 	backgroundColor: `${theme.palette.background.light} !important`,
 	backgroundImage: `linear-gradient(${alpha(theme.palette.background.light, 0.15)}, ${alpha(
@@ -38,151 +39,176 @@ const bgLightStyles = ({ theme }) => ({
 		0.25
 	)})`
 });
-const theme = createTheme({
-	palette: {
-		mode: 'dark',
-		primary: {
-			// main: '#051937'
-			// main: '#A8EB12'
-			main: '#A8EB12'
+export const getTheme = (mode='dark') => {
+	const modePalette =
+		mode === 'light'
+			? {
+					background: {
+						paper: 'transparent',
+						default: '#EDF2FA',
+						main: '#E0ECFF',
+						dark: '#CADEFC',
+						light: '#EBF2FF'
+					},
+					text: {
+						primary: '#0b0b0b',
+						secondary: '#666666',
+						disabled: '#3d3d3d'
+					},
+					inverse: {
+						main: '#000000'
+					}
+			  }
+			: {
+					mode: mode,
+					background: {
+						paper: 'transparent',
+						default: '#00153B',
+						main: '#000342',
+						dark: '#000b1f',
+						light: '#01066e'
+					},
+					text: {
+						primary: '#F4F4F4',
+						secondary: '#999999',
+						disabled: '#C2C2C2'
+					},
+					inverse: {
+						main: '#FFFFFF'
+					}
+			  };
+	return createTheme({
+		palette: {
+			
+			primary: {
+				main: '#00B0BC'
+			},
+			secondary: {
+				main: '#1B7E74'
+				// main: '#A8EB12'
+			},
+			tertiary: {
+				main: '#FF0000'
+			},
+			inverse: {
+				main: '#000000'
+			},
+			brown: {
+				main: '#632d00'
+			},
+			orange: {
+				main: '#d99802'
+			},
+			blue: {
+				main: '#0295d9'
+			},
+			teal: {
+				main: '#02d987'
+			},
+			cyan: {
+				main: '#00FFFF'
+			},
+			pink: {
+				main: '#C850C0'
+			},
+			...modePalette
 		},
-		secondary: {
-			// main: '#89bfd7'
-			main: '#00B0BC'
+		mixins: {
+			drawerWidth: 280
 		},
-		tertiary: {
-			// main: '#39d10f'
-			main: '#FF0000'
+		typography: {
+			subtitle1: {
+				fontSize: 20
+			},
+			subtitle2: {
+				fontSize: 16,
+				fontWeight: 400
+			},
+			body1: {
+				fontSize: 14
+			},
+			body2: {
+				fontSize: 13
+			},
+			fontFamily: [
+				'Google Sans',
+				'-apple-system',
+				'BlinkMacSystemFont',
+				'"Segoe UI"',
+				'Roboto',
+				'"Helvetica Neue"',
+				'Arial',
+				'sans-serif',
+				'"Apple Color Emoji"',
+				'"Segoe UI Emoji"',
+				'"Segoe UI Symbol"'
+			].join(',')
 		},
-		inverse: {
-			main: '#000000'
-		},
-		brown: {
-			main: '#632d00'
-		},
-		orange: {
-			main: '#d99802'
-		},
-		blue: {
-			main: '#0295d9'
-		},
-		teal: {
-			main: '#02d987'
-		},
-		cyan: {
-			main: '#00FFFF'
-		},
-		pink: {
-			main: '#C850C0'
-		},
-		background: {
-			paper: 'transparent',
-			default: '#00153B',
-			main: '#000342',
-			dark: '#000b1f',
-			light: '#01066e'
-		},
-		text: {
-			primary: '#F4F4F4',
-			secondary: '#EAEAEA',
-			disabled: '#C2C2C2'
+		components: {
+			MuiDrawer: {
+				styleOverrides: {
+					paper: blurBgStyles
+				}
+			},
+			MuiChartsTooltip: {
+				styleOverrides: {
+					row: bgStyles
+				}
+			},
+			MuiAutocomplete: {
+				styleOverrides: {
+					popper: bgStyles
+				}
+			},
+			MuiMenu: {
+				styleOverrides: {
+					paper: bgStyles
+				}
+			},
+			MuiDataGrid: {
+				panelContent: bgStyles
+			},
+			MuiPopper: {
+				styleOverrides: {
+					'& .MuiPaper-root': bgStyles
+				}
+			},
+			MuiDialog: {
+				styleOverrides: {
+					paper: blurBgStyles
+				}
+			},
+			MuiTooltip: {
+				styleOverrides: {
+					tooltip: ({ theme }) => ({
+						color: theme.palette.text.primary,
+						backgroundColor: `${theme.palette.background.dark} !important`,
+						backgroundImage: `linear-gradient(${alpha(theme.palette.background.dark, 0.15)}, ${alpha(
+							theme.palette.background.dark,
+							0.25
+						)})`
+					})
+				}
+			},
+			MuiPickersPopper: {
+				styleOverrides: {
+					paper: blurBgStyles
+				}
+			},
+			MuiDataGrid: {
+				styleOverrides: {
+					menu: bgDarkStyles
+				}
+			},
+			MuiListItemIcon: {
+				root: ({ theme }) => ({
+					color: `${theme.palette.text.secondary} !important`,
+					
+				})
+			}
 		}
-	},
-	mixins: {
-		drawerWidth: 280
-	},
-	typography: {
-		subtitle1: {
-			fontSize: 20
-		},
-		subtitle2: {
-			fontSize: 16,
-			fontWeight: 400
-		},
-		body1: {
-			fontSize: 14
-		},
-		body2: {
-			fontSize: 13
-		},
-		fontFamily: [
-			'Google Sans',
-			'-apple-system',
-			'BlinkMacSystemFont',
-			'"Segoe UI"',
-			'Roboto',
-			'"Helvetica Neue"',
-			'Arial',
-			'sans-serif',
-			'"Apple Color Emoji"',
-			'"Segoe UI Emoji"',
-			'"Segoe UI Symbol"'
-		].join(',')
-	},
-	components: {
-		MuiDrawer: {
-			styleOverrides: {
-				paper: blurBgStyles
-			}
-		},
-		MuiChartsTooltip: {
-			styleOverrides: {
-				row: bgStyles
-			}
-		},
-		MuiAutocomplete: {
-			styleOverrides: {
-				popper: bgStyles
-			}
-		},
-		MuiMenu: {
-			styleOverrides: {
-				paper: bgStyles
-			}
-		},
-		MuiDataGrid: {
-			panelContent: bgStyles
-		},
-		MuiPopper: {
-			styleOverrides: {
-				'& .MuiPaper-root': bgStyles
-			}
-		},
-		MuiDialog: {
-			styleOverrides: {
-				paper: blurBgStyles
-			}
-		},
-		MuiPickersPopper: {
-			styleOverrides: {
-				paper: blurBgStyles
-			}
-		},
-		MuiDataGrid: {
-			styleOverrides: {
-				menu: bgDarkStyles
-			}
-		}
-		// MuiBackdrop: {
-		// 	styleOverrides: {
-		// 		root: ({ theme }) => ({
-		// 			backgroundColor: `${alpha(theme.palette.background.dark, 0.1)} !important`,
-		// 			WebkitBackdropFilter: [`blur(2px)`, `blur(2px})`],
-		// 			backdropFilter: `blur(2px)`,
-		// 			backgroundImage: `linear-gradient(${alpha(theme.palette.background.main, 0.015)}, ${alpha(
-		// 				theme.palette.background.dark,
-		// 				0.015
-		// 			)})`
-		// 		})
-		// 	}
-		// },
-		// MuiCardHeader: {
-		// 	styleOverrides: {
-		// 		root: ({ theme }) => ({
-		// 			backgroundColor: `${alpha(theme.palette.background.dark, 0.5)} !important`
-		// 		})
-		// 	}
-		// }
-	}
-});
+	});
+}
+
+const theme = getTheme('light')
 export default theme;

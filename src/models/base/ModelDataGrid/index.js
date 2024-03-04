@@ -2,6 +2,7 @@ import { useMutationsCount, useSetState, useUniqueEffect } from "@/hooks";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, GridActionsCellItem, GridToolbar } from "@mui/x-data-grid";
 import pluralize from "pluralize";
@@ -153,15 +154,20 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title, onDelete, loading: 
 								}
 							}}
 							action={
-								<Button
-									size="small"
-									onClick={() => onOpenForm(null)}
-									color="primary"
-									variant="contained"
-									startIcon={<AddIcon />}
-								>
-									New
-								</Button>
+								<Box className="flex gap-4">
+									<Button size="small" onClick={fetchData} color="secondary" startIcon={<RefreshIcon />}>
+										Refresh
+									</Button>
+									<Button
+										size="small"
+										onClick={() => onOpenForm(null)}
+										color="primary"
+										variant="contained"
+										startIcon={<AddIcon />}
+									>
+										New
+									</Button>
+								</Box>
 							}
 						/>
 						<CardContent>

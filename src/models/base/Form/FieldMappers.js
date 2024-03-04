@@ -128,7 +128,7 @@ export default class FieldMappers {
 		forwardRef((props, ref) => {
 			const mutationCount = useMutationsCount([props]);
 			const combinedProps = useMemo(() => ({ ...config, ...props }), [mutationCount]);
-			const { label, value, onChange, required, error, helperText, ...rest } = combinedProps;
+			const { label, value=false, onChange, required, error, helperText, ...rest } = combinedProps;
 			const handleOnChange = useCallback(
 				(event) => {
 					if (typeof onChange === 'function') {
@@ -160,9 +160,9 @@ export default class FieldMappers {
 		forwardRef((props, ref) => {
 			const mutationCount = useMutationsCount([props]);
 			const combinedProps = useMemo(() => ({ ...config, ...props }), [mutationCount]);
-			const { label, required, valueOptions: options, value: formValue, ...rest } = combinedProps;
+			const { label, required, valueOptions: options, value=null, ...rest } = combinedProps;
 			
-			const value = useMemo(() => formValue? formValue : Array.isArray(options) && options.length && options[0].value? options[0].value : null, [formValue, options]);
+			// const value = useMemo(() => formValue? formValue : Array.isArray(options) && options.length && options[0].value? options[0].value : null, [formValue, options]);
 			return (
 				<FormControl>
 					<FormLabel required={required}>{label}</FormLabel>
@@ -171,7 +171,7 @@ export default class FieldMappers {
 							options.map(({ value: optionValue, label }, i) => (
 								<FormControlLabel
 									value={optionValue}
-									control={<Radio />}
+									control={<Radio value={optionValue} />}
 									label={label}
 									key={`option-${i}`}
 								/>
