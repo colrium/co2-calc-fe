@@ -139,7 +139,8 @@ export default function OverviewPage() {
 					state.company.data.map((assessment, i) => (
 						<Card
 							// sx={{ width: 240 }}
-							className="flex flex-col flex-1"
+							className="surface flex flex-col flex-1"
+							elevation={0}
 							key={`company-${i}`}
 						>
 							<CardHeader

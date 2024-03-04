@@ -120,7 +120,14 @@ const BaseForm = forwardRef(({
 				onSubmit={formik.handleSubmit}
 			>
 				<Grid item xs={12}>
-					<Card>
+					<Card
+						elevation={0}
+						sx={{
+							'&.MuiPaper-root': {
+								backgroundColor: (theme) => `${theme.palette.background.surface} !important`
+							}
+						}}
+					>
 						<CardHeader title={title} subheader={subtitle} />
 						<CardContent>
 							<Grid container columnGap={1} rowGap={3}>
@@ -165,7 +172,7 @@ const BaseForm = forwardRef(({
 										onClick={onCloseForm}
 										variant="contained"
 										color="error"
-										startIcon={<CloseIcon fontSize="inherit"/>}
+										startIcon={<CloseIcon fontSize="inherit" />}
 									>
 										Cancel
 									</Button>

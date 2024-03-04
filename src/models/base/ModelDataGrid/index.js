@@ -123,12 +123,16 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title, onDelete, loading: 
 				width: 80,
 				getActions: ({id}) => {					
 					return [
-						<GridActionsCellItem icon={<EditIcon />} onClick={() => onOpenForm(id)} label="Edit" showInMenu />,
 						<GridActionsCellItem
-							icon={<DeleteIcon />}
-							color={'error'}
+							icon={<EditIcon color={'success'} fontSize="small" />}
+							onClick={() => onOpenForm(id)}
+							label="Edit"
+							showInMenu
+						/>,
+						<GridActionsCellItem
+							icon={<DeleteIcon color={'error'} fontSize="small" />}
 							onClick={async () => {
-								 onDelete({ id, callback: fetchData });
+								onDelete({ id, callback: fetchData });
 							}}
 							label="Delete"
 							showInMenu
@@ -144,12 +148,10 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title, onDelete, loading: 
 			<Grid padding={3} container>
 				<Grid item xs={12}>
 					<Card
-					elevation={0}
-						sx={{
-							'&.MuiPaper-root': {
-								backgroundColor: (theme) => `${theme.palette.background.surface} !important`
-							}
-						}}
+						elevation={0}
+						
+						className="surface"
+						
 					>
 						<CardHeader
 							title={pluralize(title)}
@@ -162,14 +164,14 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title, onDelete, loading: 
 							}}
 							action={
 								<Box className="flex gap-4">
-									<Button size="small" onClick={fetchData} color="secondary" startIcon={<RefreshIcon />}>
+									<Button size="small" onClick={fetchData} color="info" startIcon={<RefreshIcon />}>
 										Refresh
 									</Button>
 									<Button
 										size="small"
 										onClick={() => onOpenForm(null)}
-										color="primary"
-										variant="contained"
+										color="success"
+										// variant="contained"
 										startIcon={<AddIcon />}
 									>
 										New

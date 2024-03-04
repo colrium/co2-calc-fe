@@ -35,6 +35,7 @@ export default function ThemeRegistry(props) {
 							fill: `${theme.palette.text.secondary} !important`
 						}
 					},
+					
 					'& .MuiDataGrid-paper': {
 						backgroundColor: (theme) => theme.palette.background.main
 					}
@@ -92,6 +93,10 @@ export default function ThemeRegistry(props) {
 							${theme.palette.background.main},
 							${theme.palette.background.dark}
 						);
+					}
+					.surface {
+						background-color: ${theme.palette.background.surface} !important
+				
 					}
 				`}</style>
 				{globalStyles}

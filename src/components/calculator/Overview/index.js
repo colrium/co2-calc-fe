@@ -119,7 +119,7 @@ export default function Overview({ name, options = [] }) {
 			<Grid item xs={12} className="flex p-8">
 				<Box className={'flex flex-col md:flex-row gap-4 w-full'}>
 					<Box className="flex-1">
-						<Card className="flex flex-col w-full h-40" variant="outlined">
+						<Card className="surface flex flex-col w-full h-40" elevation={0}>
 							<CardHeader title={'Total Emissions'} />
 							<CardContent>
 								<Typography variant="h3" textAlign={'center'} color="primary">
@@ -132,8 +132,8 @@ export default function Overview({ name, options = [] }) {
 						<Card
 							component={Link}
 							href="/dashboard/calculations"
-							className="flex flex-col w-full h-40"
-							variant="outlined"
+							className="surface flex flex-col w-full h-40"
+							elevation={0}
 						>
 							<CardHeader title={'Calculations'} />
 							<CardContent>
@@ -147,8 +147,8 @@ export default function Overview({ name, options = [] }) {
 						<Card
 							component={Link}
 							href="/dashboard/activities"
-							className="flex flex-col w-full h-40"
-							variant="outlined"
+							className="surface flex flex-col w-full h-40"
+							elevation={0}
 						>
 							<CardHeader title={'Activities'} />
 							<CardContent className="flex flex-col items-center justify-center">
@@ -162,8 +162,8 @@ export default function Overview({ name, options = [] }) {
 						<Card
 							component={Link}
 							href="/dashboard/domains"
-							className="flex flex-col w-full h-40"
-							variant="outlined"
+							className="surface flex flex-col w-full h-40"
+							elevation={0}
 						>
 							<CardHeader title={'Domains'} />
 							<CardContent className="flex flex-col items-center justify-center">
@@ -176,7 +176,7 @@ export default function Overview({ name, options = [] }) {
 				</Box>
 			</Grid>
 			<Grid item xs={12} md={6} columnGap={1} className="flex items-center p-8">
-				<Card className="w-full">
+				<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Annual Totals'} />
 					<CardContent>
 						{state.yearly.values?.length > 0 && (
@@ -201,7 +201,7 @@ export default function Overview({ name, options = [] }) {
 				</Card>
 			</Grid>
 			<Grid item xs={12} md={6} className="flex items-center p-8">
-				<Card className="w-full">
+				<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Scope Totals'} />
 					<CardContent className="flex w-full items-center justify-center">
 						{Object.keys(state.scopes.pie)?.length > 0 && (
@@ -236,7 +236,7 @@ export default function Overview({ name, options = [] }) {
 				</Card>
 			</Grid>
 			<Grid item xs={12} md={6} className="flex items-center p-8">
-				<Card className="w-full">
+				<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Emission Type'} />
 					<CardContent className="flex w-full items-center justify-center">
 						{Object.keys(state.emissionType)?.length > 0 && (
@@ -271,7 +271,7 @@ export default function Overview({ name, options = [] }) {
 				</Card>
 			</Grid>
 			<Grid item xs={12} md={6} columnGap={1} className="flex items-center p-8">
-				<Card className="w-full">
+				<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Activity Types'} />
 					<CardContent>
 						{state.activityTypes.values?.length > 0 && (
@@ -295,7 +295,7 @@ export default function Overview({ name, options = [] }) {
 				</Card>
 			</Grid>
 			<Grid item xs={12} md={6} columnGap={1} className="flex items-center p-8">
-				<Card className="w-full">
+				<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Emissions by Activity'} />
 					<CardContent>
 						{state.activities.values?.length > 0 && (
@@ -319,7 +319,7 @@ export default function Overview({ name, options = [] }) {
 				</Card>
 			</Grid>
 			<Grid item xs={12} md={6} columnGap={1} className="flex items-center p-8">
-				<Card className="w-full">
+				<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Domain Totals'} />
 					<CardContent>
 						{state.domains.values?.length > 0 && (
