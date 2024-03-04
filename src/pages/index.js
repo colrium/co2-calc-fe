@@ -4,8 +4,10 @@ import Diversity1Icon from '@mui/icons-material/Diversity1';
 import EnergySavingsLeafIcon from '@mui/icons-material/EnergySavingsLeaf';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import { Box, Card, CardContent, Container, Grid, Typography } from '@mui/material';
+import { alpha, useTheme } from '@mui/material/styles';
 import Image from 'next/image';
 export default function Home() {
+	const theme = useTheme()
 	return (
 		<Box>
 			{/* <Breadcrumbs title={`Welcome to Uhakika Tech's EcoCalc`} /> */}
@@ -29,7 +31,7 @@ export default function Home() {
 				>
 					<Box
 						className="h-full w-full flex flex-col items-center justify-center"
-						sx={{ backgroundColor: `rgba(0,0,0,0.7)` }}
+						sx={{ backgroundColor: `${alpha(theme.palette.background.surface, 0.3)}` }}
 					>
 						<Box className="w-10/12 md:w-8/12 p-20 rounded-2xl flex flex-col gap-8">
 							<Box className="flex flex-col items-center justify-center w-full h-full">

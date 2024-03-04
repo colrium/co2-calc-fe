@@ -186,7 +186,7 @@ export default function Summary() {
 							variant="determinate"
 							value={biogenicPercentage}
 							className="flex-1"
-							color="cyan"
+							color={emissionTypes.biogenic.colorName}
 						/>
 						<Typography color="textSecondary" variant="body2">
 							{biogenicPercentage}%
@@ -221,6 +221,7 @@ export default function Summary() {
 			</Typography>
 			<Box className="py-4 flex item-center justify-center gap-4">
 				<Button
+					disableElevation
 					startIcon={<SaveIcon />}
 					onClick={formik.handleSubmit}
 					size="small"
@@ -231,6 +232,7 @@ export default function Summary() {
 					Save
 				</Button>
 				<Button
+					disableElevation
 					startIcon={<CloseIcon />}
 					variant="contained"
 					type="button"

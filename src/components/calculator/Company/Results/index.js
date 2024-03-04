@@ -207,7 +207,7 @@ export default function Results() {
 			</Grid>
 			<Grid item xs={12} md={7} className="p-5">
 				<Box>
-					<Card elevation={6}>
+					<Card elevation={0} className="surface">
 						<CardContent>
 							<Grid container>
 								<Grid item xs={12}>
@@ -312,7 +312,7 @@ export default function Results() {
 
 			<Grid item xs={12} md={7} className="p-5 flex flex-col items-center">
 				<Box className="w-full">
-					<Card elevation={6}>
+					<Card elevation={0} className="surface">
 						<CardContent>
 							<Grid container>
 								<Grid item xs={12}>
@@ -403,7 +403,7 @@ export default function Results() {
 						Emmissions by Scope 1s' activities
 					</Typography>
 				</Box>
-				<Card elevation={6}>
+				<Card elevation={0} className="surface">
 					<CardContent>
 						<Grid container>
 							<Grid item xs={12}>
@@ -436,7 +436,7 @@ export default function Results() {
 										colors={new Array(scope1BarData.length).fill(scopes.scope1.color)}
 									>
 										<BarPlot />
-										<ChartsXAxis label='Activities' />
+										<ChartsXAxis label="Activities" />
 										<ChartsYAxis />
 										<ChartsTooltip />
 									</ResponsiveChartContainer>
@@ -453,7 +453,7 @@ export default function Results() {
 						Emmissions by Scope 2s' activities
 					</Typography>
 				</Box>
-				<Card elevation={6}>
+				<Card elevation={0} className="surface">
 					<CardContent>
 						<Grid container>
 							<Grid item xs={12}>
@@ -503,7 +503,7 @@ export default function Results() {
 						{`Emmissions by ${scopes.scope3us.label}'s activities`}
 					</Typography>
 				</Box>
-				<Card elevation={6}>
+				<Card elevation={0} className="surface">
 					<CardContent>
 						<Grid container>
 							<Grid item xs={12}>
@@ -553,7 +553,7 @@ export default function Results() {
 						{`Emmissions by ${scopes.scope3ds.label}'s activities`}
 					</Typography>
 				</Box>
-				<Card elevation={6}>
+				<Card elevation={0} className="surface">
 					<CardContent>
 						<Grid container>
 							<Grid item xs={12}>
