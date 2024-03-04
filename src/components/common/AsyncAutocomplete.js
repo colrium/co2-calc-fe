@@ -477,13 +477,6 @@ const AsyncAutocomplete = ({
 		deriveOptions(opts);
 	}, [optionsArgs, options]);
 
-	useUniqueEffect(() => {
-		
-	}, [value]);
-
-	
-console.log('derivedValue', derivedValue);
-console.log('value', value);
 	return (
 		<Autocomplete
 			renderInput={renderInput}

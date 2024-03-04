@@ -56,7 +56,7 @@ export const getTheme = (mode='dark') => {
 						disabled: '#3d3d3d'
 					},
 					inverse: {
-						main: '#000000'
+						main: '#FFFFFF'
 					}
 			  }
 			: {
@@ -74,7 +74,7 @@ export const getTheme = (mode='dark') => {
 						disabled: '#C2C2C2'
 					},
 					inverse: {
-						main: '#FFFFFF'
+						main: '#000000'
 					}
 			  };
 	return createTheme({
