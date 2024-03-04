@@ -160,7 +160,7 @@ export default function FormHeader() {
 					<Button type="submit">Continue</Button>
 				</DialogActions>
 			</Dialog>
-			<AppBar position="static" color="inverse" elevation={0}>
+			<AppBar position="static" color="transparent" elevation={0}>
 				<Toolbar>
 					<IconButton onClick={() => toggleDrawer('calcLeft')} color="secondary" className="mr-4">
 						<Icon path={mdiBackburger} rotate={leftDrawerOpen ? 0 : 180} size={1} />

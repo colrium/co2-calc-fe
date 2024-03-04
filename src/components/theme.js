@@ -48,7 +48,8 @@ export const getTheme = (mode='dark') => {
 						default: '#EDF2FA',
 						main: '#E0ECFF',
 						dark: '#CADEFC',
-						light: '#EBF2FF'
+						light: '#EBF2FF',
+						surface: '#f2f7ff'
 					},
 					text: {
 						primary: '#0b0b0b',
@@ -66,7 +67,8 @@ export const getTheme = (mode='dark') => {
 						default: '#00153B',
 						main: '#000342',
 						dark: '#000b1f',
-						light: '#01066e'
+						light: '#01066e',
+						surface: '#00022b'
 					},
 					text: {
 						primary: '#F4F4F4',

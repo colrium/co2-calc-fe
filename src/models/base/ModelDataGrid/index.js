@@ -143,7 +143,14 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title, onDelete, loading: 
 		<ModelGridContextProvider value={{ onDelete }}>
 			<Grid padding={3} container>
 				<Grid item xs={12}>
-					<Card>
+					<Card
+					elevation={0}
+						sx={{
+							'&.MuiPaper-root': {
+								backgroundColor: (theme) => `${theme.palette.background.surface} !important`
+							}
+						}}
+					>
 						<CardHeader
 							title={pluralize(title)}
 							subheader={pluralize(model.subtitle)}
