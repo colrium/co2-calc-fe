@@ -1,6 +1,7 @@
 /** @format */
 import Overview from '@/components/calculator/Overview';
 import { useSetState } from '@/hooks';
+import InternalLayout from '@/layouts/Internal';
 import { selectAuth } from '@/store/authSlice';
 import { addCompanyAssessment, addProductAssessment, setCalculatorContext } from '@/store/calculatorSlice';
 import AddIcon from '@mui/icons-material/Add';
@@ -26,7 +27,7 @@ var utc = require('dayjs/plugin/utc');
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
 
-export default function OverviewPage() {
+export default function Page() {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const [state, setState] = useSetState({
@@ -341,3 +342,6 @@ export default function OverviewPage() {
 		</Box>
 	);
 }
+Page.getLayout = (page) => {
+	return <InternalLayout>{page}</InternalLayout>;
+};

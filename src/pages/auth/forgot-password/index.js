@@ -1,11 +1,12 @@
 /** @format */
 
 import ForgotPasswordForm from '@/components/auth/ForgotPasswordForm';
+import ExternalLayout from '@/layouts/External';
 import { Box, Button, Typography } from '@mui/material';
 import Head from 'next/head';
 import Link from 'next/link';
 
-export default function ForgotPassword() {
+export default function Page() {
 	return (
 		<Box className="flex p-4 flex-col items-center justify-center auth-page">
 			<Head>
@@ -30,3 +31,6 @@ export default function ForgotPassword() {
 		</Box>
 	);
 }
+Page.getLayout = (page) => {
+	return <ExternalLayout>{page}</ExternalLayout>;
+};

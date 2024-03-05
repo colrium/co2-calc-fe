@@ -1,7 +1,11 @@
+import InternalLayout from '@/layouts/Internal';
 import User from '@/models/User';
 
 const CrudBase = new User().CrudBase;
-const UsersPage = () => {
+const Page = () => {
 	return <CrudBase />;
 };
-export default UsersPage;
+Page.getLayout = (page) => {
+	return <InternalLayout>{page}</InternalLayout>;
+};
+export default Page;

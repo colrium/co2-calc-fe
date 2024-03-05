@@ -94,7 +94,7 @@ export default function ThemeRegistry(props) {
 							${theme.palette.background.dark}
 						);
 					}
-					.surface {
+					.surface, .Surface {
 						background-color: ${theme.palette.background.surface} !important
 				
 					}

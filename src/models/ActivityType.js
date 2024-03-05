@@ -1,5 +1,12 @@
 import { scopes } from '@/config';
 import BaseModel from './base/BaseModel';
+
+const scopesLabels = Object.entries(scopes).reduce((acc, [name, { label }]) => {
+	acc[name] = label;
+	return acc
+}, {});
+const scopesOptions = Object.entries(scopes).map(([value, { label }]) => ({ value, label }));
+
 export default class ActivityType extends BaseModel {
 	static fields = [
 		{
@@ -18,7 +25,8 @@ export default class ActivityType extends BaseModel {
 			header: 'Scope',
 			required: true,
 			width: 120,
-			options: Object.values(scopes).map(({ name: value, label }) => ({ value, label }))
+			options: scopesOptions,
+			valueGetter: ({ row }) => scopesLabels[row.scope]
 		},
 		{
 			field: 'definition',
@@ -31,6 +39,7 @@ export default class ActivityType extends BaseModel {
 			field: 'example',
 			header: 'Example',
 			multiline: true,
+			hide: true,
 			minRows: 4,
 			maxRows: 10
 		}

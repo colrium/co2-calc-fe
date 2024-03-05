@@ -1,7 +1,11 @@
+import InternalLayout from '@/layouts/Internal';
 import Activity from '@/models/Activity';
 
 const CrudBase = new Activity().CrudBase;
-const ActivitiesPage = () => {
+const Page = () => {
 	return <CrudBase />;
 };
-export default ActivitiesPage;
+Page.getLayout = (page) => {
+	return <InternalLayout>{page}</InternalLayout>;
+};
+export default Page;

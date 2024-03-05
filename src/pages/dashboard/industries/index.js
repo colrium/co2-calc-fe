@@ -1,7 +1,11 @@
+import InternalLayout from '@/layouts/Internal';
 import Industry from '@/models/Industry';
 
 const CrudBase = new Industry().CrudBase;
-const IndustriesPage = () => {
+const Page = () => {
 	return <CrudBase />;
 };
-export default IndustriesPage;
+Page.getLayout = (page) => {
+	return <InternalLayout>{page}</InternalLayout>;
+};
+export default Page;

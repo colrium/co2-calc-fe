@@ -1,10 +1,11 @@
 import CalculatorForm from '@/components/calculator/CalculatorForm';
 import { useFetcher, useSetState } from '@/hooks';
+import InternalLayout from '@/layouts/Internal';
 import { Box, Grid } from '@mui/material';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-export default function CalculateId() {
+export default function Page() {
 	const router = useRouter();
 	const id = router.query.slug;
 	const [state, setState] = useSetState({loading: false, page: 1, perPage: 50, count: 0, data: []});
@@ -33,3 +34,6 @@ export default function CalculateId() {
 		</Grid>
 	);
 }
+Page.getLayout = (page) => {
+	return <InternalLayout>{page}</InternalLayout>;
+};

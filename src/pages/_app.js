@@ -8,17 +8,19 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 const App = ({ Component, pageProps }) => {
   const store = useStore();
+  const getLayout = Component.getLayout ?? ((page) => page);
   return (
 		<PersistGate
 			persistor={store.__persistor}
 			loading={
-				<div className='h-screen w-screen flex item-center justify-center'>
+				<div className="h-screen w-screen flex item-center justify-center">
 					<span className="loading loading-spinner text-info"></span>
 				</div>
 			}
 		>
 			<RootLayout>
-				<Component {...pageProps} />
+				{getLayout(<Component {...pageProps} />)}
+				{/* <Component {...pageProps} /> */}
 			</RootLayout>
 		</PersistGate>
   );

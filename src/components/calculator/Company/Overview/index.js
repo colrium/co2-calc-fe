@@ -3,7 +3,6 @@
 import AsyncAutocomplete from '@/components/common/AsyncAutocomplete';
 import { Box, TextField, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import { DateTimePicker } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { useCallback, useMemo } from 'react';
@@ -75,21 +74,7 @@ export default function Overview() {
 					error={formik.touched.description && Boolean(formik.errors.description)}
 					helperText={formik.touched.description && formik.errors.description}
 				/>
-				<Box className="h-8" />
-				<DateTimePicker
-					label={'Test picker'}
-					maxDate={dayjs().add(1, 'day')}
-					maxTime={dayjs().add(1, 'day').add(2, 'hour')}
-					className="w-full"
-					size="small"
-					format={'YYYY-MM-DD hh:mm:ss A'}
-					ampm={false}
-					slotProps={{
-						textField: {
-							size: 'small'
-						}
-					}}
-				/>
+				
 				<Box className="h-8" />
 				<DatePicker
 					label={'Year'}

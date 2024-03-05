@@ -33,13 +33,12 @@ function GetStarted() {
 		},
 		validationSchema: GetStartedSchema,
 		onSubmit: ({email}) => {
-			console.log('email', email);
 			router.push(`/auth/register?email=${email}`);
 		}
 	});
 
 	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, isValid } = formik;
-	console.log('formik', formik);
+
 	return (
 		<FormikProvider value={formik}>
 			<Form autoComplete="off" noValidate onSubmit={handleSubmit}>

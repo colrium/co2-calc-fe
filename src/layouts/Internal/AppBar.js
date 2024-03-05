@@ -112,8 +112,6 @@ function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 		anchorElNav: null,
 		drawerMenuOpen: false
 	});
-
-	console.log('themeMode', themeMode);
 	
 	const handleOpenUserMenu = (event) => {
 		setState({ anchorElNav: event.currentTarget });

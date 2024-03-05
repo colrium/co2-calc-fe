@@ -2,6 +2,7 @@
 
 import Breadcrumbs from '@/components/landingpage/Breadcrumbs';
 import { useSetState } from '@/hooks';
+import ExternalLayout from '@/layouts/External';
 import { Box, Button, Card, CardActions, CardContent, Chip, Container, Typography } from '@mui/material';
 import axios from 'axios';
 import { useEffect } from 'react';
@@ -13,7 +14,7 @@ const scopeLabels = {
 	scope3us: 'Scope 3 Upstream'
 };
 
-export default function Home() {
+export default function Page() {
 	const [state, setState] = useSetState({
 		loading: true,
 		activityTypes: []
@@ -69,3 +70,6 @@ export default function Home() {
 		</Box>
 	);
 }
+Page.getLayout = (page) => {
+	return <ExternalLayout>{page}</ExternalLayout>;
+};

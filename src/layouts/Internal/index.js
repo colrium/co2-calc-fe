@@ -1,4 +1,3 @@
-import ThemeRegistry from '@/components/ThemeRegistry';
 import { usePrerequisites } from '@/contexts/Prerequisites';
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -11,7 +10,7 @@ export default function InternalLayout({children}) {
 	const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
 	const {openDrawers, toggleDrawer} = usePrerequisites()
 	return (
-		<ThemeRegistry options={{ key: 'mui-theme' }}>
+		
 			<Box
 				// className={`flex flex-col relative overflow-x-hidden bg-gradient-to-tr from-blue-700 via-blue-800 to-gray-900`}
 				className={` min-h-screen w-screen overflow-x-hidden relative overflow-x-hidden bg-gradient-to-br from-gray-50 to-blue-100`}
@@ -32,6 +31,5 @@ export default function InternalLayout({children}) {
 					<Box sx={{ marginTop: 8 }}>{children}</Box>
 				</Box>
 			</Box>
-		</ThemeRegistry>
 	);
 }

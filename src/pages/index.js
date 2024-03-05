@@ -1,4 +1,5 @@
 import GetStarted from '@/components/landingpage/GetStarted';
+import ExternalLayout from '@/layouts/External';
 import AssignmentTurnedInRoundedIcon from '@mui/icons-material/AssignmentTurnedInRounded';
 import Diversity1Icon from '@mui/icons-material/Diversity1';
 import EnergySavingsLeafIcon from '@mui/icons-material/EnergySavingsLeaf';
@@ -137,3 +138,10 @@ export default function Home() {
 		</Box>
 	);
 }
+Home.getLayout = function getLayout(page) {
+	return (
+		<ExternalLayout>
+			{page}
+		</ExternalLayout>
+	);
+};

@@ -1,5 +1,5 @@
 import ThemeRegistry from '@/components/ThemeRegistry';
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
@@ -16,9 +16,11 @@ export default function ExternalLayout({ children }) {
 	const { openDrawers, toggleDrawer } = usePrerequisites();
 	return (
 		<ThemeRegistry options={{ key: 'mui-theme' }}>
-			<Box
+			<Container
 				// className={`flex flex-col relative overflow-x-hidden bg-gradient-to-tr from-blue-700 via-blue-800 to-gray-900`}
-				className={`flex flex-col min-h-screen w-full max-w-full overflow-x-hidden relative overflow-x-hidden bg-gradient-to-br from-gray-50 to-blue-100`}
+				className={`flex relative`}
+				disableGutters
+				maxWidth={false}
 			>
 				<AppBar />
 				<ExternalDrawer
@@ -26,10 +28,8 @@ export default function ExternalLayout({ children }) {
 					onOpen={() => toggleDrawer('external', true)}
 					onClose={() => toggleDrawer('external', false)}
 				/>
-				<Box  sx={{ marginTop: 8 }}>
-					{children}
-				</Box>
-			</Box>
+				<Box sx={{ marginTop: 8 }}>{children}</Box>
+			</Container>
 		</ThemeRegistry>
 	);
 }

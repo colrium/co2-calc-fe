@@ -59,7 +59,10 @@ body {
   /* background-image: linear-gradient(to bottom, #000342, #00063d, #000837, #000a31, #000b2a, #000b28, #000c25, #000c23, #000c24, #000b25, #000b26, #000a27); */
 }
 .auth-page {
-  min-height: calc(100vh - 64px);
+  min-height: 100vh;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
 }
 .page-error {
   padding: 40px 0;

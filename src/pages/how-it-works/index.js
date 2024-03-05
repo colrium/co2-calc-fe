@@ -1,9 +1,10 @@
 /** @format */
 
 import Breadcrumbs from '@/components/landingpage/Breadcrumbs';
+import ExternalLayout from '@/layouts/External';
 import { Box, Container, Typography } from '@mui/material';
 
-export default function Home() {
+export default function Page() {
 	return (
 		<Box className="flex min-h-screen flex-col">
 			<Breadcrumbs title={'How it works'} />
@@ -91,3 +92,6 @@ export default function Home() {
 		</Box>
 	);
 }
+Page.getLayout = (page) => {
+	return <ExternalLayout>{page}</ExternalLayout>;
+};

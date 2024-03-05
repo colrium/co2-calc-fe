@@ -1,9 +1,13 @@
+import InternalLayout from "@/layouts/Internal";
 import Domain from "@/models/Domain";
 
 const CrudBase = new Domain().CrudBase;
-const DomainsPage = () => {
+const Page = () => {
     return(
         <CrudBase />
     )
 }
-export default DomainsPage;
+Page.getLayout = (page) => {
+	return <InternalLayout>{page}</InternalLayout>;
+};
+export default Page;

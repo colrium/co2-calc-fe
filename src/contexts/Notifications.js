@@ -44,7 +44,7 @@ export const Notifications = () => (
 					anchorOrigin={notification?.anchorOrigin || { vertical: 'bottom', horizontal: 'center' }}
 					open={!!notification}
 					TransitionComponent={GrowTransition}
-					onClose={dequeue}
+					onClose={next}
 				>
 					<Alert
 						onClose={next}
