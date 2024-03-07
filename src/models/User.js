@@ -43,6 +43,7 @@ export default class User extends BaseModel {
 		{
 			field: 'confirmPassword',
 			header: 'Confirm Password',
+			required: true,
 			secure: true,
 			excludeOnGrid: true,
 			validate: 'match:password'

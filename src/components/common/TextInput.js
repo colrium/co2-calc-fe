@@ -1,8 +1,9 @@
-import { useDidUpdate } from '@/hooks';
+import { useDidUpdate, useSetState } from '@/hooks';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
-import { forwardRef, useCallback, useRef, useState } from 'react';
+import { forwardRef, useCallback, useRef } from 'react';
+
 
 const PasswordAdornment = ({ onClick, disabled, readOnly, passwordVisible }) => (
 	<InputAdornment position="end">
@@ -34,13 +35,14 @@ const TextInput = forwardRef(
 		},
 		ref
 	) => {
-
 		const inputRef = useRef();
 		const hasFocusRef = useRef(false);
-		const [state, setState] = useState({ passwordVisible: false });
+		const [state, setState] = useSetState({ passwordVisible: false });
 		const handleToggleShowPassword = useCallback(() => {
 			setState((prev) => ({ passwordVisible: !prev.passwordVisible }));
 		}, [type]);
+
+
 		const applyValueChangeEvent = useCallback(
 			(event, trimValue = false) => {
 				event?.persist?.();
@@ -51,7 +53,7 @@ const TextInput = forwardRef(
 						val = value;
 					}
 				} else {
-					const valueNeedsTrim = type === 'text' && typeof val === 'string' && /(^\s)|(\s$)/.test(val);
+					const valueNeedsTrim = typeof val === 'string' && /(^\s)|(\s$)/.test(val);
 					if (valueNeedsTrim && trimValue) {
 						val = valueNeedsTrim ? val.trim() : val;
 						inputRef.current.value = val;
@@ -61,7 +63,7 @@ const TextInput = forwardRef(
 					onChange(event, val);
 				}
 			},
-			[error, value, eager, onChange, trim]
+			[error, value, eager, onChange]
 		);
 
 		const handleChange = useCallback(
@@ -72,10 +74,10 @@ const TextInput = forwardRef(
 					onClearError(event); // This will clear validation error on change
 				}
 				if (!hasFocusRef.current || eager) {
-					applyValueChangeEvent(event);
+					applyValueChangeEvent(event, trim);
 				}
 			},
-			[applyValueChangeEvent, onClearError]
+			[applyValueChangeEvent, onClearError, trim, eager]
 		);
 
 		const handleFocus = () => {
@@ -100,7 +102,10 @@ const TextInput = forwardRef(
 					applyValueChangeEvent(event, trim);
 				}
 				if (typeof onBlur === 'function') {
-					onBlur(event);
+					setTimeout(() => {
+						onBlur(event);
+					}, 50);
+					
 				}
 			},
 			[type, value, applyValueChangeEvent, trim]

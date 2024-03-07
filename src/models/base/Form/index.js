@@ -139,6 +139,7 @@ const BaseForm = forwardRef(({
 												{...getFieldProps(name)}
 												error={Boolean(touched[name] && errors[name])}
 												helperText={(touched[name] && errors[name]) || helperText}
+												onClearError={() => formik.setFieldError(name, false)}
 												name={name}
 											/>
 										</Grid>

@@ -143,7 +143,7 @@ function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 
 					<Box sx={{ display: { xs: 'flex' } }} className="items-center gap-4">
 						<Button
-							endIcon={<AccountCircleOutlinedIcon color="tertiary" fontSize="inherit" />}
+							endIcon={<AccountCircleOutlinedIcon color="secondary" fontSize="inherit" />}
 							size="large"
 							aria-label="account of current user"
 							className="capitalize text-sm "
@@ -157,7 +157,7 @@ function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 								}
 							}}
 						>
-							{`${user.firstname || user.lastname}`}
+							{`${user?.firstname || user?.lastname || 'User'}`}
 						</Button>
 						<FormControlLabel onChange={e => dispatch(setThemeMode(e.target.checked? 'dark' : 'light'))} control={<MaterialUISwitch sx={{ m: 1 }} checked={themeMode === 'dark'} />} />
 						<Menu
@@ -185,7 +185,7 @@ function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 								color="error"
 								onClick={() => {
 									dispatch(setLoggedIn(false));
-									router.push('/');
+									router.push('/auth/login');
 								}}
 							>
 								<Typography textAlign="center" color="error">

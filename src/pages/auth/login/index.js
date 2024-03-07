@@ -12,9 +12,8 @@ export default function Page() {
 			<Card elevation className="surface">
 				<CardContent>
 					<Box className="flex p-4 flex-col items-center justify-center">
-						<Box className="z"></Box>
 						<Box className="my-8">
-							<Typography variant="h4">Login</Typography>
+							<Typography variant="h4">Welcome back</Typography>
 						</Box>
 						<Box className="p-4 w-96 mb-4">
 							<LoginForm />

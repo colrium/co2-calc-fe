@@ -7,7 +7,7 @@ const initialState = {
 	isLoggedIn: false,
 	token: null,
 	user: null,
-	themeMode: 'dark',
+	themeMode: 'system',
 };
 
 export const authSlice = createSlice({
@@ -18,9 +18,11 @@ export const authSlice = createSlice({
 			state.loggedin = action.payload;
 			state.isLoggedIn = action.payload;
 			if (!action.payload) {
+				state.themeMode = 'system';
 				Cookies.remove('accessToken');
 				Cookies.remove('refreshToken');
 				Cookies.remove('tokenType');
+				
 			}
 		},
 		setThemeMode(state, action) {

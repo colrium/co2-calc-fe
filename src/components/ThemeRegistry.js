@@ -21,7 +21,10 @@ import darkTheme from './theme-dark';
 export default function ThemeRegistry(props) {
 	const { options, children } = props;
 	const { themeMode } = useSelector(selectAuth);
-	const theme = themeMode === 'light' ? lightTheme : darkTheme;
+	const sytemInDarkMode = window && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	const isDarkMode = themeMode === 'system' ? sytemInDarkMode : themeMode === 'dark';
+	const theme = isDarkMode ? darkTheme : lightTheme;
+
 	const globalStyles = useMemo(
 		() => (
 			<CssBaseline

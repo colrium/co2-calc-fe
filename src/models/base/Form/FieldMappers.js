@@ -1,5 +1,5 @@
 import AsyncAutocomplete from "@/components/common/AsyncAutocomplete";
-import TextInput from "@/components/common/form/TextInput";
+import TextInput from "@/components/common/TextInput";
 import { useMutationsCount } from "@/hooks";
 import { Box, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Radio, RadioGroup, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -15,8 +15,9 @@ export default class FieldMappers {
 	static text = (config) =>
 		forwardRef((props, ref) => (
 			<TextInput
-				{...config}
 				{...props}
+				{...config}
+				type={config.type || props.type}
 				inputProps={{
 					autocomplete: 'new-password',
 					form: {
@@ -128,7 +129,7 @@ export default class FieldMappers {
 		forwardRef((props, ref) => {
 			const mutationCount = useMutationsCount([props]);
 			const combinedProps = useMemo(() => ({ ...config, ...props }), [mutationCount]);
-			const { label, value=false, onChange, required, error, helperText, ...rest } = combinedProps;
+			const { label, value = false, onChange, required, error, helperText, ...rest } = combinedProps;
 			const handleOnChange = useCallback(
 				(event) => {
 					if (typeof onChange === 'function') {
@@ -160,8 +161,8 @@ export default class FieldMappers {
 		forwardRef((props, ref) => {
 			const mutationCount = useMutationsCount([props]);
 			const combinedProps = useMemo(() => ({ ...config, ...props }), [mutationCount]);
-			const { label, required, valueOptions: options, value=null, ...rest } = combinedProps;
-			
+			const { label, required, valueOptions: options, value = null, ...rest } = combinedProps;
+
 			// const value = useMemo(() => formValue? formValue : Array.isArray(options) && options.length && options[0].value? options[0].value : null, [formValue, options]);
 			return (
 				<FormControl>
