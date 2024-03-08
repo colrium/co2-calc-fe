@@ -21,6 +21,7 @@ const AuthChangeWidget = memo(({open, sx, children, ...rest}) => {
 				)})`,
 				...sx
 			}}
+			open={open}
 			{...rest}
 		>
 			<CircularProgress size={32} color="inherit" />
@@ -36,7 +37,7 @@ const PageLoadingWidget = () => {
 	const loggedinRef = useRef(loggedin);
 	const theme = useTheme();
 	const Indicator = useMemo(() => {
-		if (loggedinRef.current !== loggedin) {
+		if (loggedinRef.current === loggedin) {
 			loggedinRef.current = loggedin;
 			return AuthChangeWidget;
 		}

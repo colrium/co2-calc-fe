@@ -107,7 +107,6 @@ const RegisterForm = ({ initialValues }) => {
 						initial={{ opacity: 0, y: 40 }}
 						animate={animate}
 					>
-						<input type="hidden" autocomplete="false" />
 						<TextInput
 							fullWidth
 							size="small"
@@ -117,7 +116,7 @@ const RegisterForm = ({ initialValues }) => {
 							{...getFieldProps('email')}
 							error={Boolean(touched.email && errors.email)}
 							helperText={touched.email && errors.email}
-							disabled={'email' in initialValues}
+							disabled={initialValues && 'email' in initialValues}
 							autoFocus
 							required
 						/>
