@@ -1,7 +1,7 @@
 /** @format */
 
 'use client';
-import { selectAuth } from '@/store/authSlice';
+import { useThemeMode } from '@/hooks';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,7 +10,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useServerInsertedHTML } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import lightTheme from './theme';
 import darkTheme from './theme-dark';
 
@@ -20,10 +19,12 @@ import darkTheme from './theme-dark';
 // https://github.com/emotion-js/emotion/issues/2928#issuecomment-1319747902
 export default function ThemeRegistry(props) {
 	const { options, children } = props;
-	const { themeMode } = useSelector(selectAuth);
-	const sytemInDarkMode = window && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-	const isDarkMode = themeMode === 'system' ? sytemInDarkMode : themeMode === 'dark';
-	const theme = isDarkMode ? darkTheme : lightTheme;
+	const [themeMode] = useThemeMode()
+	// const { themeMode } = useSelector(selectAuth);
+	// const sytemInDarkMode = window && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	// const isDarkMode = themeMode === 'system' ? sytemInDarkMode : themeMode === 'dark';
+	const theme = themeMode === 'dark' ? darkTheme : lightTheme;
+	console.log('themeMode', themeMode);
 
 	const globalStyles = useMemo(
 		() => (

@@ -5,10 +5,7 @@ export default function AuthLayout({ children }) {
 	const theme = useTheme();
 	return (
 		<Grid container className="auth-page">
-			<Grid xs={12} md={6}>
-				{children}
-			</Grid>
-			<Grid  xs lg={6} className={' md:block h-dvh w-full'}>
+			<Grid xs lg={6} className={'h-dvh w-full'} sx={{ display: { md: 'block', xs: 'none' } }}>
 				<Container sx={{ height: '90dvh' }} className={'h-dvh w-full'}>
 					<Card
 						elevation={0}
@@ -23,19 +20,27 @@ export default function AuthLayout({ children }) {
 						className={'h-full w-full'}
 					>
 						<CardContent className={'flex flex-col h-full w-full'}>
-							<Box  className="flex-1 flex flex-col gap-24 items-center justify-center p-32" padding={8}>
+							<Box className="flex-1 flex flex-col gap-24 items-center justify-center p-32" padding={8}>
 								<Typography variant="h4" color={'text.disabled'} className="my-8">
 									Carbon Accounting
 								</Typography>
-								<Image src="/img/scopes.svg" className="my-8" width={620} height={310}/>
-								
-								<Typography variant="subtitle2" color={'text.disabled'} className="my-8 text-wrap text-center">
-									Keep track of your progress towards climate responsibility and achieve carbon neutrality through our reduction strategies
+								<Image src="/img/scopes.svg" className="my-8" width={620} height={310} />
+
+								<Typography
+									variant="subtitle2"
+									color={'text.disabled'}
+									className="my-8 text-wrap text-center"
+								>
+									Keep track of your progress towards climate responsibility and achieve carbon neutrality
+									through our reduction strategies
 								</Typography>
 							</Box>
 						</CardContent>
 					</Card>
 				</Container>
+			</Grid>
+			<Grid xs={12} md={6}>
+				{children}
 			</Grid>
 		</Grid>
 	);

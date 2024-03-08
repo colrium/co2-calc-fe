@@ -13,7 +13,7 @@ export default function Page() {
 				<CardContent>
 					<Box className="flex p-4 flex-col items-center justify-center">
 						<Box className="my-8">
-							<Typography variant="h4">Welcome back</Typography>
+							<Typography variant="subtitle1">Welcome back</Typography>
 						</Box>
 						<Box className="p-4 w-96 mb-4">
 							<LoginForm />

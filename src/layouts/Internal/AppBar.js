@@ -2,8 +2,8 @@
 
 'use client';
 
-import { useSetState } from '@/hooks';
-import { selectAuth, setLoggedIn, setThemeMode } from '@/store/authSlice';
+import { useSetState, useThemeMode } from '@/hooks';
+import { selectAuth, setLoggedIn } from '@/store/authSlice';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
@@ -107,7 +107,9 @@ const ElevationScroll = (props) => {
 function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 	const dispatch = useDispatch();
 	const router = useRouter();
-	const { user, themeMode } = useSelector(selectAuth);
+	const { user } = useSelector(selectAuth);
+
+	const [themeMode, toggleThemeMode] = useThemeMode()
 	const [state, setState] = useSetState({
 		anchorElNav: null,
 		drawerMenuOpen: false
@@ -159,7 +161,7 @@ function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 						>
 							{`${user?.firstname || user?.lastname || 'User'}`}
 						</Button>
-						<FormControlLabel onChange={e => dispatch(setThemeMode(e.target.checked? 'dark' : 'light'))} control={<MaterialUISwitch sx={{ m: 1 }} checked={themeMode === 'dark'} />} />
+						<FormControlLabel onChange={toggleThemeMode} control={<MaterialUISwitch sx={{ m: 1 }} checked={themeMode === 'dark'} />} />
 						<Menu
 							id="menu-appbar"
 							anchorEl={state.anchorElNav}
