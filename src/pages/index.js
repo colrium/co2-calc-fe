@@ -14,9 +14,7 @@ export default function Home() {
 			{/* <Breadcrumbs title={`Welcome to Uhakika Tech's EcoCalc`} /> */}
 			<Box className="flex w-full flex-col justify-center items-center flex-1">
 				<Box className="flex flex-col gap-8 px-8 py-20 gap-4">
-					<Box
-						className="flex flex-col items-center gap-4 rounded"
-					>
+					<Box className="flex flex-col items-center gap-4 rounded">
 						<Container maxWidth="sm">
 							<GetStarted />
 						</Container>
@@ -26,7 +24,7 @@ export default function Home() {
 					className="flex flex-col items-center justify-center bg-no-repeat bg-cover bg-fixed bg-center"
 					sx={{
 						height: (theme) => '65vh',
-						backgroundImage: `url('/co2.jpg')`
+						// backgroundImage: `url('/co2.jpg')`
 						// backgroundColor: theme => theme.palette.background.paper
 					}}
 				>
@@ -36,7 +34,8 @@ export default function Home() {
 					>
 						<Box className="w-10/12 md:w-8/12 p-20 rounded-2xl flex flex-col gap-8">
 							<Box className="flex flex-col items-center justify-center w-full h-full">
-								<Image src={'/uhakika2.png'} width={150} height={150} alt="banner" />
+								
+								<Image src="/img/scopes.svg" className="my-8" width={720} height={310} alt="scopes" />
 							</Box>
 							<Typography variant="subtitle2" className="text-center">
 								We believe in the power of informed choices to create a more sustainable and eco-friendly

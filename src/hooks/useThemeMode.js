@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 const { selectAuth, setThemeMode } = require("@/store/authSlice");
@@ -7,15 +7,26 @@ const { useSelector } = require("react-redux");
 const useThemeMode = () => {
     const { themeMode } = useSelector(selectAuth);
     const dispatch = useDispatch();
-    const sytemInDarkMode = window && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-	const isDarkMode = themeMode === 'system' ? sytemInDarkMode : themeMode === 'dark';
+    const matchPrefersDark = window && window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)');
+    const sytemInDarkMode = matchPrefersDark?.matches?? false;	
+    const [isDarkMode, setIsDarkMode] = useState(themeMode === 'system' ? sytemInDarkMode : themeMode === 'dark');
     const mode = isDarkMode ? 'dark' : 'light';
     const toggleMode = useCallback(
 		(tmode = null) => dispatch(setThemeMode(['system', 'dark', 'light'].includes(tmode)? tmode : mode === 'dark' ? 'light' : 'dark')),
 		[mode]
 	);
 
-   
+    useEffect(() => {
+        const changeListener = (e) => {
+            setIsDarkMode(e.matches);
+        }
+        if (themeMode === 'system' && matchPrefersDark) {
+			matchPrefersDark.addEventListener('change', changeListener);
+            return () => {
+                matchPrefersDark.removeEventListener('change', changeListener);
+            }
+		}
+    }, [themeMode]);
 
     return [mode, toggleMode, sytemInDarkMode];
 }

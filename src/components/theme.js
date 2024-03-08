@@ -86,8 +86,7 @@ export const getTheme = (mode='dark') => {
 				main: '#00B0BC'
 			},
 			secondary: {
-				main: '#1B7E74'
-				// main: '#A8EB12'
+				main: '#A8EB12'
 			},
 			tertiary: {
 				main: '#FF0000'

@@ -24,7 +24,7 @@ export default function AuthLayout({ children }) {
 								<Typography variant="h4" color={'text.disabled'} className="my-8">
 									Carbon Accounting
 								</Typography>
-								<Image src="/img/scopes.svg" className="my-8" width={620} height={310} />
+								<Image src="/img/scopes.svg" className="my-8" width={620} height={310} alt="scopes" />
 
 								<Typography
 									variant="subtitle2"

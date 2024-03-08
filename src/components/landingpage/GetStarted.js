@@ -5,6 +5,7 @@ import { LoadingButton } from '@mui/lab';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as Yup from 'yup';
 
@@ -51,8 +52,9 @@ function GetStarted() {
 									staggerChildren: 0.55
 								}
 							}}
-							className="flex flex-col gap-12 mb-8"
+							className="flex flex-col gap-12 mb-8 items-center"
 						>
+							<Image src={'/uhakika2.png'} width={150} height={150} alt="banner" />
 							<Typography variant="h3" className="w-full text-center">
 								Track your carbon footprint
 							</Typography>
@@ -86,7 +88,7 @@ function GetStarted() {
 									required
 								/>
 								<LoadingButton
-									disabled={!isValid}									
+									disabled={!isValid}
 									size="medium"
 									type="submit"
 									variant="contained"
@@ -103,6 +105,7 @@ function GetStarted() {
 								<Button
 									// component={Link}
 									// href="/"
+									color='error'
 									startIcon={<GoogleIcon color="error" />}
 								>
 									Proceed with Google

@@ -3,13 +3,14 @@ import { setAuthToken, setAuthUser, setLoggedIn } from '@/store/authSlice';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { LoadingButton } from '@mui/lab';
-import { Box, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
+import { Box, IconButton, InputAdornment, Stack } from '@mui/material';
 import axios from 'axios';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
+import TextInput from '../common/TextInput';
 
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -107,7 +108,7 @@ const RegisterForm = ({ initialValues }) => {
 						animate={animate}
 					>
 						<input type="hidden" autocomplete="false" />
-						<TextField
+						<TextInput
 							fullWidth
 							size="small"
 							autoComplete="off"
@@ -116,11 +117,12 @@ const RegisterForm = ({ initialValues }) => {
 							{...getFieldProps('email')}
 							error={Boolean(touched.email && errors.email)}
 							helperText={touched.email && errors.email}
+							disabled={'email' in initialValues}
 							autoFocus
 							required
 						/>
 
-						<TextField
+						<TextInput
 							fullWidth
 							size="small"
 							type="text"
@@ -131,7 +133,7 @@ const RegisterForm = ({ initialValues }) => {
 							required
 						/>
 
-						<TextField
+						<TextInput
 							fullWidth
 							size="small"
 							type="text"
@@ -143,7 +145,7 @@ const RegisterForm = ({ initialValues }) => {
 							required
 						/>
 
-						<TextField
+						<TextInput
 							fullWidth
 							size="small"
 							autoComplete="off"
@@ -165,7 +167,7 @@ const RegisterForm = ({ initialValues }) => {
 							}}
 						/>
 
-						<TextField
+						<TextInput
 							fullWidth
 							size="small"
 							autoComplete="off"
