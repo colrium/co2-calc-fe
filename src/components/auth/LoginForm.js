@@ -1,6 +1,6 @@
 import { setAuthToken, setAuthUser, setLoggedIn } from '@/store/authSlice';
 import { LoadingButton } from '@mui/lab';
-import { Box, Link, Stack } from '@mui/material';
+import { Box, Link, Stack, Typography } from '@mui/material';
 import axios from 'axios';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { motion } from 'framer-motion';
@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import TextInput from '../common/TextInput';
+import OAuth from './OAuth';
 
 
 let easing = [0.6, -0.05, 0.01, 0.99];
@@ -110,14 +111,9 @@ const LoginForm = ({ setAuth }) => {
 								control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
 								label="Remember me"
 							/> */}
-							<Box/>
+							<Box />
 
-							<Link
-								component={NextLink}
-								href="/auth/forgot-password"
-								variant="subtitle2"
-								underline="hover"
-							>
+							<Link component={NextLink} href="/auth/forgot-password" variant="subtitle2" underline="hover">
 								Forgot password?
 							</Link>
 						</Stack>
@@ -129,9 +125,15 @@ const LoginForm = ({ setAuth }) => {
 							type="submit"
 							variant="contained"
 							loading={isSubmitting}
+							className="!rounded-3xl"
 						>
 							{isSubmitting ? 'loading...' : 'Login'}
 						</LoadingButton>
+					</Box>
+
+					<Box className="flex flex-col items-center pt-8">
+						<Typography variant="body2">Proceed with</Typography>
+						<OAuth google iconsOnly={false} />
 					</Box>
 				</Box>
 			</Form>

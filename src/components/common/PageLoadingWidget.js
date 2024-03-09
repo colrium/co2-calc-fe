@@ -5,6 +5,8 @@ import Router from 'next/router';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+
+
 const AuthChangeWidget = memo(({open, sx, children, ...rest}) => {
 	const theme = useTheme();
 	return (
@@ -59,10 +61,7 @@ const PageLoadingWidget = () => {
 
 	// return loading ? <LinearProgress sx={{zIndex: theme => theme.zIndex.tooltip}} /> : null;
 	return (
-		<Indicator
-			open={loading}
-			onClick={() => setLoading(false)}
-		/>
+			<Indicator open={loading} onClick={() => setLoading(false)} />
 	);
 };
 

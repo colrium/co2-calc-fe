@@ -15,11 +15,11 @@ export default function Page() {
 						<Box className="my-8">
 							<Typography variant="subtitle1">Welcome back</Typography>
 						</Box>
-						<Box className="p-4 w-96 mb-4">
+						<Box className="p-4 w-96">
 							<LoginForm />
 						</Box>
 						<Box className="my-2">
-							<Typography>Don't have an account yet?</Typography>
+							<Typography variant='body2'>Don't have an account yet?</Typography>
 							<Button component={Link} href="/auth/register">
 								Create Account
 							</Button>

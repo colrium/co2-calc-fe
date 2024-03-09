@@ -24,7 +24,6 @@ export default function ThemeRegistry(props) {
 	// const sytemInDarkMode = window && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 	// const isDarkMode = themeMode === 'system' ? sytemInDarkMode : themeMode === 'dark';
 	const theme = themeMode === 'dark' ? darkTheme : lightTheme;
-	console.log('themeMode', themeMode);
 
 	const globalStyles = useMemo(
 		() => (
@@ -98,9 +97,39 @@ export default function ThemeRegistry(props) {
 							${theme.palette.background.dark}
 						);
 					}
-					.surface, .Surface {
-						background-color: ${theme.palette.background.surface} !important
-				
+					.surface,
+					.Surface {
+						background-color: ${theme.palette.background.surface} !important;
+					}
+					.fill-primary {
+						fill: ${theme.palette.primary.main};
+					}
+					.fill-background {
+						fill: ${theme.palette.background.main};
+					}
+					.fill-background-surface {
+						fill: ${theme.palette.background.surface};
+					}
+					.fill-background-dark {
+						fill: ${theme.palette.background.dark};
+					}
+					.fill-primary {
+						fill: ${theme.palette.primary.main};
+					}
+					.fill-primary-dark {
+						fill: ${theme.palette.primary.dark};
+					}
+					.fill-secondary {
+						fill: ${theme.palette.secondary.main};
+					}
+					.fill-secondary-dark {
+						fill: ${theme.palette.secondary.dark};
+					}
+					.fill-tertiary {
+						fill: ${theme.palette.tertiary.main};
+					}
+					.fill-tertiary-dark {
+						fill: ${theme.palette.tertiary.dark};
 					}
 				`}</style>
 				{globalStyles}

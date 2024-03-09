@@ -146,3 +146,122 @@ body {
     backdrop-filter: blur(8px);
 } */
 
+.cls-1 {
+  fill: #fff;
+}
+
+.cls-1,
+.cls-2,
+.cls-3,
+.cls-4 {
+  isolation: isolate;
+  font-family: Google Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica
+ Neue",Arial,sans-serif," Apple Color Emoji"," Segoe UI Emoji"," Segoe UI Symbol";
+
+}
+
+.cls-1,
+.cls-3,
+.cls-4 {
+  font-size: 36px;
+}
+
+.cls-4 {
+  fill: #002c55;
+}
+
+.cls-5 {
+  fill: #A8EB12;
+}
+
+.cls-2 {
+  font-size: 20px;
+}
+
+.cls-6 {
+  fill: #0054ff;
+}
+
+.cls-7 {
+  stroke-width: 1.75px;
+}
+
+.cls-7,
+.cls-8,
+.cls-9,
+.cls-10 {
+  stroke: #002c55;
+}
+
+.cls-7,
+.cls-8,
+.cls-9,
+.cls-10,
+.cls-11,
+.cls-12 {
+  fill: none;
+}
+
+.cls-7,
+.cls-9,
+.cls-10 {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cls-13 {
+  fill: #00B0BC;
+}
+
+.cls-14 {
+  fill: #7ccae9;
+}
+
+.cls-15 {
+  letter-spacing: 0em;
+}
+
+.cls-16 {
+  fill: #26813f;
+}
+
+.cls-8,
+.cls-10 {
+  stroke-width: 2.55px;
+}
+
+.cls-8,
+.cls-12 {
+  stroke-miterlimit: 10;
+}
+
+.cls-17 {
+  fill-rule: evenodd;
+}
+
+
+
+.cls-19 {
+  letter-spacing: -.02em;
+}
+
+.cls-3 {
+  fill: #000b1f;
+}
+
+.cls-20 {
+  fill: #CADEFC;
+}
+
+.cls-9 {
+  stroke-width: 1.7px;
+}
+
+.cls-12 {
+  stroke: #fff;
+  stroke-width: 4.06px;
+}
+
+.cls-21 {
+  fill: #f7f7f7;
+}

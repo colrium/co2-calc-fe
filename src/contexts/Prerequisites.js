@@ -159,7 +159,7 @@ const PrerequisitesProvider = ({ children }) => {
 				toggleDrawer,
 				drawerVariant: isMobile ? 'temporary' : 'persistent'
 			}}
-		>
+		>		
 			{children}
 		</PrerequisitesContext.Provider>
 	);

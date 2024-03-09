@@ -58,6 +58,9 @@ export const getTheme = (mode='dark') => {
 					},
 					inverse: {
 						main: '#FFFFFF'
+					},
+					github: {
+						main: '#2b3137'
 					}
 			  }
 			: {
@@ -77,11 +80,13 @@ export const getTheme = (mode='dark') => {
 					},
 					inverse: {
 						main: '#000000'
+					},
+					github: {
+						main: '#fafbfc'
 					}
 			  };
 	return createTheme({
 		palette: {
-			
 			primary: {
 				main: '#00B0BC'
 			},
@@ -111,6 +116,15 @@ export const getTheme = (mode='dark') => {
 			},
 			pink: {
 				main: '#C850C0'
+			},
+			google: {
+				main: '#DB4437'
+			},
+			github: {
+				main: '#2b3137'
+			},
+			linkedin: {
+				main: '#0077B5'
 			},
 			...modePalette
 		},
@@ -203,8 +217,7 @@ export const getTheme = (mode='dark') => {
 			},
 			MuiListItemIcon: {
 				root: ({ theme }) => ({
-					color: `${theme.palette.text.secondary} !important`,
-					
+					color: `${theme.palette.text.secondary} !important`
 				})
 			}
 		}

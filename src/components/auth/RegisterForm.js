@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import TextInput from '../common/TextInput';
+import OAuth from './OAuth';
 
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -219,6 +220,10 @@ const RegisterForm = ({ initialValues }) => {
 						>
 							{state.loading ? 'loading...' : 'Register'}
 						</LoadingButton>
+					</Box>
+					<Box className="flex flex-col items-center pt-8">
+						<Typography variant="body2">Proceed with</Typography>
+						<OAuth />
 					</Box>
 				</Box>
 			</Form>
