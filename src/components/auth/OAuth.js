@@ -64,7 +64,7 @@ export default function OAuth({ options = ['google', 'github', 'linkedin'], icon
 							<Box className="flex-1 flex flex-row gap-4 items-center justify-center" padding={1}>
 								{oAuthOptions.map(({ Icon, label, color, href }, i) => (
 									<Tooltip title={label} key={`oath-option-${i}`}>
-										<IconButton color={color} component={Link} href={href}>
+										<IconButton color={color} component={Link} href={href} disabled>
 											<Icon fontSize='small'/>
 										</IconButton>
 									</Tooltip>
