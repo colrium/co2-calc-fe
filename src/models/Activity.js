@@ -19,6 +19,7 @@ export default class Activity extends BaseModel {
 		},
 		{
 			field: 'emissionType',
+			default: 'biogenic',
 			header: 'Emission Type',
 			required: true,
 			options: [
@@ -30,6 +31,7 @@ export default class Activity extends BaseModel {
 			field: 'emissionFactor',
 			header: 'Emission Factor',
 			required: true,
+			default: 0.1,
 			type: 'number',
 			valueGetter: (params) => {
 				return params.row.custom ? params.row.emissionFactor : null;
@@ -38,6 +40,7 @@ export default class Activity extends BaseModel {
 		{
 			field: 'unit',
 			header: 'Unit',
+			default: 't',
 			required: true
 		},
 		{
@@ -54,10 +57,10 @@ export default class Activity extends BaseModel {
 	static title = 'Activity';
 	static subtitle = `tCO2e-genarative activity`;
 	static endpoint = '/api/activities';
-	static customizeSaveData = async ({ values, activeRecord }) => {
-		values.name = `${values.scope}_${values.label.toLowerCase().replace(' ', '_')}`;
-		return values;
-	};
+	// static customizeSaveData = async ({ values, activeRecord }) => {
+	// 	values.name = `${values.scope}_${values.label.toLowerCase().replace(' ', '_')}`;
+	// 	return values;
+	// };
 	constructor(config = {}) {
 		super({
 			fields: Activity.fields,

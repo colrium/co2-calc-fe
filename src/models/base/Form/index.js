@@ -50,7 +50,7 @@ const BaseForm = forwardRef(({
 					onCloseForm()
 				}
 			} catch (error) {
-				
+				console.log('submit error', error)
 			} finally {
 				setState({ loading: false });
 			}
@@ -156,8 +156,8 @@ const BaseForm = forwardRef(({
 								<LoadingButton
 									loadingPosition="start"
 									startIcon={<SaveIcon />}
-									loading={state.loading}
-									disabled={state.loading}
+									// loading={state.loading}
+									// disabled={state.loading}
 									size="small"
 									type="submit"
 									variant="contained"
@@ -169,7 +169,7 @@ const BaseForm = forwardRef(({
 									<Button
 										size="small"
 										type="button"
-										disabled={state.loading}
+										// disabled={state.loading}
 										onClick={onCloseForm}
 										variant="contained"
 										color="error"
