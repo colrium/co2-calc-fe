@@ -10,20 +10,28 @@ export default class Target extends BaseModel {
 			field: 'year',
 			header: 'Year',
 			type: 'number',
+			width: 160,
 			min: 2000,
 			max: 2050,
 			required: true
 		},
 		{
-			field: 'amount',
+			field: 'totalEmission',
 			header: 'tCO2e',
+			width: 160,
 			type: 'number'
 		},
 		{
 			field: 'domain',
 			header: 'Domain',
+			excludeOnForm: true
+		},
+		{
+			field: 'domainId',
+			header: 'Domain',
 			required: true,
-			lookup: 'Domains'
+			lookup: 'Domains',
+			excludeOnGrid: true
 		}
 	];
 	static title = 'Target';
