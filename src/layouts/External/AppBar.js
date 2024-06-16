@@ -1,7 +1,7 @@
 /** @format */
 
 'use client';
-import { publicRoutes } from '@/config';
+import { publicRoutes, title } from '@/config';
 import { usePrerequisites } from '@/contexts/Prerequisites';
 import { useSetState } from '@/hooks';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -15,10 +15,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
+import Image from 'next/image';
 import Link from 'next/link';
 import * as React from 'react';
-const title = 'Manufacturing Carbon Footprint';
-const subtitle = 'Carbon Footprint Calculator';
 const pages = [
 	{ path: '/', label: 'Home' },
 	{ path: '/how-it-works', label: 'How it works' },
@@ -122,7 +121,7 @@ function ResponsiveAppBar(props) {
 				<Container maxWidth="xl">
 					<Toolbar disableGutters sx={{ height: 8 }}>
 						<Box
-							className="flex-col"
+							className="flex items-center gap-4"
 							sx={{
 								mr: 2,
 								display: { xs: 'none', md: 'flex' },
@@ -145,8 +144,9 @@ function ResponsiveAppBar(props) {
 							>
 								{title}
 							</Typography> */}
+							<Image src={'/img/logo-light.png'} width={48} height={48} alt="logo" />
 							<Typography variant="subtitle1" component={Link} href="/">
-								{subtitle}
+								{title}
 							</Typography>
 						</Box>
 

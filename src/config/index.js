@@ -12,7 +12,7 @@ import {
 
 export const disableOAth = true;
 export const publicRoutes = [
-	{ pathname: '/', label: 'Home' },
+	// { pathname: '/', label: 'Home' },
 	{ pathname: '/how-it-works', label: 'How it works' },
 	{ pathname: '/help', label: 'Help' }
 ];

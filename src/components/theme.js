@@ -88,7 +88,7 @@ export const getTheme = (mode='dark') => {
 	return createTheme({
 		palette: {
 			primary: {
-				main: '#00B0BC'
+				main: '#0bc100'
 			},
 			secondary: {
 				// main: '#A8EB12'

@@ -25,7 +25,7 @@ export const makeStore = () => {
 		// we need it only on client side
 
 		const persistConfig = {
-			key: 'ghg-calc',
+			key: 'ecocalc',
 			whitelist: ['auth', 'calculator'], // make sure it does not clash with server keys
 			storage
 		};
@@ -42,5 +42,6 @@ export const makeStore = () => {
 	}
 };
 
-
+export const store = makeStore();
+export const persistor = persistStore(store);
 export const wrapper = createWrapper(makeStore);
