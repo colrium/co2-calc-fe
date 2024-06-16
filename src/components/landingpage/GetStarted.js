@@ -1,4 +1,5 @@
 
+import { description, disableOAth } from '@/config';
 import { useSetState } from '@/hooks';
 import GoogleIcon from '@mui/icons-material/Google';
 import { LoadingButton } from '@mui/lab';
@@ -54,13 +55,12 @@ function GetStarted() {
 							}}
 							className="flex flex-col gap-12 mb-8 items-center"
 						>
-							<Image src={'/uhakika2.png'} width={150} height={150} alt="banner" />
-							<Typography variant="h3" className="w-full text-center">
+							<Image src={'/img/logo-light.png'} width={150} height={150} alt="banner" />
+							<Typography variant="h3" className="w-full text-center" color="primary">
 								Track your carbon footprint
 							</Typography>
 							<Typography variant="subtitle2" className="w-full text-center">
-								Step into sustainability: Calculate and Minimize your manufacturing carbon footprint. Begin
-								your Green transformation
+								{description}
 							</Typography>
 						</Box>
 						<Box
@@ -72,7 +72,7 @@ function GetStarted() {
 							}}
 							className="flex flex-col  gap-4"
 						>
-							<Box className="w-full flex flex-col justify-center items-center gap-4">
+							<Box className="w-full flex flex-col justify-center items-center gap-20">
 								<TextField
 									placeholder="Enter your Email"
 									label="Email Address"
@@ -101,7 +101,7 @@ function GetStarted() {
 								</Button> */}
 							</Box>
 
-							<Box className="flex flex-col items-center">
+							{!disableOAth && <Box className="flex flex-col items-center">
 								<Button
 									// component={Link}
 									// href="/"
@@ -110,7 +110,7 @@ function GetStarted() {
 								>
 									Proceed with Google
 								</Button>
-							</Box>
+							</Box>}
 						</Box>
 					</Grid>
 				</Grid>

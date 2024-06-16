@@ -12,7 +12,7 @@ import {
 
 export const disableOAth = true;
 export const publicRoutes = [
-	{ pathname: '/', label: 'Home' },
+	// { pathname: '/', label: 'Home' },
 	{ pathname: '/how-it-works', label: 'How it works' },
 	{ pathname: '/help', label: 'Help' }
 ];
@@ -49,5 +49,7 @@ export const emissionTypes = {
 	biogenic: { name: 'biogenic', label: 'Biogenic', color: theme.palette.orange.main, colorName: 'orange' },
 	fossil: { name: 'fossil', label: 'Fossil', color: theme.palette.pink.main, colorName: 'pink' }
 };
-export const title = 'Carbon Footprint Calculator';
-export const subtitle = 'Manufacturing Carbon Footprint';
+export const title = 'EcoCalc';
+export const subtitle = 'Carbon Footprint Calculator';
+export const description =
+	'Your go-to tool for evaluating and managing your carbon footprint. With easy-to-use features and accurate calculations, EcoMeter helps you understand your impact on the environment and make informed decisions to reduce your carbon emissions.';
