@@ -36,7 +36,7 @@ export const makeStore = () => {
 			devTools: process.env.NODE_ENV !== 'production'
 		});
 
-		store.__persistor = persistStore(store); // Nasty hack
+		// store.__persistor = persistStore(store); // Nasty hack
 
 		return store;
 	}

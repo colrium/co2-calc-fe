@@ -166,6 +166,20 @@ export const getTheme = (mode='dark') => {
 					paper: blurBgStyles
 				}
 			},
+			MuiSelect: {
+				defaultProps: {
+					variant: 'outlined',
+					size: 'small',
+					margin: 'dense'
+				}
+			},
+			MuiTextField: {
+				defaultProps: {
+					variant: 'outlined',
+					size: 'small',
+					margin: 'dense'
+				}
+			},
 			MuiChartsTooltip: {
 				styleOverrides: {
 					row: bgStyles

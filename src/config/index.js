@@ -10,6 +10,7 @@ import {
 	mdiViewDashboard
 } from '@mdi/js';
 
+export const disableOAth = true;
 export const publicRoutes = [
 	{ pathname: '/', label: 'Home' },
 	{ pathname: '/how-it-works', label: 'How it works' },

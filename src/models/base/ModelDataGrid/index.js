@@ -7,7 +7,9 @@ import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, GridActionsCellItem, GridToolbar } from "@mui/x-data-grid";
 import pluralize from "pluralize";
 import { forwardRef, useCallback, useMemo } from "react";
-import ModelGridContextProvider from "./Contex";
+import { formatQuery } from "react-querybuilder";
+import ModelDataGridProvider, { useModelDataGrid } from "./Contex";
+import QueryEditor from "./QueryEditor";
 const { Grid, CardActions, CardContent, CardHeader, Card, Button, Box, Typography, Fab, LinearProgress } = require('@mui/material');
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
@@ -70,10 +72,74 @@ export const NoRowsOverlay = ({message='No Rows'}) => {
 }
 
 const dataGridSx = { '--DataGrid-overlayHeight': '200px' }
+const CustomToolbar = forwardRef((props, ref) => {
+	const {query, patch, model} = useModelDataGrid()
+	return (
+		<Grid rowSpacing={1} container>
+			<Grid item xs={12}>
+				<GridToolbar {...props} ref={ref} />
+			</Grid>
+			<Grid item xs={12} className="p-2">
+				<QueryEditor value={query} onChange={(query) => patch({ query })} model={model} />
+			</Grid>
+		</Grid>
+	);
+});
+
+const localText = {
+	// Filter operators text
+	filterOperatorContains: 'contains',
+	filterOperatorEquals: '=',
+	filterOperatorStartsWith: 'beginsWith',
+	filterOperatorEndsWith: 'endswith',
+	filterOperatorIs: '=',
+	filterOperatorNot: '!=',
+	filterOperatorAfter: 'is after',
+	filterOperatorOnOrAfter: 'is on or after',
+	filterOperatorBefore: 'is before',
+	filterOperatorOnOrBefore: 'is on or before',
+	filterOperatorIsEmpty: 'null',
+	filterOperatorIsNotEmpty: 'notNull',
+	filterOperatorIsAnyOf: 'is any of',
+	'filterOperator=': '=',
+	'filterOperator!=': '!=',
+	'filterOperator>': '>',
+	'filterOperator>=': '>=',
+	'filterOperator<': '<',
+	'filterOperator<=': '<='
+};
 const slots = {
 	noRowsOverlay: NoRowsOverlay,
 	loadingOverlay: LinearProgress,
-	toolbar: GridToolbar
+	toolbar: CustomToolbar
+};
+
+const slotProps = {
+	panel: {
+		sx: {
+			'& .MuiPaper-root': {
+				backgroundColor: (theme) => `${theme.palette.background.dark} !important`,
+				backgroundImage: (theme) =>
+					`linear-gradient(${alpha(theme.palette.background.dark, 1)}, ${alpha(
+						theme.palette.background.dark,
+						1
+					)})`,
+				'& select': {
+					backgroundColor: (theme) => `${theme.palette.background.dark} !important`
+				}
+			}
+		}
+	},
+	menuList: {
+		sx: {
+			backgroundColor: (theme) => `${theme.palette.background.dark} !important`,
+			backgroundImage: (theme) =>
+				`linear-gradient(${alpha(theme.palette.background.main, 0.15)}, ${alpha(
+					theme.palette.background.dark,
+					0.25
+				)})`
+		}
+	}
 };
 const ModelDataGrid = forwardRef(({model, onOpenForm, title, onDelete, loading: parentLoading}, ref) => {
 	const initialColumnVisibilityModel = useMemo(() =>model.getInitialGridColumnVisibilityModel(), [model])
@@ -83,12 +149,26 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title, onDelete, loading: 
 		pages: 0,
 		rowCount: 0,
 		columnVisibilityModel: initialColumnVisibilityModel,
-		paginationModel: { pageSize: 10, page: 0 }
+		paginationModel: { pageSize: 10, page: 0 },
+		query: {},
+		filterModel: {}
 	});
 
-	const loadCount = useMutationsCount([state.paginationModel]);
+	const loadCount = useMutationsCount([state.paginationModel, state.query]);
 	const query = useMemo(
-		() => ({ perPage: state.paginationModel.pageSize, page: state.paginationModel.page + 1 }),
+		() => {
+			let mongoQuery = {}
+			if (Object.keys(state.query).length > 0) {
+				let mongoqueryStr;
+				try {
+					mongoqueryStr = formatQuery(state.query, 'mongodb');
+					mongoQuery = mongoqueryStr? JSON.parse(mongoqueryStr) : {};
+				} catch (error) {
+					console.log('error', error)
+				}
+			}
+			console.log('state.query', state.query);
+			return ({...mongoQuery, perPage: state.paginationModel.pageSize, page: state.paginationModel.page + 1 })},
 		[loadCount]
 	);
 	
@@ -142,17 +222,28 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title, onDelete, loading: 
 		],
 		[model]
 	);
-
+	const getState = useCallback(() => getState, [state]);
+	const onFilterModelChange = useCallback((filterModel) => {
+		// Here you save the data you need from the filter model
+		console.log('filterModel', filterModel);
+		setState({ filterModel: { ...filterModel } });
+	}, []);
     return (
-		<ModelGridContextProvider value={{ onDelete }}>
+		<ModelDataGridProvider
+			value={{
+				...state,
+				onDelete,
+				patch: setState,
+				getState,
+				model,
+				onOpenForm,
+				title,
+				loading: state.loading || parentLoading
+			}}
+		>
 			<Grid padding={3} container>
 				<Grid item xs={12}>
-					<Card
-						elevation={0}
-						
-						className="surface"
-						
-					>
+					<Card elevation={0} className="surface">
 						<CardHeader
 							title={pluralize(title)}
 							subheader={pluralize(model.subtitle)}
@@ -191,36 +282,9 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title, onDelete, loading: 
 										paginationModel={state.paginationModel}
 										onPaginationModelChange={(paginationModel) => setState({ paginationModel })}
 										slots={slots}
-										slotProps={{
-											panel: {
-												sx: {
-													'& .MuiPaper-root': {
-														backgroundColor: (theme) =>
-															`${theme.palette.background.dark} !important`,
-														backgroundImage: (theme) =>
-															`linear-gradient(${alpha(
-																theme.palette.background.dark,
-																1
-															)}, ${alpha(theme.palette.background.dark, 1)})`,
-														'& select': {
-															backgroundColor: (theme) =>
-																`${theme.palette.background.dark} !important`
-														}
-													}
-												}
-											},
-											menuList: {
-												sx: {
-													backgroundColor: (theme) =>
-														`${theme.palette.background.dark} !important`,
-													backgroundImage: (theme) =>
-														`linear-gradient(${alpha(
-															theme.palette.background.main,
-															0.15
-														)}, ${alpha(theme.palette.background.dark, 0.25)})`
-												}
-											}
-										}}
+										filterMode="server"
+										onFilterModelChange={onFilterModelChange}
+										slotProps={slotProps}
 										disableRowSelectionOnClick
 										loading={state.loading || parentLoading}
 										sx={dataGridSx}
@@ -242,7 +306,7 @@ const ModelDataGrid = forwardRef(({model, onOpenForm, title, onDelete, loading: 
 					</Card>
 				</Grid>
 			</Grid>
-		</ModelGridContextProvider>
+		</ModelDataGridProvider>
 	);
 })
 

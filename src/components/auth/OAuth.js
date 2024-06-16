@@ -1,3 +1,4 @@
+import { disableOAth } from '@/config';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import GoogleIcon from '@mui/icons-material/Google';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -64,8 +65,8 @@ export default function OAuth({ options = ['google', 'github', 'linkedin'], icon
 							<Box className="flex-1 flex flex-row gap-4 items-center justify-center" padding={1}>
 								{oAuthOptions.map(({ Icon, label, color, href }, i) => (
 									<Tooltip title={label} key={`oath-option-${i}`}>
-										<IconButton color={color} component={Link} href={href} disabled>
-											<Icon fontSize='small'/>
+										<IconButton color={color} component={Link} href={href} disabled={disableOAth}>
+											<Icon fontSize="small" />
 										</IconButton>
 									</Tooltip>
 								))}

@@ -1,10 +1,15 @@
 import axios from 'axios';
+import dayjs from 'dayjs';
 import { forwardRef } from 'react';
 import * as Yup from 'yup';
 import CrudBase from './CrudBase';
 import BaseForm from './Form';
 import FieldMappers from './Form/FieldMappers';
 import ModelDataGrid from './ModelDataGrid';
+const relativeTime = require('dayjs/plugin/relativeTime');
+const utc = require('dayjs/plugin/utc');
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
 export default class BaseModel {
 	idField = 'id';
 	constructor(config = {}) {
@@ -13,6 +18,7 @@ export default class BaseModel {
 	init(config = {}) {
 		const columns = [];
 		const inputFields = [];
+		const fieldNames = [];
 		if (Array.isArray(config.fields)) {
 			config.fields.forEach((field) => {
 				if (!field.type) {
@@ -31,11 +37,40 @@ export default class BaseModel {
 				field.headerName = field.headerName || field.header;
 				field.name = field.name || field.field;
 				field.label = field.label || field.header;
+				fieldNames.push();
 				if (!field.excludeOnGrid) {
 					columns.push(field);
 				}
 				if (!field.excludeOnForm) {
 					inputFields.push(field);
+				}
+			});
+		}
+		if (!columns.find(column => column.field === 'createdAt')) {
+			columns.push({
+				field: 'createdAt',
+				headerName: 'Created At',
+				type: 'dateTime',
+				flex: 1,
+				valueGetter: ({ row: { createdAt } }) => {
+					if (createdAt) {
+						return dayjs.utc(createdAt).toDate();
+					}
+					return;
+				}
+			});
+		}
+		if (!columns.find((column) => column.field === 'updatedAt')) {
+			columns.push({
+				field: 'updatedAt',
+				headerName: 'Updated At',
+				type: 'dateTime',
+				flex: 1,
+				valueGetter: ({ row: { updatedAt } }) => {
+					if (updatedAt) {
+						return dayjs.utc(updatedAt).toDate();
+					}
+					return;
 				}
 			});
 		}

@@ -2,7 +2,6 @@ import { usePrerequisites } from '@/contexts/Prerequisites';
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Head from 'next/head';
 import AppBar from './AppBar';
 import MainDrawer from './MainDrawer';
 
@@ -16,9 +15,7 @@ export default function InternalLayout({children}) {
 				// className={`flex flex-col relative overflow-x-hidden bg-gradient-to-tr from-blue-700 via-blue-800 to-gray-900`}
 				className={` min-h-screen w-screen overflow-x-hidden relative overflow-x-hidden bg-gradient-to-br from-gray-50 to-blue-100`}
 			>
-			<Head>
-				<title>Dashboard</title>
-			</Head>
+			
 				<MainDrawer
 					open={openDrawers.internal}
 					onOpen={() => toggleDrawer('internal', true)}

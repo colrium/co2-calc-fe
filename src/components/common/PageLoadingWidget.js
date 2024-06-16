@@ -1,8 +1,9 @@
+import { useDidUpdate } from '@/hooks';
 import { selectAuth } from '@/store/authSlice';
 import { Backdrop, CircularProgress, LinearProgress } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import Router from 'next/router';
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 
@@ -38,12 +39,11 @@ const PageLoadingWidget = () => {
 	const {loggedin} = useSelector(selectAuth)
 	const loggedinRef = useRef(loggedin);
 	const theme = useTheme();
-	const Indicator = useMemo(() => {
-		if (loggedinRef.current === loggedin) {
-			loggedinRef.current = loggedin;
-			return AuthChangeWidget;
-		}
-		return PageChangeWidget;
+	const Indicator = loggedinRef.current === loggedin? PageChangeWidget : AuthChangeWidget;
+	
+	
+	useDidUpdate(() => {
+		loggedinRef.current = loggedin;
 	}, [loggedin]);
 	
 	useEffect(() => {

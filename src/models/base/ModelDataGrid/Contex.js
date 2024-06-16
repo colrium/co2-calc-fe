@@ -1,9 +1,9 @@
 const { createContext, useContext } = require("react");
 
-export const ModelGridContext = createContext({});
-export const useModelGridContext = () => {
-    return useContext(ModelGridContext);
+export const ModelDataGridContext = createContext({});
+export const useModelDataGrid = () => {
+    return useContext(ModelDataGridContext);
 };
 
-const ModelGridContextProvider = ModelGridContext.Provider;
-export default ModelGridContextProvider;
+const ModelDataGridProvider = ModelDataGridContext.Provider;
+export default ModelDataGridProvider;
