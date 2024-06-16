@@ -237,15 +237,15 @@ export default function Page() {
 				</Card>
 				<Fab
 					onClick={handleOnGoToAssessment('company', -1)}
-					color="tertiary"
+					color="primary"
 					aria-label="Add a new Assessment"
 					className="inline-block md:hidden bottom-16 right-14"
 					sx={{
 						position: 'fixed !important',
 						color: 'text.primary',
-						[theme.breakpoints.up('md')]: {
-							display: 'none'
-						}
+						// [theme.breakpoints.up('md')]: {
+						// 	display: 'none'
+						// }
 					}}
 				>
 					<AddIcon />

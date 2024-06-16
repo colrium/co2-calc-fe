@@ -95,7 +95,7 @@ export const getTheme = (mode='dark') => {
 				main: '#9c08a1'
 			},
 			tertiary: {
-				main: '#FF0000'
+				main: '#a19c08'
 			},
 			inverse: {
 				main: '#000000'
