@@ -3,7 +3,7 @@
 import { emissionTypes, scopes } from '@/config';
 import { useSetState } from '@/hooks';
 import { NoRowsOverlay } from '@/models/base/ModelDataGrid';
-import { Box, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, Grid, Skeleton, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import { BarPlot, ChartsTooltip, ChartsXAxis, ChartsYAxis, PieChart, ResponsiveChartContainer } from '@mui/x-charts';
 import { LinePlot, MarkPlot } from '@mui/x-charts/LineChart';
@@ -114,37 +114,43 @@ export default function Overview({ name, options = [] }) {
 	return (
 		<Grid container>
 			<Grid item xs={12} className="flex p-8">
-				<Typography variant="subtitle1">Overview</Typography>
+				{state.loading && <Skeleton variant="text" width={160} className="m-1" />}
+						{!state.loading && (<Typography variant="subtitle1">Overview</Typography>)}
 			</Grid>
 			<Grid item xs={12} className="flex p-8">
 				<Box className={'flex flex-col md:flex-row gap-4 w-full'}>
 					<Box className="flex-1">
-						<Card className="surface flex flex-col w-full h-40" elevation={0}>
+						{state.loading && <Skeleton variant="rounded" height={150} className="m-1" />}
+						{!state.loading && (<Card className="surface flex flex-col w-full h-40" elevation={0}>
 							<CardHeader title={'Total Emissions'} />
 							<CardContent>
 								<Typography variant="h3" textAlign={'center'} color="primary">
 									{state.total}
 								</Typography>
 							</CardContent>
-						</Card>
+						</Card>)}
 					</Box>
 					<Box className="flex-1">
-						<Card
-							component={Link}
-							href="/dashboard/calculations"
-							className="surface flex flex-col w-full h-40"
-							elevation={0}
-						>
-							<CardHeader title={'Calculations'} />
-							<CardContent>
-								<Typography variant="h3" textAlign={'center'} color="secondary">
-									{state.calculationCount}
-								</Typography>
-							</CardContent>
-						</Card>
+						{state.loading && <Skeleton variant="rounded" height={150} className="m-1" />}
+						{!state.loading && (
+							<Card
+								component={Link}
+								href="/dashboard/calculations"
+								className="surface flex flex-col w-full h-40"
+								elevation={0}
+							>
+								<CardHeader title={'Calculations'} />
+								<CardContent>
+									<Typography variant="h3" textAlign={'center'} color="secondary">
+										{state.calculationCount}
+									</Typography>
+								</CardContent>
+							</Card>
+						)}
 					</Box>
 					<Box className="flex-1">
-						<Card
+						{state.loading && <Skeleton variant="rounded" height={150} className="m-1" />}
+						{!state.loading && (<Card
 							component={Link}
 							href="/dashboard/activities"
 							className="surface flex flex-col w-full h-40"
@@ -156,10 +162,11 @@ export default function Overview({ name, options = [] }) {
 									{state.activityCount}
 								</Typography>
 							</CardContent>
-						</Card>
+						</Card>)}
 					</Box>
 					<Box className="flex-1">
-						<Card
+						{state.loading && <Skeleton variant="rounded" height={150} className="m-1" />}
+						{!state.loading && (<Card
 							component={Link}
 							href="/dashboard/domains"
 							className="surface flex flex-col w-full h-40"
@@ -171,12 +178,13 @@ export default function Overview({ name, options = [] }) {
 									{state.domainCount}
 								</Typography>
 							</CardContent>
-						</Card>
+						</Card>)}
 					</Box>
 				</Box>
 			</Grid>
 			<Grid item xs={12} md={6} columnGap={1} className="flex items-center p-8">
-				<Card className="surface w-full" elevation={0}>
+				{state.loading && <Skeleton variant="rounded" height={150} className="m-1" />}
+						{!state.loading && (<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Annual Totals'} />
 					<CardContent>
 						{state.yearly.values?.length > 0 && (
@@ -198,10 +206,11 @@ export default function Overview({ name, options = [] }) {
 							</Box>
 						)}
 					</CardContent>
-				</Card>
+				</Card>)}
 			</Grid>
 			<Grid item xs={12} md={6} className="flex items-center p-8">
-				<Card className="surface w-full" elevation={0}>
+				{state.loading && <Skeleton variant="rounded" height={150} className="m-1" />}
+						{!state.loading && (<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Scope Totals'} />
 					<CardContent className="flex w-full items-center justify-center">
 						{Object.keys(state.scopes.pie)?.length > 0 && (
@@ -233,10 +242,11 @@ export default function Overview({ name, options = [] }) {
 							</Box>
 						)}
 					</CardContent>
-				</Card>
+				</Card>)}
 			</Grid>
 			<Grid item xs={12} md={6} className="flex items-center p-8">
-				<Card className="surface w-full" elevation={0}>
+				{state.loading && <Skeleton variant="rounded" height={150} className="m-1" />}
+						{!state.loading && (<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Emission Type'} />
 					<CardContent className="flex w-full items-center justify-center">
 						{Object.keys(state.emissionType)?.length > 0 && (
@@ -268,10 +278,11 @@ export default function Overview({ name, options = [] }) {
 							</Box>
 						)}
 					</CardContent>
-				</Card>
+				</Card>)}
 			</Grid>
 			<Grid item xs={12} md={6} columnGap={1} className="flex items-center p-8">
-				<Card className="surface w-full" elevation={0}>
+				{state.loading && <Skeleton variant="rounded" height={150} className="m-1" />}
+						{!state.loading && (<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Activity Types'} />
 					<CardContent>
 						{state.activityTypes.values?.length > 0 && (
@@ -292,10 +303,11 @@ export default function Overview({ name, options = [] }) {
 							</Box>
 						)}
 					</CardContent>
-				</Card>
+				</Card>)}
 			</Grid>
 			<Grid item xs={12} md={6} columnGap={1} className="flex items-center p-8">
-				<Card className="surface w-full" elevation={0}>
+				{state.loading && <Skeleton variant="rounded" height={150} className="m-1" />}
+						{!state.loading && (<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Emissions by Activity'} />
 					<CardContent>
 						{state.activities.values?.length > 0 && (
@@ -316,10 +328,11 @@ export default function Overview({ name, options = [] }) {
 							</Box>
 						)}
 					</CardContent>
-				</Card>
+				</Card>)}
 			</Grid>
 			<Grid item xs={12} md={6} columnGap={1} className="flex items-center p-8">
-				<Card className="surface w-full" elevation={0}>
+				{state.loading && <Skeleton variant="rounded" height={150} className="m-1" />}
+						{!state.loading && (<Card className="surface w-full" elevation={0}>
 					<CardHeader title={'Domain Totals'} />
 					<CardContent>
 						{state.domains.values?.length > 0 && (
@@ -340,7 +353,7 @@ export default function Overview({ name, options = [] }) {
 							</Box>
 						)}
 					</CardContent>
-				</Card>
+				</Card>)}
 			</Grid>
 		</Grid>
 	);

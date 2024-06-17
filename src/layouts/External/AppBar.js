@@ -144,7 +144,7 @@ function ResponsiveAppBar(props) {
 							>
 								{title}
 							</Typography> */}
-							<Image src={'/img/logo-light.png'} width={48} height={48} alt="logo" />
+							<Image src={'/img/logo.png'} width={48} height={48} alt="logo" />
 							<Typography variant="subtitle1" component={Link} href="/">
 								{title}
 							</Typography>

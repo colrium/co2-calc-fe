@@ -52,4 +52,4 @@ export const emissionTypes = {
 export const title = 'EcoCalc';
 export const subtitle = 'Carbon Footprint Calculator';
 export const description =
-	'Your go-to tool for evaluating and managing your carbon footprint. With easy-to-use features and accurate calculations, EcoMeter helps you understand your impact on the environment and make informed decisions to reduce your carbon emissions.';
+	'Your go-to tool for evaluating and managing your carbon footprint. With easy-to-use features and accurate calculations, EcoCalc helps you understand your impact on the environment and make informed decisions to reduce your carbon emissions.';

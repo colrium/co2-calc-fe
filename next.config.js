@@ -3,9 +3,10 @@ const nextConfig = {
 	output: 'standalone',
 	transpilePackages: ['@mui/x-charts'],
 	async rewrites() {
-		console.log('NODE_ENV', process.env.NODE_ENV);
 		const destination =
-			process.env.NODE_ENV === 'development' ? 'http://localhost:5000/v1/:slug*' : 'http://146.190.50.223:5000/v1/:slug*';
+			process.env.NODE_ENV === 'development'
+				? 'https://co2-calc-be.onrender.com/v1/:slug*'
+				: 'https://co2-calc-be.onrender.com/v1/:slug*';
 		return [
 			{
 				source: '/api/:slug*',
