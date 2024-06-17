@@ -55,7 +55,7 @@ function GetStarted() {
 							}}
 							className="flex flex-col gap-12 mb-8 items-center"
 						>
-							<Image src={'/img/logo-light.png'} width={150} height={150} alt="banner" />
+							<Image src={'/img/logo.png'} width={150} height={150} alt="banner" />
 							<Typography variant="h3" className="w-full text-center" color="primary">
 								Track your carbon footprint
 							</Typography>
