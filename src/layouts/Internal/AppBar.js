@@ -2,8 +2,14 @@
 
 'use client';
 
+import { useModelForm } from '@/contexts/ModelForm';
+import { usePrerequisites } from '@/contexts/Prerequisites';
+import CloseIcon from '@mui/icons-material/Close';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import SaveIcon from '@mui/icons-material/Save';
 import { useSetState, useThemeMode } from '@/hooks';
 import { selectAuth, setLoggedIn } from '@/store/authSlice';
+import Icon from '@mdi/react';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
@@ -22,6 +28,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { mdiBackburger } from '@mdi/js';
+import ModelFormHeader from '@/contexts/ModelForm/ModelFormHeader';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 	width: 62,
@@ -108,7 +116,7 @@ function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 	const dispatch = useDispatch();
 	const router = useRouter();
 	const { user } = useSelector(selectAuth);
-
+	const { formik, onCloseForm, context } = useModelForm();
 	const [themeMode, toggleThemeMode] = useThemeMode()
 	const [state, setState] = useSetState({
 		anchorElNav: null,
@@ -134,13 +142,18 @@ function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 				color="inherit"
 			>
 				<Toolbar className="flex gap-2" sx={{ height: 8 }}>
+					
 					<IconButton onClick={onToggleDrawer} color="tertiary">
 						{drawerOpen ? <MenuOpenIcon fontSize="inherit" /> : <MenuIcon />}
 					</IconButton>
-					<Box className="flex-col flex-1">
+					<Box className="flex-col">
 						<Typography color={'tertiary'} component={Link} href="/dashboard/overview">
 							{subtitle}
 						</Typography>
+					</Box>
+
+					<Box flex={1}>
+						{context && <ModelFormHeader />}
 					</Box>
 
 					<Box sx={{ display: { xs: 'flex' } }} className="items-center gap-4">
@@ -161,7 +174,10 @@ function ResponsiveAppBar({ onToggleDrawer, drawerOpen, ...rest }) {
 						>
 							{`${user?.firstname || user?.lastname || 'User'}`}
 						</Button>
-						<FormControlLabel onChange={toggleThemeMode} control={<MaterialUISwitch sx={{ m: 1 }} checked={themeMode === 'dark'} />} />
+						<FormControlLabel
+							onChange={toggleThemeMode}
+							control={<MaterialUISwitch sx={{ m: 1 }} checked={themeMode === 'dark'} />}
+						/>
 						<Menu
 							id="menu-appbar"
 							anchorEl={state.anchorElNav}

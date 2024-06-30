@@ -7,6 +7,7 @@ import Head from 'next/head';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import pluralize, { singular } from 'pluralize';
+import { useModelForm } from '@/contexts/ModelForm';
 
 const CrudBase = ({ model, ...rest}) => {
 	const [state, setState] = useSetState({
@@ -19,26 +20,10 @@ const CrudBase = ({ model, ...rest}) => {
 	const searchParams = useSearchParams();
     const {query} = router;
     const activeRecordId = searchParams.get("id");
-	
+	const {destroy: destroyForm, init: initForm, context} = useModelForm()
 	const Form = useMemo(() => model.Form, [model]);
     const DataGrid = useMemo(() => model.DataGrid, [model]);
-    const activeRecord = useMemo(() => {
-		if (typeof activeRecordId !== 'undefined') {
-            let record = { ...state.record };
-			const fieldNames = model.fields.map(({ name }) => name);
-			for (let [key, value] of Object.entries(query)) {
-				if (fieldNames.includes(key)) {
-					record[key] = value;
-				}
-			}
-			return {
-				record,
-				lookups: state.lookups,
-				isNew: !/^[0-9a-fA-F]{24}$/.test(activeRecordId)
-			};
-		}
-        return;
-	}, [model, query, activeRecordId, state.loading]);
+    
     
     const onOpenForm = useCallback((id=null) => {
         router.push(`${router.pathname}?id=${id || 'new'}`);
@@ -47,15 +32,19 @@ const CrudBase = ({ model, ...rest}) => {
 
 	
     const onCloseForm = useCallback(
-		(replace = false) => {
-			const params = new URLSearchParams(searchParams.toString());
-			params.delete('id');
-			const uri = query.returnTo
-				? decodeURIComponent(query.returnTo)
-				: `${router.pathname}${params.size > 0 ? '?' : ''}${params.toString()}`;
-
-			const action = replace ? router.replace : router.push;
-			action(uri);
+		(updateURL = true, replace = false) => {
+			if (updateURL) {
+				const params = new URLSearchParams(searchParams.toString());
+				params.delete('id');
+				const uri = query.returnTo
+					? decodeURIComponent(query.returnTo)
+					: `${router.pathname}${params.size > 0 ? '?' : ''}${params.toString()}`;
+				
+				const action = replace ? router.replace : router.push;
+				action(uri);
+				
+			}
+			destroyForm()
 		},
 		[activeRecordId, query, searchParams]
 	);
@@ -87,24 +76,16 @@ const CrudBase = ({ model, ...rest}) => {
 		[activeRecordId, query]
 	);
 
-    const fetchRecord = useCallback((id) => {
-		setState({ loading: true, lookups: {}, record: null });
-        axios
-			.get(`${model.endpoint}/${id || 'new'}`, {params: {lookups: true}})
-			.then((res) => {
-				const { data: record, lookups } = res.data;
-				setState({ lookups, record });
-			})
-			.catch((err) => console.error('error fetching record', err))
-			.finally(() => setState({ loading: false }));
-
-	}, [model]);
 
     useUniqueEffect(() => {
         if (activeRecordId) {
-            fetchRecord(activeRecordId);
+            initForm(model, activeRecordId);
 		}
-    }, [activeRecordId]);
+		else {
+			destroyForm()
+		}
+	}, [activeRecordId]);
+	
 	return (
 		<Box>
 			<Head>
@@ -118,7 +99,7 @@ const CrudBase = ({ model, ...rest}) => {
 							title={singular(model.formTitle || model.title)}
 							subtitle={model.formSubtitle || model.subtitle}
 							onCloseForm={onCloseForm}
-							activeRecord={activeRecord}
+						id={activeRecordId}
 							onDelete={handleDeleteRecord}
 						/>
 				  )

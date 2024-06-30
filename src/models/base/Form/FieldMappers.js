@@ -1,15 +1,26 @@
-import AsyncAutocomplete from "@/components/common/AsyncAutocomplete";
-import TextInput from "@/components/common/TextInput";
-import { useMutationsCount } from "@/hooks";
-import { Box, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Radio, RadioGroup, Typography } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
-import axios from "axios";
-import { forwardRef, useCallback, useMemo } from "react";
-import { useModelForm } from "./ModelFormContext";
+import AsyncAutocomplete from '@/components/common/AsyncAutocomplete';
+import TextInput from '@/components/common/TextInput';
+import { useModelForm } from '@/contexts/ModelForm';
+import { useMutationsCount } from '@/hooks';
+import {
+	Box,
+	Checkbox,
+	FormControl,
+	FormControlLabel,
+	FormGroup,
+	FormHelperText,
+	FormLabel,
+	Radio,
+	RadioGroup,
+	Typography
+} from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
+import axios from 'axios';
+import { forwardRef, useCallback, useMemo } from 'react';
 
 const loadLookups = (endpoint) => async () => {
-	return await axios.get(endpoint, {params: {perPage: 1000, page: 1}}).then(res => res.data.dat)
-}
+	return await axios.get(endpoint, { params: { perPage: 1000, page: 1 } }).then((res) => res.data.dat);
+};
 
 export default class FieldMappers {
 	static text = (config) =>
@@ -181,7 +192,20 @@ export default class FieldMappers {
 				</FormControl>
 			);
 		});
-	static date = (config) => forwardRef((props, ref) => <DatePicker {...config} {...props} ref={ref} />);
+	static date = (config) =>
+		forwardRef((props, ref) => (
+			<DatePicker
+			
+				{...config}
+				{...props}
+				slotProps={{
+					...config?.slotProps,
+					...props?.slotProps,
+					textField: { fullWidth: true, ...config?.slotProps?.textField, ...props?.slotProps?.textField }
+				}}
+				ref={ref}
+			/>
+		));
 	static invalid = (config) =>
 		forwardRef((props, ref) => (
 			<Box {...props} ref={ref}>

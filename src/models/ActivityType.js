@@ -8,6 +8,7 @@ const scopesLabels = Object.entries(scopes).reduce((acc, [name, { label }]) => {
 const scopesOptions = Object.entries(scopes).map(([value, { label }]) => ({ value, label }));
 
 export default class ActivityType extends BaseModel {
+	formTitleValue = 'label';
 	static fields = [
 		{
 			field: 'id',

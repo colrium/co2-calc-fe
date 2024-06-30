@@ -12,6 +12,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(utc);
 export default class BaseModel {
 	idField = 'id';
+	formTitleValue = 'name';
 	constructor(config = {}) {
 		this.init(config);
 	}
@@ -93,7 +94,7 @@ export default class BaseModel {
 			return acc;
 		}, {});
 	}
-	getValidationSchema({ activeRecord }) {
+	getValidationSchema({ data, lookups  }) {
 		const validations = {};
 		const fields = this.fields;
 		for (const field of fields) {
@@ -130,6 +131,8 @@ export default class BaseModel {
 			if (validate) {
 				if (typeof validate === 'object') {
 					validationConfig = validate;
+				} else if (typeof validate === 'function') {
+					validationConfig = validate({data, lookups});
 				} else if (typeof validate === 'string') {
 					const [validationName, validateFieldName] = validate.split(':');
 					const validateField = validateFieldName
@@ -157,13 +160,14 @@ export default class BaseModel {
 			return res.data;
 		});
 	}
-	async load(id, params = {}) {
+	async load(id, opts = {}) {
+		const options = {...opts}
 		const endpoint = this.endpoint;
-		return await axios.get(`${endpoint}/${id}`, { params }).then((res) => {
+		return await axios.get(`${endpoint}/${id}`, options).then((res) => {
 			return res.data;
 		});
 	}
-	evalInputComponents({ activeRecord, include=[], exclude=[] }) {
+	evalInputComponents({ lookups, data, include=[], exclude=[] }) {
 		let arr = [];
 		const model = this;
 		if (Array.isArray(model.fields)) {
@@ -187,7 +191,7 @@ export default class BaseModel {
 					let getComponent = inputType in FieldMappers ? FieldMappers[inputType] : FieldMappers.invalid;
 					if (field.lookup) {
 						if (typeof field.lookup === 'string') {
-							fieldConfig.valueOptions = activeRecord?.lookups?.[field.lookup] || [];
+							fieldConfig.valueOptions = lookups?.[field.lookup] || [];
 						}
 						if (!field.inputType) {
 							getComponent = FieldMappers.select;
@@ -195,7 +199,7 @@ export default class BaseModel {
 					}
 					if (field.valueOptions) {
 						if (typeof field.valueOptions === 'string') {
-							fieldConfig.valueOptions = activeRecord?.lookups?.[field.options] || [];
+							fieldConfig.valueOptions = lookups?.[field.options] || [];
 						}
 						if (!field.inputType) {
 							getComponent = FieldMappers.radio;

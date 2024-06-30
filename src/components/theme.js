@@ -160,12 +160,23 @@ export const getTheme = (mode='dark') => {
 				'"Segoe UI Symbol"'
 			].join(',')
 		},
+		breakpoints: {
+			values: {
+			  xs: 0,
+			  sm: 600,
+			  md: 960,
+			  lg: 1280,
+			  xl: 1920,
+			},
+		},		
 		components: {
 			MuiDrawer: {
 				styleOverrides: {
 					paper: blurBgStyles
 				}
-			},
+			}, 
+			
+
 			MuiSelect: {
 				defaultProps: {
 					variant: 'outlined',
@@ -177,7 +188,13 @@ export const getTheme = (mode='dark') => {
 				defaultProps: {
 					variant: 'outlined',
 					size: 'small',
-					margin: 'dense'
+					margin: 'dense',
+					fullwidth: true
+				}
+			},
+			MuiFormControl: {
+				defaultProps: {
+					fullwidth: true
 				}
 			},
 			MuiChartsTooltip: {

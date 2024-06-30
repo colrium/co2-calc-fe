@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import BaseModel from './base/BaseModel';
 export default class Activity extends BaseModel {
 	static fields = [
@@ -46,12 +47,33 @@ export default class Activity extends BaseModel {
 		{
 			field: 'yearFrom',
 			header: 'From',
-			type: 'number'
+			inputType: 'date',
+			format: 'YYYY',
+			valueGetter: ({value}) => {
+				let year = value && parseInt(value)
+				year = isNaN(year)? dayjs(value).year() : year
+				const dte = year ? dayjs().year(year).startOf('year') : undefined;
+				console.log('dte', dte)
+				return dte
+			},
+			views: ['year'],
+			openTo: 'year',
+			onChange: (...args) => {
+				console.log('yearFrom changed args', args)
+			}
 		},
 		{
 			field: 'yearTo',
 			header: 'To',
-			type: 'number'
+			inputType: 'date',
+			valueGetter: ({ value }) => {
+				let year = value && parseInt(value)
+				year = isNaN(year)? dayjs(value).year() : year
+				const dte = year? dayjs().year(year).startOf('year') : undefined;
+				return dte
+			},
+			views: ['year'],
+			openTo: 'year',
 		}
 	];
 	static title = 'Activity';

@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 
 export function middleware(request) {
-	const accessToken = request.cookies.get('accessToken');
-	if (accessToken?.value) {
+	const userAccessToken = request.cookies.get('accessToken');
+	if (userAccessToken?.value) {
 		if (request.nextUrl?.pathname && !request.nextUrl.pathname.startsWith('/dashboard')) {
 			return NextResponse.redirect(new URL('/dashboard/overview', request.url));
-		}		
-	}
-	else {
+		}
+	} else {
 		if (request.nextUrl?.pathname && request.nextUrl.pathname.startsWith('/dashboard')) {
 			return NextResponse.redirect(new URL('/auth/login', request.url));
 		}

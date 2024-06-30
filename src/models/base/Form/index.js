@@ -1,116 +1,59 @@
-import { useMutationsCount, useSetState } from "@/hooks";
+import { useMutationsCount, useSetState, useUniqueEffect } from '@/hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
-import { LoadingButton } from "@mui/lab";
-import axios from "axios";
-import dayjs from "dayjs";
-import { forwardRef, useCallback, useMemo } from "react";
-import ModelFormProvider from './ModelFormContext';
-const { Grid, CardActions, CardContent, CardHeader, Card, Button, Box, Typography, CircularProgress, Skeleton } = require('@mui/material');
-const { useFormik } = require("formik");
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { LoadingButton } from '@mui/lab';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import { forwardRef, useCallback, useMemo } from 'react';
+import { useModelForm } from '@/contexts/ModelForm';
+const {
+	Grid,
+	CardActions,
+	CardContent,
+	CardHeader,
+	Card,
+	Button,
+	Box,
+	Typography,
+	CircularProgress,
+	Skeleton,
+	IconButton,
+	Stack
+} = require('@mui/material');
+const { useFormik } = require('formik');
 
-const noop = () => {}
+const noop = () => {};
 const get = () => {};
 
-
-const BaseForm = forwardRef(({
-	activeRecord,
-	onSubmit,
-	model,
-	formProps,
-	title,
-	subtitle,
-	loading,
-	onCloseForm = noop,
-	cardActionsProps,
-	cardActions
-}, ref) => {
-	const mutationCount = useMutationsCount([activeRecord, model]);
-	const [state, setState] = useSetState({
-		loading: false
-	});
-	
-	const handleSubmit = useCallback(
-		async (values, formikBag) => {
-			setState({loading: true})
-			if (typeof model.customizeSaveData === 'function') {
-				const customizedValues = await model.customizeSaveData({ values, activeRecord, formikBag });
-				values = {
-					...values,
-					...customizedValues
-				};
-			}
-			try {
-				if (activeRecord.isNew) {
-					await axios.post(model.endpoint, values);
-				} else {
-					await axios.patch(`${model.endpoint}/${activeRecord?.record?.id}`, values);
-				}
-				if (typeof onCloseForm === 'function') {
-					onCloseForm()
-				}
-			} catch (error) {
-				console.log('submit error', error)
-			} finally {
-				setState({ loading: false });
-			}
-			
+const BaseForm = forwardRef(
+	(
+		{
+			// activeRecord,
+			onSubmit,
+			id,
+			model,
+			formProps,
+			title,
+			subtitle,
+			loading: loadingProp,
+			onCloseForm = noop,
+			cardActionsProps,
+			cardActions
 		},
-		[onSubmit, model]
-	);
-	const initialValues = useMemo(() => {
-		const parseValue = (value, type) => {
-			try {
-				switch (type) {
-					case 'number':
-						value = Number(value);
-						break;
-					case 'boolean':
-						value = Boolean(value);
-						break;
-					case 'date':
-					case 'dateTime':
-						value = dayjs(value);
-						break;
-					default:
-						break;
-				}
-				
-			} catch (error) {
-				
-			}
-			
-			return value
-		}
-		let vals = { ...activeRecord?.record };
-		const defaultValues = {...model.defaultValues};
-		for (const field of model.fields) {
-			if (field.name in vals) {
-				vals[field.name] = parseValue(vals[field.name], field.type);
-			}
-			if (activeRecord.isNew && 'default' in field) {
-				defaultValues[field.name] = field.default;
-			}
-		}
-		if (activeRecord.isNew) {
-			vals = {...defaultValues, ...vals};
-		}
-		delete vals[model.idField]
-		return {...vals, ...activeRecord.record}
-	}, [activeRecord?.record, mutationCount])
+		ref
+	) => {
+		
 
-	const validationSchema = useMemo(() => model.getValidationSchema({ activeRecord }), [model, activeRecord]);
-	const formik = useFormik({
-		initialValues: initialValues,
-		enableReinitialize: true,
-		onSubmit: handleSubmit,
-		validationSchema: validationSchema
-	});
-	const fields = useMemo(() => model.evalInputComponents({ activeRecord }), [mutationCount]);
-	const { errors, touched, values, isSubmitting, getFieldProps, isValid } = formik;
-	return (
-		<ModelFormProvider value={{ ...state, formik, model, activeRecord, validationSchema, submit: formik.handleSubmit }}>
-			<Grid
+		const { formik, loading, init, destroy, context } = useModelForm();
+		useUniqueEffect(() => {
+			init(model, id);
+		}, [model, id]);
+		const { errors, touched, isSubmitting, getFieldProps, isValid, values } = formik;
+		console.log('values', values)
+		return (
+			context && <Grid
 				padding={3}
 				container
 				autoComplete="off"
@@ -128,13 +71,29 @@ const BaseForm = forwardRef(({
 							}
 						}}
 					>
-						<CardHeader title={title} subheader={subtitle} />
+						<CardHeader
+							title={title}
+							subheader={subtitle}
+							action={
+								<Stack direction={'row'} alignItems={'center'} columnGap={3} justifyContent={'center'}>
+									{loading && (
+										<Box aria-label="loading">
+											<CircularProgress size={16} />
+										</Box>
+									)}
+									<IconButton aria-label="menu" color="secondary">
+										<MoreVertIcon />
+									</IconButton>
+								</Stack>
+							}
+						/>
 						<CardContent>
 							<Grid container columnGap={1} rowGap={3}>
-								{!loading &&
-									fields.map(({ wrapperProps, name, Component, helperText, ...fieldProps }, i) => (
+								{Array.isArray(context?.inputs) &&
+									context.inputs.map(({ wrapperProps, name, Component, helperText, ...fieldProps }, i) => (
 										<Grid item xs={12} {...wrapperProps} key={`input-${i}`}>
 											<Component
+												disabled={loading}
 												{...fieldProps}
 												{...getFieldProps(name)}
 												error={Boolean(touched[name] && errors[name])}
@@ -144,11 +103,11 @@ const BaseForm = forwardRef(({
 											/>
 										</Grid>
 									))}
-								{loading && (
+								{/*loading && (
 									<Grid item xs={12} className="p-16 gap-8 flex justify-center items-center">
 										<CircularProgress size={20} className="my-8" />
 									</Grid>
-								)}
+								)*/}
 							</Grid>
 						</CardContent>
 						{!loading ? (
@@ -182,15 +141,15 @@ const BaseForm = forwardRef(({
 							</CardActions>
 						) : (
 							<CardActions className={`py-4`} {...cardActionsProps}>
-								<Skeleton variant="rounded" width={64} height={48} />
-								<Skeleton variant="rounded" width={64} height={48} />
+								<Skeleton variant="rounded" width={64} height={32} />
+								<Skeleton variant="rounded" width={64} height={32} />
 							</CardActions>
 						)}
 					</Card>
 				</Grid>
 			</Grid>
-		</ModelFormProvider>
-	);
-});
+		);
+	}
+);
 
 export default BaseForm;

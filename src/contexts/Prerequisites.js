@@ -33,7 +33,8 @@ const PrerequisitesProvider = ({ children }) => {
 			internal: false,
 			calcLeft: !isMobile,
 			calcRight: !isMobile
-		}
+		},
+		formik: null
 	});
     const router = useRouter();
 	const tokenType = Cookies.get('tokenType');
@@ -157,7 +158,8 @@ const PrerequisitesProvider = ({ children }) => {
 				loggedin,
 				token: { accessToken, tokenType, refreshToken },
 				toggleDrawer,
-				drawerVariant: isMobile ? 'temporary' : 'persistent'
+				drawerVariant: isMobile ? 'temporary' : 'persistent',
+				patch: setState
 			}}
 		>		
 			{children}

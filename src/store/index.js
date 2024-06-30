@@ -33,7 +33,8 @@ export const makeStore = () => {
 		const persistedReducer = persistReducer(persistConfig, rootReducer);
 		let store = configureStore({
 			reducer: persistedReducer,
-			devTools: process.env.NODE_ENV !== 'production'
+			devTools: process.env.NODE_ENV !== 'production',
+			middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}), 
 		});
 
 		// store.__persistor = persistStore(store); // Nasty hack
