@@ -159,6 +159,7 @@ const ModelFormProvider = ({ children }) => {
 				if (typeof onCloseRef.current === 'function') {
 					onCloseRef.current();
 				}
+				setState({ loading: false, context: null });
 			} catch (error) {
 				console.log('submit error', error);
 			} finally {
@@ -175,9 +176,10 @@ const ModelFormProvider = ({ children }) => {
 
 	const init = useCallback(
 		async (model, id=null, config={}) => {		
-			
+			const { onClose, ...rest } = { ...config };
+			onCloseRef.current = onClose
 			if (model) {
-				const context = new Context(model, config);				
+				const context = new Context(model, rest);				
 				setState({ id, context, loading: true });
 				context
 					.init(id)

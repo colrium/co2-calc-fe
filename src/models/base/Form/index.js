@@ -40,7 +40,7 @@ const BaseForm = forwardRef(
 			loading: loadingProp,
 			onCloseForm = noop,
 			cardActionsProps,
-			cardActions
+			cardActions,
 		},
 		ref
 	) => {
@@ -48,10 +48,9 @@ const BaseForm = forwardRef(
 
 		const { formik, loading, init, destroy, context } = useModelForm();
 		useUniqueEffect(() => {
-			init(model, id);
+			init(model, id, {onClose: onCloseForm});
 		}, [model, id]);
 		const { errors, touched, isSubmitting, getFieldProps, isValid, values } = formik;
-		console.log('values', values)
 		return (
 			context && <Grid
 				padding={3}

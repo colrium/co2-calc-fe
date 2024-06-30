@@ -52,6 +52,8 @@ export default class Calculation extends BaseModel {
 	static title = 'Calculations';
 	static subtitle = `tCO2e calculations`;
 	static endpoint = '/api/calculations';
+	hasLeftDrawer = true;
+	hasRightDrawer = true;
 	constructor(config = {}) {
 		super({
 			fields: Calculation.fields,
